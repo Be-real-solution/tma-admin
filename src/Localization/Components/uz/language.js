@@ -54,6 +54,7 @@ const header = {
   },
 
   table: {
+    search_by:"larni qidirish",
     loading:"Yuklanmoqda...",
     not_found:"Malumot topilmadi",
     isTop:"Top Yangilik",

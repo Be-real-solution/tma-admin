@@ -139,7 +139,7 @@ spacing={4}>
                 </div>
               {/* )} */}
             </Stack>
-            <CustomersSearch onSearch={onSearch}
+            <CustomersSearch forLabel={localization.sidebar.category} onSearch={onSearch}
 type={"country"} />
             <CustomersTable
              isLoading={isLoading}

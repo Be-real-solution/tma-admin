@@ -47,6 +47,7 @@ const header = {
     expenses: "расходы"
   },
   table: {
+    search_by:"искать",
     grafik: "график",
     open_hour: "время открытия",
     close_hour: "время закрытия",

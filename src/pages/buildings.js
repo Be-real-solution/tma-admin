@@ -136,7 +136,7 @@ const Page = ({subIdSecond, setSubIdSecond}) => {
 
               </div>
             </Stack>
-            <CustomersSearch type="country" onSearch={onSearch} />
+            <CustomersSearch forLabel={localization.sidebar.reviews} type="country" onSearch={onSearch} />
             <CustomersTable
              isLoading={isLoading}
               type="buildings"

@@ -132,10 +132,11 @@ handleClose={handleClose} localization={localization}/>
               </TableRow>
               : items.length ? items.map((customer) => {
                 const createdAt = format(new Date(customer?.createdAt), "dd/MM/yyyy HH:mm");
+console.log(customer);
 
                 return (
                   <>
-                    { type === "news" || type === "news-banner" ? (
+                    { type === "news"  ? (
                       <TableRow hover key={customer.id}>
                         <TableCell onClick={() => handleClickOpen([customer?.mainImage, ...customer.images])}>
                           {!!customer.images && (
@@ -154,15 +155,41 @@ handleClose={handleClose} localization={localization}/>
                         </TableCell>
                         <TableCell>{customer.name?.[lang]}</TableCell>
                         <TableCell>{customer.description?.[lang]}</TableCell>
-                        <TableCell>{customer.category.name?.[lang]}</TableCell>
+                        <TableCell>{customer?.categories && customer?.categories?.map((el)=> (<p>
+{el.name?.[lang]}
+                        </p>))}</TableCell>
                         <TableCell>{customer.admin?.fullName}</TableCell>
                         <TableCell>{createdAt}</TableCell>
-                       {type !== "news-banner" && <TableCell onClick={(e) => e.stopPropagation()}>
+                      <TableCell onClick={(e) => e.stopPropagation()}>
                           <EditCarModal row={customer} route={`new`} getDatas={getDate} />
                           <DeleteModal route={`new/${customer.id}`} getDatas={getDate} />
-                        </TableCell>}
+                        </TableCell>
                       </TableRow>
-                    ) : type === "buildings" ? (
+                    ) : type === "news-banner" ?     <TableRow hover key={customer.id}>
+                    <TableCell onClick={() => handleClickOpen([customer?.mainImage, ...customer.images])}>
+                      {!!customer.images && (
+                        
+                        <Image
+                          priority
+                           placeholder="blur" // You can use "empty" or a custom element as well
+                        blurDataURL="/assets/errors/error-404.png"
+                          src={BaseUrl + "/uploads/images/" + customer.mainImage}
+                          alt="image"
+                          width={50}
+                          height={50}
+                          style={{ borderRadius: 10 }}
+                        />
+                      )}
+                    </TableCell>
+                    <TableCell>{customer.name}</TableCell>
+                    <TableCell>{customer.description}</TableCell>
+                    <TableCell>{customer?.categories && customer?.categories?.map((el)=> (<p>
+{el.name}
+                    </p>))}</TableCell>
+                    <TableCell>{customer.admin?.fullName}</TableCell>
+                    <TableCell>{createdAt}</TableCell>
+              
+                  </TableRow>  : type === "buildings" ? (
                       <TableRow hover key={customer.id}>
                           <TableCell onClick={() => handleClickOpen([customer?.mainImage, ...customer.images])}>
                           {!!customer.images && (

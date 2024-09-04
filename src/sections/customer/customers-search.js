@@ -6,10 +6,7 @@ import Content from "src/Localization/Content";
 import { useSelector } from "react-redux";
 
 
-export const CustomersSearch = ({ onSearch, select,  type, extraData }) => {
-  const { data, loading, error, fetchData } = useFetcher();
-      const [subCategories, setSubCategories] = useState([]);
-
+export const CustomersSearch = ({ onSearch, select,  type, extraData, forLabel }) => {
 
 
 
@@ -25,7 +22,7 @@ export const CustomersSearch = ({ onSearch, select,  type, extraData }) => {
           <OutlinedInput
             onChange={(e) => onSearch(e)}
             fullWidth
-            placeholder={localization.table.name}
+            placeholder={forLabel + localization.table.search_by}
             startAdornment={
               <InputAdornment position="start">
                 <SvgIcon color="action" fontSize="small">
@@ -56,7 +53,7 @@ export const CustomersSearch = ({ onSearch, select,  type, extraData }) => {
         <OutlinedInput
           onChange={(e) => onSearch(e)}
           fullWidth
-          placeholder={localization.table.name}
+          placeholder={forLabel +localization.table.search_by}
           startAdornment={
             <InputAdornment position="start">
               <SvgIcon color="action" fontSize="small">

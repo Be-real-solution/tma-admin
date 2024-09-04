@@ -99,8 +99,8 @@ const Page = ({ subId, setSubId }) => {
           if (searchValue == "") {
             return user;
           } else if (
-            user?.name?.[lang]?.toLowerCase().includes(searchValue.toString()?.toLowerCase()) ||
-            user?.description?.[lang]?.toLowerCase().includes(searchValue.toString()?.toLowerCase())) {
+            user?.name?.toLowerCase().includes(searchValue.toString()?.toLowerCase()) ||
+            user?.description?.toLowerCase().includes(searchValue.toString()?.toLowerCase())) {
             return user;
           }
         })
@@ -114,7 +114,7 @@ const Page = ({ subId, setSubId }) => {
   return (
     <>
       <Head>
-        <title>News | TMA Admin </title>
+        <title>News  Banner | TMA Admin </title>
       </Head>
       <Box
         component="main"
@@ -135,7 +135,7 @@ const Page = ({ subId, setSubId }) => {
 
             
             </Stack>
-            <CustomersSearch onSearch={onSearch} type={"country"} />
+            <CustomersSearch forLabel={localization.sidebar.top_news} onSearch={onSearch} type={"country"} />
             <CustomersTable
              isLoading={isLoading}
              

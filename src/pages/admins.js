@@ -141,7 +141,7 @@ spacing={4}>
 getDatas={getCountries} />
               </div>
             </Stack>
-            <CustomersSearch type="admin"
+            <CustomersSearch forLabel={localization.sidebar.admins} type="admin"
 onSearch={onSearch} />
             <CustomersTable
              isLoading={isLoading}
