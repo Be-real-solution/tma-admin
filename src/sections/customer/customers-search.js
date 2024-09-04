@@ -22,7 +22,7 @@ export const CustomersSearch = ({ onSearch, select,  type, extraData, forLabel }
           <OutlinedInput
             onChange={(e) => onSearch(e)}
             fullWidth
-            placeholder={forLabel + localization.table.search_by}
+            placeholder={localization.table.search_by(forLabel)}
             startAdornment={
               <InputAdornment position="start">
                 <SvgIcon color="action" fontSize="small">
@@ -53,7 +53,7 @@ export const CustomersSearch = ({ onSearch, select,  type, extraData, forLabel }
         <OutlinedInput
           onChange={(e) => onSearch(e)}
           fullWidth
-          placeholder={forLabel +localization.table.search_by}
+          placeholder={localization.table.search_by(forLabel)}
           startAdornment={
             <InputAdornment position="start">
               <SvgIcon color="action" fontSize="small">

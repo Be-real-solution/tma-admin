@@ -5,7 +5,8 @@ const header = {
   action: "actions",
   create: "create",
   delete: "delete",
-  update: "edit",
+  close: "close",
+  update: "update",
   basket: "Basket",
   transfer: "Transfer",
   continue: "confirm",
@@ -14,21 +15,24 @@ const header = {
     title: "Login",
     password: "Password",
     enter: "login",
-    wrongpassword: "Incorrect username or password! Please try again"
+    wrongpasswor: "Incorrect username or password! Please try again",
   },
+
   alerts: {
-    password_incorrect: "Password is incorrect: it must contain at least one uppercase letter, a special character, and a number, and be between 6 and 30 characters long",
+    password_incorreect:
+      "incorrect password: the password must contain at least one uppercase letter, symbol, and number, and must be between 6 to 30 characters long",
     confirmdelete: "Are you sure you want to delete?",
-    ok: "OK",
-    no: "Cancel",
-    inputError: "Do not leave fields empty",
-    nodelete: "No permission",
+    ok: "ok",
+    no: "cancel",
+    inputError: "Do not enter empty data",
+    nodelete: "no permission",
     deleted: "Successfully deleted",
     added: "Successfully created",
-    edited: "Successfully edited",
-    slownetwork: "Internet is slow or not available",
-    warning: "Something went wrong, please try again"
+    edited: "Successfully updated",
+    slownetwork: "The internet is slow or unavailable",
+    warning: "something went wrong, please try again",
   },
+
   sidebar: {
     category: "Category",
     reviews: "Buildings",
@@ -36,32 +40,40 @@ const header = {
     news: "News",
     type: "type",
     exit: "Logout",
-    role: "role"
+    role: "role",
+    top_news: "Top News",
   },
+
   home: {
     start_time: "start time",
     end_time: "end time",
     budget: "budget",
     clients: "clients",
     total_profit: "total profit",
-    expenses: "expenses"
+    expenses: "expenses",
   },
-  table: {
-    search_by:"search for",
 
-    grafik: "chart",
+  table: {
+    search_by: (e) => `Search for ${e}`,
+    loading: "Loading...",
+    not_found: "Data not found",
+    isTop: "Top News",
+    main_image: "Main Image",
+    images: "Images",
+    grafik: "graph",
     open_hour: "opening time",
     close_hour: "closing time",
-    address: "address",
-    datefrom: (s, e) => `${s} to ${e}`,
+    address: "Address",
+    datefrom: (s, e) => `From ${s} to ${e}`,
     fuel_type: "fuel type",
     max_speed: "maximum speed",
     place: "place",
     tinting: "tinting",
-    baggage: "baggage",
-    conditioner: "air conditioning",
+    baggage: "luggage",
+    conditioner: "air conditioner",
     false: "not available",
     true: "available",
+
     lang: "language",
     star: "star",
     from: "from",
@@ -86,13 +98,14 @@ const header = {
     payment_method: "payment method",
     shipment_id: "shipment ID",
     custom_date: "custom time",
-    residual_amount: "residual amount",
-    complated_amount: "detailed description",
+    residual_amount: "short info",
+    complated_amount: "long info",
+    complated: "completed",
     image: "image",
-    exist: "exists",
-    deliver_name: "deliverer's name",
-    deliver_phone: "deliverer's phone",
-    truck_number: "truck number",
+    exist: "available",
+    deliver_name: "deliverer name",
+    deliver_phone: "deliverer phone",
+    truck_number: "main",
     add_shipment: "Add Shipment",
     name: "Name",
     sale: "sale",
@@ -100,28 +113,28 @@ const header = {
     sale_cost: "sale price",
     sale_amount: "discount percentage",
     subtitle: "subtitle",
-    info: "information",
+    info: "info",
     created_at: "created at",
     amount: "amount",
-    overall_price: "Total Price",
-    payed_price: "paid part",
+    overall_price: "Total price",
+    payed_price: "components",
     status: "status",
-    country: "Country",
+    country: "Category",
     country_number: "order number",
     id: "ID",
     inn: "INN",
     total_amount: "total amount",
-    type: "Car Type",
-    car_name: "Car Name",
+    type: "Car type",
+    car_name: "Car name",
     method: "method",
-    uses_date: "date of use",
-    seria_id: "serial number",
+    uses_date: "use date",
+    seria_id: "lower",
     sum: "Amount",
     dollar: "in currency",
     stock_id: "warehouse ID",
-    price: "price",
+    price: "subtitle",
     client_id: "client ID",
-    new_price: "new price",
+    new_price: "price",
     direction: "direction",
     product_name: "product name",
     client_name: "client name",
@@ -130,7 +143,7 @@ const header = {
     additional_info: "additional information",
     expenses_name: "expenses name",
     rows_per_page: "Rows per page",
-    date: "date",
+    date: "time",
     status: "status",
     direction: "direction",
     rejected: "rejected",
@@ -140,8 +153,9 @@ const header = {
     pending: "pending",
     warehouse: "Warehouse",
     employee: "employee",
-    location: "location"
+    location: "location",
   },
+
   modal: {
     add: "Add",
     edit: "Edit",
@@ -155,33 +169,37 @@ const header = {
       sale: "sale",
       addtocart: "Add to Cart",
       sale_product: "Sell Product",
-      total_price: "Total Price"
+      total_price: "Total price",
     },
     addAdmins: {
       adddeliver: "Add Admin",
-      editdeliver: "Edit Admin"
+      editdeliver: "Edit Admin",
     },
     addNews: {
       addNews: "Add News",
-      editNews: "Edit News"
+      editNews: "Edit News",
     },
     addBuilding: {
       addbuilding: "Add Building",
-      editbuilding: "Edit Building"
+      editbuilding: "Edit Building",
     },
     addWarehouse: {
       title: "Add Brand",
       edit: "Edit Brand",
       transfer_from_werhouse: "Transfer from Main Warehouse",
-      transfer_to_werhouse: "Transfer between Warehouses"
+      transfer_to_werhouse: "Transfer from Warehouse to Warehouse",
+    },
+    addNews: {
+      addnews: "Add News",
+      editnews: "Edit News",
     },
     addExpenses: {
       title: "Add Expenses",
-      edit: "Edit Expenses"
+      edit: "Edit Expenses",
     },
     addIncome: {
       title: "Add Income",
-      edit: "Edit Income"
+      edit: "Edit Income",
     },
     addCategory: {
       title: "Add Category",
@@ -189,7 +207,7 @@ const header = {
       category: "Category",
       subcategory: "Subcategory",
       subtitle: "Add Subcategory",
-      subedit: "Edit Subcategory"
+      subedit: "Edit Subcategory",
     },
     addCompany: {
       title: "Add Company",
@@ -197,9 +215,9 @@ const header = {
       category: "Company",
       subcategory: "account number",
       subtitle: "Add Company Account",
-      subedit: "Edit Company Account"
-    }
-  }
+      subedit: "Edit Company Account",
+    },
+  },
 };
 
 export default header;
