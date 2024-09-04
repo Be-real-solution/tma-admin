@@ -155,15 +155,14 @@ export default function AddCompanyModal({ getDatas, type, subId }) {
             submit: null,
         },
         validationSchema: Yup.object({
-            // open_hour: Yup.string().required("Name is required"),
-            // close_hour: Yup.string().required("Name is required"),
+          
             nameuz: Yup.string().min(2).required("Name is required"),
             nameru: Yup.string().min(2).required("Name is required"),
             nameen: Yup.string().min(2).required("Name is required"),
             phone_number: Yup.string().min(2).required("Phone number is required"),
-            descriptionuz: Yup.string().min(5).required("Info is required"),
-            descriptionru: Yup.string().min(5).required("Info is required"),
-            descriptionen: Yup.string().min(5).required("Info is required"),
+            // descriptionuz: Yup.string().min(5).required("Info is required"),
+            // descriptionru: Yup.string().min(5).required("Info is required"),
+            // descriptionen: Yup.string().min(5).required("Info is required"),
         }),
 
 
@@ -186,8 +185,8 @@ export default function AddCompanyModal({ getDatas, type, subId }) {
                 formData.append("address[uz]", mapModal.data.address);
                 formData.append("address[ru]", mapModal.data.address);
                 formData.append("address[en]", mapModal.data.address);
-                formData.append("workEndTime", values.close_hour);
-                formData.append("workStartTime", values.open_hour);
+                values.close_hour &&  formData.append("workEndTime", values.close_hour);
+                values.open_hour && formData.append("workStartTime", values.open_hour);
                 formData.append("latitude",  String(mapModal.data.lat));
                 formData.append("longitude", String(mapModal.data.long));
               

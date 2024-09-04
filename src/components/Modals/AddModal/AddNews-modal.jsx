@@ -13,6 +13,8 @@ import CloseIcon from "@heroicons/react/24/solid/XMarkIcon";
 import { SvgIcon, useMediaQuery } from "@mui/material";
 import useFetcher from "src/hooks/use-fetcher";
 import PlusIcon from "@heroicons/react/24/solid/PlusIcon";
+import {  Select, FormControl, InputLabel, Chip } from '@mui/material';
+
 import { useFormik } from "formik";
 import { useAuth } from 'src/hooks/use-auth';
 import { useRouter } from 'next/router';
@@ -123,7 +125,7 @@ export default function AddOrderModal({ getDatas, company }) {
   };
   const onFinish = () => {
     formik.values.nameuz = "";
-    formik.values.category_id = "";
+    formik.values.category_id = [];
     formik.values.nameen = "";
     formik.values.nameru = "";
     formik.values.descriptionuz = "";
@@ -136,7 +138,7 @@ image.current=""
   
   const formik = useFormik({
     initialValues: {
-      category_id:"" ,
+      category_id:[] ,
       nameen: "",
       nameuz: "",
       nameru: "",
@@ -161,6 +163,7 @@ image.current=""
     onSubmit: async (values, helpers) => {
       setIsLoading(true)
       try {
+console.log( values.category_id);
 
         const formData = new FormData();
         for (let index = 0; index < images?.length; index++) {
@@ -173,7 +176,9 @@ image.current=""
         formData.append("description[uz]", values.descriptionuz);
         formData.append("description[ru]", values.descriptionru);
         formData.append("description[en]", values.descriptionen);
-        formData.append('categoryId', values.category_id);
+        values.category_id.forEach(id => {
+          formData.append('categoryIds', id);
+        });
         formData.append('adminId', user?.id);
         formData.append("isTop", Boolean(values.isTop));
     
@@ -322,26 +327,36 @@ style={{display:"flex", alignItems:"center", justifyContent:"space-between"}}>
       )}
     </Paper>
 
-              <TextField
-                error={!!(formik.touched.category_id && formik.errors.category_id)}
-                fullWidth
-                select
-                helperText={formik.touched.category_id && formik.errors.category_id}
-                label={localization.sidebar.category}
-                name="category_id"
-                onBlur={formik.handleBlur}
-                onChange={formik.handleChange}
-                type="text"
-                value={formik.values.category_id}
-              >
-                {categories &&
-                  categories.map((item) => (
-                    <MenuItem key={item?.id}
-                      value={item?.id}>
-                      {item?.name}
-                    </MenuItem>
-                  ))}
-              </TextField>
+    <FormControl fullWidth error={!!(formik.touched.category_id && formik.errors.category_id)}>
+  <InputLabel  variant="filled" id="demo-simple-select-autowidth-label">{localization.sidebar.category}</InputLabel>
+  <Select
+    labelId="demo-simple-select-autowidth-label"
+  label
+    multiple
+    name="category_id"
+    value={formik.values.category_id}
+    onChange={formik.handleChange}
+    onBlur={formik.handleBlur}
+    renderValue={(selected) => (
+      <Box sx={{ display: 'flex', pt:0.6, flexWrap: 'wrap', gap: 0.5 }}>
+        {selected.map((value) => (
+          <Chip sx={{height:22}} key={value} label={categories.find(category => category.id === value)?.name} />
+        ))}
+      </Box>
+    )}
+  >
+    {categories &&
+      categories.map((item) => (
+        <MenuItem key={item?.id} value={item?.id}>
+          {item?.name}
+        </MenuItem>
+      ))}
+  </Select>
+  {formik.touched.category_id && formik.errors.category_id && (
+    <FormHelperText>{formik.errors.category_id}</FormHelperText>
+  )}
+</FormControl>
+
       
               <TextField
 

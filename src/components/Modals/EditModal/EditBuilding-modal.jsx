@@ -71,7 +71,7 @@ BootstrapDialogTitle.propTypes = {
 };
 
 export default function AddCompanyModal({ getDatas, type, row }) {
-    const { loading, error, createData } = useFetcher();
+
     const [open, setOpen] = React.useState(false);
     const { lang } = useSelector((state) => state.localiztion);
     const [isLoading, setIsLoading] = React.useState(false);
@@ -144,15 +144,13 @@ export default function AddCompanyModal({ getDatas, type, row }) {
             submit: null,
         },
         validationSchema: Yup.object({
-            // open_hour: Yup.string().required("Name is required"),
-            // close_hour: Yup.string().required("Name is required"),
             nameuz: Yup.string().min(2).required("Name is required"),
             nameru: Yup.string().min(2).required("Name is required"),
             nameen: Yup.string().min(2).required("Name is required"),
             phoneNumber: Yup.string().min(2).required("Phone number is required"),
-            descriptionuz: Yup.string().min(5).required("Info is required"),
-            descriptionru: Yup.string().min(5).required("Info is required"),
-            descriptionen: Yup.string().min(5).required("Info is required"),
+            // descriptionuz: Yup.string().min(5).required("Info is required"),
+            // descriptionru: Yup.string().min(5).required("Info is required"),
+            // descriptionen: Yup.string().min(5).required("Info is required"),
         }),
 
 
