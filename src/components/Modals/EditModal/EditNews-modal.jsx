@@ -17,7 +17,7 @@ import { useRouter } from 'next/router';
 import {PlusIcon, PencilSquareIcon} from "@heroicons/react/24/solid";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import {  List, ListItem, IconButton, CardMedia, Paper } from '@mui/material';
+import {  List, ListItem, IconButton, FormHelperText, CardMedia, Paper } from '@mui/material';
 import { Delete as DeleteIcon, Image as ImageIcon } from '@mui/icons-material';
 import {  Select, FormControl, InputLabel, Chip } from '@mui/material';
 

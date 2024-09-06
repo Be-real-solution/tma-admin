@@ -13,7 +13,7 @@ import CloseIcon from "@heroicons/react/24/solid/XMarkIcon";
 import { SvgIcon, useMediaQuery } from "@mui/material";
 import useFetcher from "src/hooks/use-fetcher";
 import PlusIcon from "@heroicons/react/24/solid/PlusIcon";
-import {  Select, FormControl, InputLabel, Chip } from '@mui/material';
+import {  Select, FormControl, FormHelperText, InputLabel, Chip } from '@mui/material';
 
 import { useFormik } from "formik";
 import { useAuth } from 'src/hooks/use-auth';

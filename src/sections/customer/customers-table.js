@@ -155,7 +155,7 @@ console.log(customer);
                         </TableCell>
                         <TableCell>{customer.name?.[lang]}</TableCell>
                         <TableCell>{customer.description?.[lang]}</TableCell>
-                        <TableCell>{customer?.categories && customer?.categories?.map((el)=> (<p>
+                        <TableCell>{customer?.categories && customer?.categories?.map((el, index)=> (<p key={index}>
 {el.name?.[lang]}
                         </p>))}</TableCell>
                         <TableCell>{customer.admin?.fullName}</TableCell>
@@ -183,7 +183,7 @@ console.log(customer);
                     </TableCell>
                     <TableCell>{customer.name}</TableCell>
                     <TableCell>{customer.description}</TableCell>
-                    <TableCell>{customer?.categories && customer?.categories?.map((el)=> (<p>
+                    <TableCell>{customer?.categories && customer?.categories?.map((el, index)=> (<p key={index}>
 {el.name}
                     </p>))}</TableCell>
                     <TableCell>{customer.admin?.fullName}</TableCell>
