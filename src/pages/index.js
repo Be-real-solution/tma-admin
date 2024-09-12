@@ -1,144 +1,165 @@
-import Head from "next/head";
-import { useEffect, useState, useRef } from "react";
-import { Box, Container, Unstable_Grid2 as Grid } from "@mui/material";
-import { Layout as DashboardLayout } from "src/layouts/dashboard/layout";
-import { OverviewBudget } from "src/sections/overview/overview-budget";
-import useFetcher from "src/hooks/use-fetcher";
-import ReactDatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
-import styled from "styled-components";
+import { useCallback, useMemo, useState, useEffect, useRef } from 'react';
+import Head from 'next/head';
+import { Box, Button, Container, Stack, SvgIcon, Typography, Breadcrumbs } from "@mui/material";
+import { routeControler } from "src/utils/role-controler";
+import { usePathname, useRouter } from "next/navigation";
+
+
+import { Layout as DashboardLayout } from 'src/layouts/dashboard/layout';
+import { CustomersTable } from 'src/sections/customer/customers-table';
+import { CustomersSearch } from 'src/sections/customer/customers-search';
+import { applyPagination } from 'src/utils/apply-pagination';
+import useFetcher from 'src/hooks/use-fetcher';
+import AddCompanyModal from 'src/components/Modals/AddModal/AddNews-modal';
 import Content from "src/Localization/Content";
-import { useSelector } from "react-redux";
-import useMediaQuery from "@mui/material/useMediaQuery";
+import { useSelector, useDispatch } from "react-redux";
+import { changePage } from "src/slices/paginationReduser";
+import { useSearchParams } from 'next/navigation';
+
+
+
+const useCustomers = (data, page, rowsPerPage) => {
+  return useMemo(() => {
+    return applyPagination(data, page, rowsPerPage);
+  }, [data, page, rowsPerPage]);
+};
 
 
 
 
-const CustomInput = styled.input`
-  /* Add your custom styles here */
-  padding: 10px;
-  font-size: 16px;
-  border: 1px solid #ccc;
-  border-radius:10px;
-`;
-const CustomLabel = styled.label`
-  display: flex;
-  flex-direction: column;
-  margin-left: 12px;
-`;
 
-const now = new Date();
-const date = new Date();
+const Page = ({ subId, setSubId }) => {
+  const { data, loading, error, fetchData, createData } = useFetcher();
+  const dispatch = useDispatch();
+  const params = useSearchParams();
+  const ParamId = params.get("id");
+  const routers = useRouter();
+  const router = usePathname();
+  const user = JSON.parse(window.sessionStorage.getItem("user")) || false;
+  const checkAccess = routeControler[user.role]?.edit?.find((item) => item == router);
 
-const Page = () => {
-  const matches = useMediaQuery("(max-width:480px)");
+  const [searchValue, setSearchValue] = useState("");
+  const [page, setPage] = useState(0);
+  const { pageCount } = useSelector((state) => state.pageCount);
+  const [rowsPerPage, setRowsPerPage] = useState(pageCount || 5);
 
-  const { data, loading, error, fetchData } = useFetcher();
-  const [startTime, setstartTime] = useState(date.setDate(date.getDate() - 1));
-  const [endTime, setEndTime] = useState(now.getTime());
+  const initalData = data[`/new/carousel`];
+  const [filtered, setFiltered] = useState(initalData || []);
+  const customers = useCustomers(filtered, page, rowsPerPage);
+  const [isLoading, setIsLoading] = useState(true);
 
- const { lang } = useSelector((state) => state.localiztion);
+  const { lang } = useSelector((state) => state.localiztion);
 
- const { localization } = Content[lang];
+  const { localization } = Content[lang];
 
 
-  
+  useEffect(()=> {
+    setTimeout(() => {
+      setIsLoading(loading)
+    }, 500);
+  }, [data])
+
+  const handlePageChange = useCallback((event, value) => {
+    setPage(value);
+  }, []);
+
+  const handleRowsPerPageChange = useCallback(
+    (event) => {
+      setRowsPerPage(event.target.value);
+      dispatch(changePage({ pageCount: event.target.value }));
+      setPage(0);
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    []
+  );
+
 
 
   function getCountries() {
-    fetchData(`/statistics/all?start=${startTime}&end=${endTime}`);
+      fetchData(`/new/carousel`);
   }
 
-  
-  // useEffect(() => {
-  //     getCountries();
-    
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [startTime, endTime]);
+  useEffect(() => {
+    getCountries();
 
-  const info = data[`/statistics/all?start=${startTime}&end=${endTime}`];
- 
- 
-   const StatisticsData = [
-     {
-       label: localization.home.budget,
-       value: info?.budget,
-     },
-     {
-       label: localization.home.clients,
-       value: info?.clients,
-     },
-     {
-       label: localization.home.total_profit,
-       value: info?.mainCheckout,
-     },
-     {
-       label: localization.home.expenses,
-       value: info?.expenses,
-     },
-   ];
- 
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  function onSearch(e) {
+    setSearchValue(e.target.value);
+  }
+
+
+
+  useEffect(() => {
+    try {
+      setPage(0);
+      setFiltered(
+        initalData.filter((user) => {
+          if (searchValue == "") {
+            return user;
+          } else if (
+            user?.name?.toLowerCase().includes(searchValue.toString()?.toLowerCase()) ||
+            user?.description?.toLowerCase().includes(searchValue.toString()?.toLowerCase())) {
+            return user;
+          }
+        })
+      );
+    } catch (error) {
+      setFiltered([]);
+      console.error("Filtered Groups Error => ", error.message);
+    }
+  }, [initalData, searchValue]);
+
   return (
     <>
       <Head>
-        <title>Dashboard | TMA Admin</title>
+        <title>News  Banner | TMA Admin </title>
       </Head>
       <Box
         component="main"
         sx={{
           flexGrow: 1,
-          py: 4,
+          py: 4
         }}
       >
         <Container maxWidth="xl">
-          <Box
-            sx={
-              matches
-                ? { flexDirection: "column", mb: 3 }
-                : { display: "flex", justifyContent: "right", mb: 3 }
-            }
-          >
-            <CustomLabel>
-              <b>{localization.home.start_time}</b>
-              <ReactDatePicker
-                customInput={<CustomInput style={matches ? { width: "100%" } : {}} />}
-                selected={startTime}
-                onChange={(date) => {
-                  setstartTime(date.getTime());
-                }}
-              />
-            </CustomLabel>
-            <CustomLabel>
-              <b>{localization.home.end_time}</b>
-              <ReactDatePicker
-                customInput={<CustomInput style={matches ? { width: "100%" } : {}} />}
-                selected={endTime}
-                onChange={(date) => {
-                  setEndTime(date.getTime());
-                }}
-              />
-            </CustomLabel>
-          </Box>
+          <Stack spacing={3}>
+            <Stack direction="row" justifyContent="space-between" spacing={4}>
+              <Stack spacing={1}>
+      
+                <Typography variant="h4" textTransform={"capitalize"}>
+                  {localization.sidebar.top_news}
+                </Typography>
+              </Stack>
 
-          <Grid container spacing={3}>
-            {StatisticsData &&
-              StatisticsData.map((item, index) => (
-                <Grid xs={12} key={index} sm={6} lg={3}>
-                  <OverviewBudget
-                    difference={12}
-                    label={item?.label}
-                    sx={{ height: "100%" }}
-                    value={item?.value || 0}
-                  />
-                </Grid>
-              ))}
-          </Grid>
+            
+            </Stack>
+            <CustomersSearch forLabel={localization.sidebar.top_news} onSearch={onSearch} type={"country"} />
+            <CustomersTable
+             isLoading={isLoading}
+             
+              count={filtered?.length}
+              items={customers}
+              onPageChange={handlePageChange}
+              onRowsPerPageChange={handleRowsPerPageChange}
+              page={page}
+              data={data}
+              type="news-banner"
+              getDate={getCountries}
+              rowsPerPage={rowsPerPage}
+            />
+          </Stack>
         </Container>
       </Box>
     </>
   );
 };
 
-Page.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
+Page.getLayout = (page) => (
+  <DashboardLayout>
+    {page}
+  </DashboardLayout>
+);
 
 export default Page;
