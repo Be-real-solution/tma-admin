@@ -1,7 +1,7 @@
 module.exports = {
   reactStrictMode: false,
   images: {
-    domains: ["mobile.tma.uz", "164.92.117.144"],
+    domains: ["mobile.tma.uz", "admin.medsfera.uz", "164.92.117.144"],
     remotePatterns: [
       {
         protocol: "http",
