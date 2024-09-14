@@ -14,7 +14,8 @@ import {
   TableRow,
   Backdrop,
   Typography,
-  CircularProgress
+  CircularProgress,
+  Tooltip
 
 } from "@mui/material";
 import useFetcher from "src/hooks/use-fetcher";
@@ -153,8 +154,34 @@ console.log(customer);
                             />
                           )}
                         </TableCell>
-                        <TableCell>{customer.name?.[lang]}</TableCell>
-                        <TableCell>{customer.description?.[lang]}</TableCell>
+                        <TableCell>
+                        <Tooltip   arrow title= {customer.name?.[lang]}>
+                      <Typography   sx={{
+    display: '-webkit-box',
+    WebkitLineClamp: 4,
+    WebkitBoxOrient: 'vertical',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+  }}>
+                          {customer.name?.[lang]}
+                          </Typography>
+                         </Tooltip>
+                          </TableCell>
+                        <TableCell>
+                        <Tooltip   arrow title={customer.description?.[lang]}>
+                      <Typography   sx={{
+    display: '-webkit-box',
+    WebkitLineClamp: 4,
+    WebkitBoxOrient: 'vertical',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+  }}>
+
+                        {customer.description?.[lang]}
+                      </Typography>
+                    </Tooltip>
+                    </TableCell>
+                     
                         <TableCell>{customer?.categories && customer?.categories?.map((el, index)=> (<p key={index}>
 {el.name?.[lang]}
                         </p>))}</TableCell>
@@ -181,8 +208,34 @@ console.log(customer);
                         />
                       )}
                     </TableCell>
-                    <TableCell>{customer.name}</TableCell>
-                    <TableCell>{customer.description}</TableCell>
+                    <TableCell>
+                        <Tooltip   arrow title= {customer.name}>
+                      <Typography   sx={{
+    display: '-webkit-box',
+    WebkitLineClamp: 4,
+    WebkitBoxOrient: 'vertical',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+  }}>
+                        {customer.name}
+                          </Typography>
+                         </Tooltip>
+                          </TableCell>
+                    
+                    <TableCell>
+                    <Tooltip   arrow title={customer.description}>
+                    <Typography   sx={{
+    display: '-webkit-box',
+    WebkitLineClamp: 4,
+    WebkitBoxOrient: 'vertical',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+  }}>
+
+                    {customer.description}
+                    </Typography>
+                    </Tooltip>
+                    </TableCell>
                     <TableCell>{customer?.categories && customer?.categories?.map((el, index)=> (<p key={index}>
 {el.name}
                     </p>))}</TableCell>
@@ -205,8 +258,36 @@ console.log(customer);
                             />
                           )}
                         </TableCell>
-                        <TableCell>{customer.name?.[lang]}</TableCell>
-                        <TableCell>{customer.description?.[lang]}</TableCell>
+                        <TableCell>
+                        <Tooltip   arrow title={customer.name?.[lang]}>
+                      <Typography   sx={{
+    display: '-webkit-box',
+    WebkitLineClamp: 4,
+    WebkitBoxOrient: 'vertical',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+  }}>
+{customer.name?.[lang]}
+                          
+  </Typography>
+  </Tooltip>
+                          </TableCell>
+                        
+                        <TableCell>
+                          
+                        <Tooltip   arrow title={customer.description?.[lang]}>
+                      <Typography   sx={{
+    display: '-webkit-box',
+    WebkitLineClamp: 4,
+    WebkitBoxOrient: 'vertical',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+  }}>
+{customer.description?.[lang]}
+                          
+  </Typography>
+  </Tooltip>
+                          </TableCell>
                         <TableCell>
                           <a
 
