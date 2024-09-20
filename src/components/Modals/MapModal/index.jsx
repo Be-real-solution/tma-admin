@@ -50,6 +50,40 @@ const Modal = ({ shown, close, setMapModal, localization }) => {
       // eslint-disable-next-line react-hooks/exhaustive-deps
    }, [currentLocation]);
 
+
+   function fetchAddress(lat, lng) {
+      const uri = new URL("https://geocode-maps.yandex.ru/1.x");
+  
+  
+      const params = {
+        apikey: MAP_APIKEY,
+        geocode: `${lng},${lat}`,
+        format: "json",
+        lang: "uz",
+      };
+      uri.search = new URLSearchParams(params).toString();
+  
+      fetch(uri)
+        .then((res) => res.json())
+        .then((data) => {
+          setLocationName(
+            data?.response?.GeoObjectCollection?.featureMember?.[0]?.GeoObject
+              ?.metaDataProperty?.GeocoderMetaData?.text
+          );
+        })
+        .catch((error) => {
+          console.error("Error fetching data: ", error);
+        });
+    }
+ 
+   useEffect(() => {
+     if (currentLocation.lat) {
+       fetchAddress(currentLocation.lat, currentLocation.lng);
+     } else if (currentLocation[0]) {
+       fetchAddress(currentLocation[0], currentLocation[1]);
+     }
+   }, [currentLocation]);
+
    useEffect(() => {
       try {
          if (searchLocation) {
