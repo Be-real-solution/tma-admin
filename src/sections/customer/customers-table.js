@@ -133,7 +133,6 @@ handleClose={handleClose} localization={localization}/>
               </TableRow>
               : items.length ? items.map((customer) => {
                 const createdAt = format(new Date(customer?.createdAt), "dd/MM/yyyy HH:mm");
-console.log(customer);
 
                 return (
                   <>
@@ -302,7 +301,7 @@ rel="noreferrer"
                         <TableCell>
                         <a href={`tel:+${customer?.phoneNumber}`}>+{customer?.phoneNumber}</a>
                           </TableCell>
-                        <TableCell>{customer?.workStartTime+" - " +customer.workEndTime}</TableCell>
+                        <TableCell>{`${customer?.workStartTime ? `${customer?.workStartTime} - ` : ""} ${customer?.workEndTime ? `${customer?.workEndTime} ` : ""}` }</TableCell>
                         <TableCell sx={{display:"flex", flexDirection:"row", alignItems:"flex-start", py:'25px'}} onClick={(e) => e.stopPropagation()}>
                           <EditCompanyModal row={customer} route={`building`} getDatas={getDate} />
                           <DeleteModal route={`building/${customer.id}`} getDatas={getDate} />

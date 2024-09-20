@@ -34,7 +34,7 @@ export default function useFetcher() {
      });
      const json = await response.json();
 
-     if (response.status === 401) {
+     if (response.status > 205) {
       auth.signOut();
       router.push("/auth/login");
     }
@@ -56,10 +56,13 @@ export default function useFetcher() {
      } else {
          addToast(json.errorMessage, { appearance: "error", autoDismiss: true });
        setError(json.errorMessage);
+       
      }
     } catch (error) {
       setError(error.message);
          addToast(error.message, { appearance: "error", autoDismiss: true });
+         auth.signOut();
+         router.push("/auth/login");
 
     } finally {
       setLoading(false);
@@ -83,11 +86,13 @@ export default function useFetcher() {
 
 
       const json = await response.json();
-if (response.status === 401) {
+if (response.status > 205) {
   auth.signOut();
   router.push("/auth/login");
 }
       if (!response.ok) {
+        auth.signOut();
+  router.push("/auth/login");
         throw new Error(json.message);
         
       }
@@ -98,6 +103,7 @@ if (response.status === 401) {
         addToast(json.message || (method === "POST" ? localization.alerts.added : localization.alerts.edited), { appearance: "success", autoDismiss: true });
 
       } else {
+        
         setError(json.message);
         addToast(json.message, { appearance: "error", autoDismiss: true });
 

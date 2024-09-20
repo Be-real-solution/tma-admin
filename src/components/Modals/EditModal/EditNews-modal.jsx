@@ -89,6 +89,7 @@ export default function AddOrderModal({ getDatas, row }) {
   
   const [images, setImages] = useState([]);
   const [images2, setImages2] = useState([]);
+  const [mainImage, setMainImage] = useState([]);
 
 
 
@@ -106,6 +107,21 @@ export default function AddOrderModal({ getDatas, row }) {
     newImages.splice(index, 1);
     setImages(newImages);
   };
+
+
+  const handleFileChange2 = (event) => {
+    const newImages = Array.from(event.target.files).map((file) => ({
+        file,
+        url: URL.createObjectURL(file),
+    }));
+    setMainImage((prevImages) => [...prevImages, ...newImages]);
+};
+
+const handleDelete2 = (index) => {
+    const newImages = [...mainImage];
+    newImages.splice(index, 1);
+    setMainImage(newImages);
+};
 
 
   const handleDeleteImageFromApi = (index) => {
@@ -146,7 +162,11 @@ export default function AddOrderModal({ getDatas, row }) {
 
   useEffect(()=>{
 setImages2(row.images)
-  },[row])
+setMainImage([{
+  file: null,
+  url: row?.mainImage,
+}])
+  },[row, open])
 
 
   const formik = useFormik({
@@ -180,7 +200,8 @@ setImages2(row.images)
         for (let index = 0; index < images?.length; index++) {
           images?.[index].file &&  formData.append('images', images?.[index].file);  
         }
-        image.current?.files[0] && formData.append('image', image.current?.files[0]);  
+        mainImage?.[0]?.file && formData.append('image', mainImage[0]?.file);
+
         formData.append("name[uz]", values.nameuz);
         formData.append("name[ru]", values.nameru);
         formData.append("name[en]", values.nameen);
@@ -259,22 +280,55 @@ setImages2(row.images)
           <DialogContent dividers>
           <Stack spacing={3}
               >
-              <TextField
+                   <Paper elevation={3} 
+    style={{ padding: '16px', marginTop: '16px'}}>
+     <TextField
                 fullWidth
                 name="image"
                 label={localization.table.main_image}
-
-                onBlur={formik.handleBlur}
-                onChange={formik.handleChange}
-                type="file"
-                inputRef={image}
+               disabled={mainImage?.length}
                 InputLabelProps={{
                   shrink: true,
                 }}
+                onBlur={formik.handleBlur}
+                onChange={(e) => {
+                    handleFileChange2(e)
+                  // formik.handleChange()}
+                }}
+                type="file"
+                inputRef={image}
+              /> 
+  
+      {mainImage?.length > 0 ? (
+        <List>
+          {mainImage.map((image, index) => (
+            <ListItem key={index}
+             divider
+style={{display:"flex", alignItems:"center", justifyContent:"space-between"}}>
+    <Box sx={{display:"flex", alignItems:"center"}}>          <CardMedia
+                component="img"
+                image={image?.file ?  image.url : BaseUrl + "/uploads/images/" + image.url}
+                alt={`Uploaded preview ${index}`}
+                style={{ width: '100px', height: '100px', marginRight: '16px', objectFit:"contain" }}
               />
-
-
-{/* <ImageUploadList/> */}
+              <Typography variant="body2">{image?.file ? image?.file?.name : "image.png"}</Typography></Box>
+              <IconButton edge="end" 
+              onClick={() => handleDelete2(index)}>
+                <DeleteIcon />
+              </IconButton>
+            </ListItem>
+          ))}
+        </List>
+      ) : (
+        <Box textAlign="center">
+          <ImageIcon style={{ fontSize: 50, color: 'gray' }} />
+          <Typography variant="body2"
+           color="textSecondary">
+            No images uploaded
+          </Typography>
+        </Box>
+      )}
+    </Paper>
 
 <Paper elevation={3} 
     style={{ padding: '16px', marginTop: '16px' }}>

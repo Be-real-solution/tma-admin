@@ -81,6 +81,7 @@ export default function AddCompanyModal({ getDatas, type, row }) {
     const { addToast } = useToasts()
     const [images, setImages] = useState([]);
     const [images2, setImages2] = useState([]);
+    const [mainImage, setMainImage] = useState([]);
 
     const [mapModal, setMapModal] = React.useState({
         status: false, data: {
@@ -97,6 +98,7 @@ export default function AddCompanyModal({ getDatas, type, row }) {
     };
     const handleClose = () => {
         setOpen(false);
+     
     };
 
     const handleFileChange = (event) => {
@@ -114,11 +116,30 @@ export default function AddCompanyModal({ getDatas, type, row }) {
     };
 
 
+    const handleFileChange2 = (event) => {
+        const newImages = Array.from(event.target.files).map((file) => ({
+            file,
+            url: URL.createObjectURL(file),
+        }));
+        setMainImage((prevImages) => [...prevImages, ...newImages]);
+    };
+
+    const handleDelete2 = (index) => {
+        const newImages = [...mainImage];
+        newImages.splice(index, 1);
+        setMainImage(newImages);
+    };
+
+    
 
     useEffect(() => {
         if (row) {
             formik.setFieldValue("phoneNumber", row.phoneNumber)
             setImages2(row.images)
+            setMainImage([{
+                file: null,
+                url: row?.mainImage,
+            }])
             setMapModal({
                 status: false, data: {
                     lat: row?.latitude || "",
@@ -128,7 +149,7 @@ export default function AddCompanyModal({ getDatas, type, row }) {
             })
 
         }
-    }, [row])
+    }, [row, open])
 
     const formik = useFormik({
         initialValues: {
@@ -147,7 +168,8 @@ export default function AddCompanyModal({ getDatas, type, row }) {
             nameuz: Yup.string().min(2).required("Name is required"),
             nameru: Yup.string().min(2).required("Name is required"),
             nameen: Yup.string().min(2).required("Name is required"),
-            phoneNumber: Yup.string().min(2).required("Phone number is required"),
+            phoneNumber: Yup.string().min(2)
+            // .required("Phone number is required"),
             // descriptionuz: Yup.string().min(5).required("Info is required"),
             // descriptionru: Yup.string().min(5).required("Info is required"),
             // descriptionen: Yup.string().min(5).required("Info is required"),
@@ -161,7 +183,7 @@ export default function AddCompanyModal({ getDatas, type, row }) {
                 for (let index = 0; index < images?.length; index++) {
                     images?.[index].file && formData.append('images', images?.[index].file);
                 }
-                image.current?.files[0] && formData.append('image', image.current?.files[0]);
+                mainImage?.[0]?.file && formData.append('image', mainImage[0]?.file);
                 values.nameuz && formData.append("name[uz]", values.nameuz);
                 values.nameru && formData.append("name[ru]", values.nameru);
                 values.nameen && formData.append("name[en]", values.nameen);
@@ -274,22 +296,57 @@ export default function AddCompanyModal({ getDatas, type, row }) {
                     <DialogContent dividers>
                         <Stack spacing={3}
                           >
-                            <TextField
-                                fullWidth
-                                name="image"
-                                label={localization.table.main_image}
+                    <Paper elevation={3} 
+    style={{ padding: '16px', marginTop: '16px'}}>
+     <TextField
+                fullWidth
+                name="image"
+                label={localization.table.main_image}
+               disabled={mainImage?.length}
+                InputLabelProps={{
+                  shrink: true,
+                }}
+                onBlur={formik.handleBlur}
+                onChange={(e) => {
+                    handleFileChange2(e)
+                  // formik.handleChange()}
+                }}
+                type="file"
+                inputRef={image}
+              /> 
+  
+      {mainImage?.length > 0 ? (
+        <List>
+          {mainImage.map((image, index) => (
+            <ListItem key={index}
+             divider
+style={{display:"flex", alignItems:"center", justifyContent:"space-between"}}>
+    <Box sx={{display:"flex", alignItems:"center"}}>          <CardMedia
+                component="img"
+                image={image?.file ?  image.url : BaseUrl + "/uploads/images/" + image.url}
+                alt={`Uploaded preview ${index}`}
+                style={{ width: '100px', height: '100px', marginRight: '16px', objectFit:"contain" }}
+              />
+              <Typography variant="body2">{image?.file ? image?.file?.name : "image.png"}</Typography></Box>
+              <IconButton edge="end" 
+              onClick={() => handleDelete2(index)}>
+                <DeleteIcon />
+              </IconButton>
+            </ListItem>
+          ))}
+        </List>
+      ) : (
+        <Box textAlign="center">
+          <ImageIcon style={{ fontSize: 50, color: 'gray' }} />
+          <Typography variant="body2"
+           color="textSecondary">
+            No images uploaded
+          </Typography>
+        </Box>
+      )}
+    </Paper>
 
-                                onBlur={formik.handleBlur}
-                                onChange={formik.handleChange}
-                                type="file"
-                                inputRef={image}
-                                InputLabelProps={{
-                                    shrink: true,
-                                }}
-                            />
-
-
-                            {/* <ImageUploadList/> */}
+                         
 
                             <Paper elevation={3}
                                 style={{ padding: '16px', marginTop: '16px' }}>
@@ -312,13 +369,7 @@ export default function AddCompanyModal({ getDatas, type, row }) {
                                     type="file"
                                     inputRef={image}
                                 />
-                                {/* <input
-        type="file"
-        accept="image/*"
-        multiple
-        onChange={handleFileChange}
-        style={{ marginBottom: '16px' }}
-      /> */}
+
 
                                 {(images.length > 0 || images2.length > 0) ? (
                                     <List>

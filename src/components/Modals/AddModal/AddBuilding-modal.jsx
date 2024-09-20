@@ -79,6 +79,8 @@ export default function AddCompanyModal({ getDatas, type, subId }) {
     const image = React.useRef("")
     const {addToast} = useToasts()
     const [images, setImages] = useState([]);
+    const [mainImage, setMainImage] = useState([]);
+    
     const [mapModal, setMapModal] = React.useState({
         status: false, data: {
             lat: "",
@@ -96,6 +98,14 @@ export default function AddCompanyModal({ getDatas, type, subId }) {
       }));
       setImages((prevImages) => [...prevImages, ...newImages]);
     };
+
+    const handleFileChange2 = (event) => {
+        const newImages = Array.from(event.target.files).map((file) => ({
+          file,
+          url: URL.createObjectURL(file),
+        }));
+        setMainImage((prevImages) => [...prevImages, ...newImages]);
+      };
   
     const handleDelete = (index) => {
       const newImages = [...images];
@@ -103,6 +113,15 @@ export default function AddCompanyModal({ getDatas, type, subId }) {
       setImages(newImages);
     };
   
+    const handleDelete2 = (index) => {
+
+        const newImages = [...mainImage];
+        newImages.splice(index, 1);
+        setMainImage(newImages);
+     
+    };
+
+    
 
     
 
@@ -127,6 +146,7 @@ export default function AddCompanyModal({ getDatas, type, subId }) {
         formik.values.open_hour = ""
         formik.values.close_hour = ""
         setImages([])
+        setMainImage([])
         setMapModal({
             status: false,
             data: {
@@ -159,7 +179,8 @@ export default function AddCompanyModal({ getDatas, type, subId }) {
             nameuz: Yup.string().min(2).required("Name is required"),
             nameru: Yup.string().min(2).required("Name is required"),
             nameen: Yup.string().min(2).required("Name is required"),
-            phone_number: Yup.string().min(2).required("Phone number is required"),
+            phone_number: Yup.string().min(2)
+            // .required("Phone number is required"),
             // descriptionuz: Yup.string().min(5).required("Info is required"),
             // descriptionru: Yup.string().min(5).required("Info is required"),
             // descriptionen: Yup.string().min(5).required("Info is required"),
@@ -174,14 +195,14 @@ export default function AddCompanyModal({ getDatas, type, subId }) {
                 for (let index = 0; index < images?.length; index++) {
                     images?.[index].file && formData.append('images', images?.[index].file);
                 }
-                image.current?.files[0] && formData.append('image', image.current?.files[0]);
+                mainImage?.length && formData.append('image', mainImage[0]?.file);
                 formData.append("name[uz]", values.nameuz);
                 formData.append("name[ru]", values.nameru);
                 formData.append("name[en]", values.nameen);
                 formData.append("description[uz]", values.descriptionuz);
                 formData.append("description[ru]", values.descriptionru);
                 formData.append("description[en]", values.descriptionen);
-                formData.append("phoneNumber", values.phone_number);
+                values.phone_number && formData.append("phoneNumber", values.phone_number);
                 formData.append("address[uz]", mapModal.data.address);
                 formData.append("address[ru]", mapModal.data.address);
                 formData.append("address[en]", mapModal.data.address);
@@ -264,21 +285,57 @@ onClose={handleClose}
                     <DialogContent dividers>
                         <Stack  spacing={3}
                             >
-        <TextField
+     
+
+<Paper elevation={3} 
+    style={{ padding: '16px', marginTop: '16px'}}>
+     <TextField
                 fullWidth
                 name="image"
-          label={localization.table.main_image}
-                onBlur={formik.handleBlur}
-                onChange={formik.handleChange}
-                type="file"
-                inputRef={image}
+                label={localization.table.main_image}
+               disabled={mainImage?.length}
                 InputLabelProps={{
                   shrink: true,
                 }}
+                onBlur={formik.handleBlur}
+                onChange={(e) => {
+                    handleFileChange2(e)
+                  // formik.handleChange()}
+                }}
+                type="file"
+                inputRef={image}
+              /> 
+  
+      {mainImage?.length > 0 ? (
+        <List>
+          {mainImage.map((image, index) => (
+            <ListItem key={index}
+             divider
+style={{display:"flex", alignItems:"center", justifyContent:"space-between"}}>
+    <Box sx={{display:"flex", alignItems:"center"}}>          <CardMedia
+                component="img"
+                image={image.url}
+                alt={`Uploaded preview ${index}`}
+                style={{ width: '100px', height: '100px', marginRight: '16px', objectFit:"contain" }}
               />
-
-
-{/* <ImageUploadList/> */}
+              <Typography variant="body2">{image.file.name}</Typography></Box>
+              <IconButton edge="end" 
+              onClick={() => handleDelete2(index)}>
+                <DeleteIcon />
+              </IconButton>
+            </ListItem>
+          ))}
+        </List>
+      ) : (
+        <Box textAlign="center">
+          <ImageIcon style={{ fontSize: 50, color: 'gray' }} />
+          <Typography variant="body2"
+           color="textSecondary">
+            No images uploaded
+          </Typography>
+        </Box>
+      )}
+    </Paper>
 
 <Paper elevation={3} 
     style={{ padding: '16px', marginTop: '16px'}}>
@@ -300,13 +357,7 @@ onClose={handleClose}
                 type="file"
                 inputRef={image}
               /> 
-      {/* <input
-        type="file"
-        accept="image/*"
-        multiple
-        onChange={handleFileChange}
-        style={{ marginBottom: '16px' }}
-      /> */}
+  
       {images.length > 0 ? (
         <List>
           {images.map((image, index) => (
