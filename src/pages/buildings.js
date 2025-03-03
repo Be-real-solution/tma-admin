@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-max-props-per-line */
 import { useCallback, useMemo, useState, useEffect, useRef } from "react";
 import Head from "next/head";
 import { Box, Button, Container, Stack, SvgIcon, Typography, Breadcrumbs } from "@mui/material";
@@ -35,7 +36,7 @@ const Page = ({subIdSecond, setSubIdSecond}) => {
   const [rowsPerPage, setRowsPerPage] = useState(pageCount || 5);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const initalData =
-    data[`/building/for-admin`] || [];
+    data[`/building/list/`] || [];
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const [filtered, setFiltered] = useState(initalData);
   const customers = useCustomers(filtered, page, rowsPerPage);
@@ -45,6 +46,7 @@ const Page = ({subIdSecond, setSubIdSecond}) => {
     setTimeout(() => {
       setIsLoading(loading)
     }, 500);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data])
 
   const { lang } = useSelector((state) => state.localiztion);
@@ -73,6 +75,7 @@ const Page = ({subIdSecond, setSubIdSecond}) => {
       setFiltered([]);
       console.error("Filtered Groups Error => ", error.message);
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [initalData, searchValue]);
 
   const handlePageChange = useCallback((event, value) => {
@@ -89,7 +92,7 @@ const Page = ({subIdSecond, setSubIdSecond}) => {
 
   
   function getCountries() {
-    fetchData(`/building/for-admin`);
+    fetchData(`/building/list/`);
   }
 
  
@@ -124,7 +127,9 @@ const Page = ({subIdSecond, setSubIdSecond}) => {
         <Container maxWidth="xl">
           <Stack spacing={3}>
           
-            <Stack direction="row" justifyContent="space-between" spacing={4}>
+            <Stack direction="row"
+justifyContent="space-between"
+spacing={4}>
               <Stack spacing={1}>
                 <Typography variant="h4" textTransform="capitalize">
                   { localization.sidebar.reviews

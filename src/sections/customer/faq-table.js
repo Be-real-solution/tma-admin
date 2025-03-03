@@ -1,12 +1,12 @@
 /* eslint-disable react/jsx-no-target-blank */
 /* eslint-disable react/jsx-max-props-per-line */
+import Image from "next/image";
 import PropTypes from "prop-types";
 import { format } from "date-fns";
 import { usePathname } from "next/navigation";
 import { useToasts } from "react-toast-notifications";
 // import { routeControler } from "src/utils/role-controler";
 import { useEffect } from "react";
-import Image from "next/image";
 import {
   Box,
   Card,
@@ -25,8 +25,7 @@ import {
 import useFetcher from "src/hooks/use-fetcher";
 import DeleteModal from "src/components/Modals/DeleteModal";
 import EditProductModal from "src/components/Modals/EditModal/EditCategory-modal";
-import EditAnonsNetworkLink from "src/components/Modals/EditModal/EditAnonsNetworkLink";
-import EditFaqCategoryModal from "src/components/Modals/EditModal/EditFaqCategory-modal";
+import EditFaqCategoryModal from "src/components/Modals/EditModal/EditAnonsFaq-modal";
 
 
 import { Scrollbar } from "src/components/scrollbar";
@@ -70,22 +69,13 @@ export const CustomersTable = (props) => {
         <Box sx={{ minWidth: 800 }}>
           <Table>
             <TableHead>
-            {type === "networklink" ?  <TableRow>
-         <TableCell>{localization.table.country}</TableCell> 
-                <TableCell>{localization.table.title + " uz"}</TableCell>
-                <TableCell>{localization.table.title + " ru"}</TableCell>
-                <TableCell>{localization.table.title + " ru"}</TableCell>
-                <TableCell>{localization.table.title + " en"}</TableCell>
-                <TableCell>{localization.table.link}</TableCell>
-                <TableCell>{localization.action}</TableCell>
-              </TableRow> : <TableRow>
-              {type === "networkcategory" && <TableCell>{localization.table.image}</TableCell> }
+              <TableRow>
                 <TableCell>{localization.table.name + " uz"}</TableCell>
                 <TableCell>{localization.table.name + " ru"}</TableCell>
                 <TableCell>{localization.table.name + " en"}</TableCell>
                 <TableCell>{localization.table.name + " kaa"}</TableCell>
                 <TableCell>{localization.action}</TableCell>
-              </TableRow>}
+              </TableRow>
             </TableHead>
             <TableBody>
          
@@ -96,57 +86,36 @@ export const CustomersTable = (props) => {
               </Box> 
               </TableCell>
               </TableRow> : items.length ? items.map((customer) => {
-                const createdAt = format(new Date(customer?.createdAt || null), "dd/MM/yyyy");
-             
+                const createdAt = format(new Date(customer?.created_at || null), "dd/MM/yyyy");
+                // const customAt = format(
+                //   new Date(customer?.custom_date ? customer?.custom_date : null)?.getTime(),
+                //   "dd/MM/yyyy HH:mm"
+                // );
 
                 return (
-                  <>
-              
-                 {type === "networklink" ? ( <TableRow hover
-                  key={customer.id}>
-          
-                   <TableCell>{customer?.category.name}</TableCell>
-                   <TableCell>{customer?.title_uz}</TableCell>
-                   <TableCell>{customer?.title_ru}</TableCell>
-                   <TableCell>{customer?.title_en}</TableCell>
-                   <TableCell>{customer?.title_kaa}</TableCell>                
-                   <TableCell><a target="_blank" href={customer?.url}>Link</a></TableCell>
-               <TableCell>
-                     <EditAnonsNetworkLink row={customer} route={`category`} getDatas={getDate} />
-                     <DeleteModal route={`/announcement/social/network/link/delete`} id={customer.id} getDatas={getDate} />
-                   </TableCell> 
-                 </TableRow>) : ( <TableRow hover
+                  <TableRow hover
                    key={customer.id}>
-                    {type === "networkcategory" && <TableCell>
-                    {customer?.icon &&  <Image
-                        src={customer?.icon?.toString().replace("http", "https")}
-                        alt={customer?.name_uz}
-                        sx={{ width: 40, height: 40, borderRadius: 1 }}
-                        width={40}
-                        height={40}
-                      />}
-                    </TableCell> }
-                    <TableCell>{customer?.name_uz}</TableCell>
-                    <TableCell>{customer?.name_ru}</TableCell>
-                    <TableCell>{customer?.name_en}</TableCell>
-                    <TableCell>{customer?.name_kaa}</TableCell>                
-              {type === "faq-categories"  ?       <TableCell>
-                      <EditFaqCategoryModal row={customer} route={`/announcement/faq/category/update`} getDatas={getDate} />
-                      <DeleteModal route={`/announcement/faq/category/delete`} id={customer.id} getDatas={getDate} />
-                    </TableCell> :  type === "librarycategory"  ?       <TableCell>
-                      <EditProductModal row={customer} route={`/library/category/update`} getDatas={getDate} />
-                      <DeleteModal route={`/library/category/delete`} id={customer.id} getDatas={getDate} />
-                    </TableCell> :  type === "networkcategory"  ?       <TableCell>
-                      <EditProductModal row={customer} route={`/library/category/update`} getDatas={getDate} />
-                      <DeleteModal route={`/announcement/social/networks/link/category/delete`} id={customer.id} getDatas={getDate} />
+                
+
+                    <TableCell>{customer?.category?.[`name_${lang}`]}</TableCell>
+                    <TableCell>{customer?.[`question_${lang}`]}</TableCell>
+                    <TableCell>{customer?.[`answer_${lang}`]}</TableCell>
+                    <TableCell>{createdAt}</TableCell>
+              
+     
+            
+                 
+                  
+              {type === "anons-faq"  ?       <TableCell>
+                      <EditFaqCategoryModal row={customer} route={`/announcement/faq/update`} getDatas={getDate} />
+                      <DeleteModal route={`/announcement/faq/delete`} id={customer.id} getDatas={getDate} />
                     </TableCell> :    <TableCell>
                       <EditProductModal row={customer} route={`category`} getDatas={getDate} />
                       <DeleteModal route={`/news/category/delete`} id={customer.id} getDatas={getDate} />
-                    </TableCell> }
-                  </TableRow>)}
-                  </>
+                    </TableCell>}
+                  </TableRow>
                 );
-              })  :     <TableRow >
+              }) :      <TableRow >
               <TableCell  colSpan={5}>
 
             <Box height={"200px"} display={"flex"} pt={5} flexDirection={"column"} alignItems={"center"} justifyContent={"center"} >

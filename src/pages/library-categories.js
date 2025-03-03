@@ -41,7 +41,7 @@ const Page = () => {
    const [page, setPage] = useState(0);
    const { pageCount } = useSelector((state) => state.pageCount);
    const [rowsPerPage, setRowsPerPage] = useState(pageCount || 5);
-    const initalData = data["/news/category/list/"]?.results;
+    const initalData = data["/library/category/list/"]?.results;
     const [filtered, setFiltered] = useState(initalData || []);
     const customers = useCustomers(filtered, page, rowsPerPage);
     const [isLoading, setIsLoading] = useState(true);
@@ -79,7 +79,7 @@ console.log(initalData);
 
 
   function getCountries() {
-    fetchData(`/news/category/list/`);
+    fetchData(`/library/category/list/`);
     
   }
 
@@ -144,7 +144,7 @@ spacing={4}>
               </Stack>
               {/* {checkAccess && ( */}
                 <div>
-                  <AddCompanyModal getDatas={getCountries} type={"news"}/>
+                  <AddCompanyModal getDatas={getCountries} />
                 </div>
               {/* )} */}
             </Stack>
@@ -158,7 +158,7 @@ type={"country"} />
               onPageChange={handlePageChange}
               onRowsPerPageChange={handleRowsPerPageChange}
               page={page}
-              type="categories"
+              type="librarycategory"
               getDate={getCountries}
               rowsPerPage={rowsPerPage}
             />

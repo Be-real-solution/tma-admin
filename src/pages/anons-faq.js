@@ -6,11 +6,11 @@ import { usePathname, useRouter } from "next/navigation";
 
 
 import { Layout as DashboardLayout } from 'src/layouts/dashboard/layout';
-import { CustomersTable } from 'src/sections/customer/customers-table';
+import { CustomersTable } from 'src/sections/customer/faq-table';
 import { CustomersSearch } from 'src/sections/customer/customers-search';
 import { applyPagination } from 'src/utils/apply-pagination';
 import useFetcher from 'src/hooks/use-fetcher';
-import AddCompanyModal from 'src/components/Modals/AddModal/AddNews-modal';
+import AddCompanyModal from 'src/components/Modals/AddModal/AddAnonsFaq-modal';
 import Content from "src/Localization/Content";
 import { useSelector, useDispatch } from "react-redux";
 import { changePage } from "src/slices/paginationReduser";
@@ -42,22 +42,23 @@ const Page = ({ subId, setSubId }) => {
   const [page, setPage] = useState(0);
   const { pageCount } = useSelector((state) => state.pageCount);
   const [rowsPerPage, setRowsPerPage] = useState(pageCount || 5);
+  const [isLoading, setIsLoading] = useState(true);
 
-  const initalData = data[`/news/list/?is_top=true`]?.results;
+  const initalData = data[`/announcement/faq/list/`]?.results;
   const [filtered, setFiltered] = useState(initalData || []);
   const customers = useCustomers(filtered, page, rowsPerPage);
-  const [isLoading, setIsLoading] = useState(true);
 
   const { lang } = useSelector((state) => state.localiztion);
 
   const { localization } = Content[lang];
 
+console.log(initalData);
 
-  useEffect(()=> {
-    setTimeout(() => {
-      setIsLoading(loading)
-    }, 500);
-  }, [data])
+useEffect(()=> {
+  setTimeout(() => {
+    setIsLoading(loading)
+  }, 500);
+}, [data])
 
   const handlePageChange = useCallback((event, value) => {
     setPage(value);
@@ -76,7 +77,7 @@ const Page = ({ subId, setSubId }) => {
 
 
   function getCountries() {
-      fetchData(`/news/list/?is_top=true`);
+      fetchData(`/announcement/faq/list/`);
   }
 
   useEffect(() => {
@@ -99,8 +100,8 @@ const Page = ({ subId, setSubId }) => {
           if (searchValue == "") {
             return user;
           } else if (
-            user?.name?.toLowerCase().includes(searchValue.toString()?.toLowerCase()) ||
-            user?.description?.toLowerCase().includes(searchValue.toString()?.toLowerCase())) {
+            user?.name?.[lang]?.toLowerCase().includes(searchValue.toString()?.toLowerCase()) ||
+            user?.description?.[lang]?.toLowerCase().includes(searchValue.toString()?.toLowerCase())) {
             return user;
           }
         })
@@ -114,7 +115,7 @@ const Page = ({ subId, setSubId }) => {
   return (
     <>
       <Head>
-        <title>News  Banner | TMA Admin </title>
+        <title>News | TMA Admin </title>
       </Head>
       <Box
         component="main"
@@ -129,13 +130,15 @@ const Page = ({ subId, setSubId }) => {
               <Stack spacing={1}>
       
                 <Typography variant="h4" textTransform={"capitalize"}>
-                  {localization.sidebar.top_news}
+                  {localization.sidebar.news}
                 </Typography>
               </Stack>
 
-            
+              <div>
+                <AddCompanyModal type="announcementfaq" getDatas={getCountries} />
+              </div>
             </Stack>
-            <CustomersSearch forLabel={localization.sidebar.top_news} onSearch={onSearch} type={"country"} />
+            <CustomersSearch forLabel={localization.sidebar.news} onSearch={onSearch} type={"country"} />
             <CustomersTable
              isLoading={isLoading}
              
@@ -145,7 +148,7 @@ const Page = ({ subId, setSubId }) => {
               onRowsPerPageChange={handleRowsPerPageChange}
               page={page}
               data={data}
-              type="news-banner"
+              type="anons-faq"
               getDate={getCountries}
               rowsPerPage={rowsPerPage}
             />

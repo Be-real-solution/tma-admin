@@ -12,7 +12,7 @@ import { useSelector } from "react-redux";
 import { usePathname } from "next/navigation";
 import { useToasts } from "react-toast-notifications";
 import {routeControler} from "src/utils/role-controler"
-export default function DeleteModal({ route, getDatas, type }) {
+export default function DeleteModal({ route, getDatas, type, id }) {
   const isAuthenticated = JSON.parse(window.sessionStorage.getItem("authenticated")) || false;
   const { lang } = useSelector((state) => state.localiztion);
   const { addToast } = useToasts();
@@ -34,18 +34,20 @@ export default function DeleteModal({ route, getDatas, type }) {
   };
 
   const handleDelete = () => {
-    fetch(`${BaseUrl}/${route}`, {
-      method: "DELETE",
+    fetch(`${BaseUrl}${route}/`, {
+      method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${isAuthenticated}`,
+        Authorization: `Bearer ${isAuthenticated?.access}`,
       },
+      body: JSON.stringify({ ids: [id]
+       }),
     })
       .then((res) => res.json())
       .then((data) => {
         handleClose();
-        addToast(data?.errorMessage || data?.message  || localization.alerts.deleted, { appearance: data.status === 200 ? "success" : "error", autoDismiss: true });
-        if (data.status) {
+        addToast(data?.errorMessage || data?.msg  || localization.alerts.deleted, { appearance: data.msg ? "success" : "error", autoDismiss: true });
+        if (data.msg) {
           getDatas();
           
         }

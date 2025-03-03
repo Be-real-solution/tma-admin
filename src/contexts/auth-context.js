@@ -111,7 +111,7 @@ export const AuthProvider = (props) => {
   const signIn = async (email, password) => {
 
     try {
-             const res = await fetch(`${BaseUrl}/admin/sign-in`, {
+             const res = await fetch(`${BaseUrl}/account/auth/login/`, {
                headers: {
                  Accept: "application/json",
                  "Content-Type": "application/json",
@@ -125,11 +125,15 @@ export const AuthProvider = (props) => {
              });
 
              const req = await res.json();
-             console.log(req);
-             
-             if (req.status === 200) {
-               window.sessionStorage.setItem("authenticated", JSON.stringify(req?.data?.tokens.accessToken));
-               window.sessionStorage.setItem("user", JSON.stringify(req?.data?.admin));
+
+          
+             if (res.status === 200) {
+              const token = {
+                access: req?.access,
+                refresh: req?.refresh,
+             }
+               window.sessionStorage.setItem("authenticated", JSON.stringify(token));
+               window.sessionStorage.setItem("user", JSON.stringify(req?.user));
                router.push('/buildings');
 
     dispatch({
@@ -179,3 +183,6 @@ AuthProvider.propTypes = {
 export const AuthConsumer = AuthContext.Consumer;
 
 export const useAuthContext = () => useContext(AuthContext);
+
+
+

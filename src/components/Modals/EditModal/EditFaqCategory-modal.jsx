@@ -65,7 +65,7 @@ BootstrapDialogTitle.propTypes = {
   onClose: PropTypes.func.isRequired,
 };
 
-export default function AddCompanyModal({ getDatas, row, type }) {
+export default function AddCompanyModal({ getDatas, row, route }) {
   const { loading, error, createData } = useFetcher();
   const [open, setOpen] = React.useState(false);
   const { lang } = useSelector((state) => state.localiztion);
@@ -114,7 +114,7 @@ export default function AddCompanyModal({ getDatas, row, type }) {
          
 
         };
-        createData(type === "news" ? `/news/category/update/${row.id}/` : `/library/category/update/${row.id}/`, newData, "PATCH", getDatas);
+        createData(`${route}/${row.id}/`, newData, "PATCH", getDatas);
         setIsLoading(false)
         handleClose()
 

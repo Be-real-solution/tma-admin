@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-max-props-per-line */
 import ChartBarIcon from '@heroicons/react/24/solid/QueueListIcon';
 import CogIcon from "@heroicons/react/24/solid/CircleStackIcon";
 import CarIcon from "@heroicons/react/24/solid/TruckIcon";
@@ -51,7 +52,7 @@ export function Items() {
     },
 
     {
-      title: localization.sidebar.category,
+      title: localization.sidebar.news_category,
       path: "/categories",
       icon: (
         <SvgIcon fontSize="small">
@@ -59,6 +60,54 @@ export function Items() {
         </SvgIcon>
       ),
     },
+    {
+      title: localization.sidebar.faq_category,
+      path: "/faq-categories",
+      icon: (
+        <SvgIcon fontSize="small">
+          <ChartBarIcon />
+        </SvgIcon>
+      ),
+    },
+    {
+      title: localization.sidebar.library_category,
+      path: "/library-categories",
+      icon: (
+        <SvgIcon fontSize="small">
+          <ChartBarIcon />
+        </SvgIcon>
+      ),
+    },
+    {
+      title: localization.sidebar.anons_network_category,
+      path: "/anons-network-category",
+      icon: (
+        <SvgIcon fontSize="small">
+          <BellIcon />
+        </SvgIcon>
+      ),
+     
+    },
+    {
+      title: localization.sidebar.anons_faq,
+      path: "/anons-faq",
+      icon: (
+        <SvgIcon fontSize="small">
+          <ChartBarIcon />
+        </SvgIcon>
+      ),
+    },
+    {
+      title: localization.sidebar.anons_network_category,
+      path: "/anons-network-category-link",
+      icon: (
+        <SvgIcon fontSize="small">
+          <BellIcon />
+        </SvgIcon>
+      ),
+     
+    },
+    
     {
       title: localization.sidebar.reviews,
       path: "/buildings",
@@ -77,15 +126,40 @@ export function Items() {
       ),
     },
     
-    // {
-    //   title: localization.sidebar.leeds,
-    //   path: "/leeds",
-    //   icon: (
-    //     <SvgIcon fontSize="small">
-    //       <CogIcon />
-    //     </SvgIcon>
-    //   ),
-    // },
+    {
+      title: localization.sidebar.advertisement,
+      path: "/advertisment",
+      icon: (
+        <SvgIcon fontSize="small">
+          <BellIcon />
+        </SvgIcon>
+      ),
+     
+    },
+    {
+      title: localization.sidebar.anouncement,
+      path: "/announcement",
+      icon: (
+        <SvgIcon fontSize="small">
+          <BellIcon />
+        </SvgIcon>
+      ),
+     
+    },
+
+
+   
+    {
+      title: localization.sidebar.story,
+      path: "/story",
+      icon: (
+        <SvgIcon fontSize="small">
+          <BellIcon />
+        </SvgIcon>
+      ),
+     
+    },
+  
     {
       title: localization.sidebar.news,
       path: "/news",
@@ -100,53 +174,14 @@ export function Items() {
         </SvgIcon>
       ),
     },
-    {
-      title: localization.sidebar.admins,
-      path: "/admins",
-      icon: (
-        <SvgIcon fontSize="small">
-          <UserCircleIcon />
-        </SvgIcon>
-      ),
-    },
     // {
-    //   title: localization.sidebar.mobile,
-    //   path: "/mobile",
+    //   title: localization.sidebar.admins,
+    //   path: "/admins",
     //   icon: (
     //     <SvgIcon fontSize="small">
-    //       <PhoneIcon />
+    //       <UserCircleIcon />
     //     </SvgIcon>
     //   ),
-    //   subItems: [
-    //     {
-    //       title: localization.sidebar.cars,
-    //       path: "/mobile/cars",
-    //       icon: (
-    //         <SvgIcon fontSize="small">
-    //           <CarIcon />
-    //         </SvgIcon>
-    //       ),
-    //     },
-    //     {
-    //       title: localization.sidebar.orders,
-    //       path: "/mobile/orders",
-    //       icon: (
-    //         <SvgIcon fontSize="small">
-    //           <CogIcon />
-    //         </SvgIcon>
-    //       ),
-    //     },
-    //     {
-    //       // accessRole: ["owner"],
-    //       title: localization.sidebar.natifications,
-    //       path: "/mobile/natifications",
-    //       icon: (
-    //         <SvgIcon fontSize="small">
-    //           <BellIcon />
-    //         </SvgIcon>
-    //       ),
-    //     },
-    //   ],
     // },
   ];
 

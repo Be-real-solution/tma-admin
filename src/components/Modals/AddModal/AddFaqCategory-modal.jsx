@@ -116,7 +116,7 @@ export default function AddCompanyModal({ getDatas, type, subId }) {
 name_kaa: values.namekaa,
                     
                 };
-                createData(type === "news" ? `/news/category/create/` : `/library/category/create/`, newData, "POST", getDatas, onFinish);
+                createData(type === "announcementfaq" ? `/announcement/faq/create/` : type === "announcementnetwork" ?  `/announcement/social/networks/link/category/create/` : `/library/category/create/`, newData, "POST", getDatas, onFinish);
                 setIsLoading(false)
             } catch (err) {
                 helpers.setStatus({ success: false });
@@ -194,7 +194,6 @@ onSubmit={formik.handleSubmit}>
                                 type="text"
                                 value={formik.values.nameen}
                             />
-                           
                                <TextField
                                            error={!!(formik.touched.namekaa && formik.errors.namekaa)}
                                            fullWidth

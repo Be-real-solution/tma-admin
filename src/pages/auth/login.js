@@ -33,7 +33,7 @@ const Page = () => {
     },
     validationSchema: Yup.object({
       login: Yup.string().max(50).min(5).required("Login is required"),
-      password: Yup.string().max(50).min(5).required("Password is required"),
+      password: Yup.string().max(50).min(2).required("Password is required"),
     }),
     onSubmit: async (values, helpers) => {
       try {

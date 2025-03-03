@@ -2,6 +2,7 @@ const header = {
   uz: "uz",
   ru: "ru",
   en: "en",
+  kaa: "kaa",
   action: "harakatlar",
   create: "yaratmoq",
   delete: "o'chirish",

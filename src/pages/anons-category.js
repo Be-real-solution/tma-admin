@@ -42,22 +42,22 @@ const Page = ({ subId, setSubId }) => {
   const [page, setPage] = useState(0);
   const { pageCount } = useSelector((state) => state.pageCount);
   const [rowsPerPage, setRowsPerPage] = useState(pageCount || 5);
+  const [isLoading, setIsLoading] = useState(true);
 
-  const initalData = data[`/news/list/?is_top=true`]?.results;
+  const initalData = data[`/announcement/faq/category/list/`]?.results;
   const [filtered, setFiltered] = useState(initalData || []);
   const customers = useCustomers(filtered, page, rowsPerPage);
-  const [isLoading, setIsLoading] = useState(true);
 
   const { lang } = useSelector((state) => state.localiztion);
 
   const { localization } = Content[lang];
 
 
-  useEffect(()=> {
-    setTimeout(() => {
-      setIsLoading(loading)
-    }, 500);
-  }, [data])
+useEffect(()=> {
+  setTimeout(() => {
+    setIsLoading(loading)
+  }, 500);
+}, [data])
 
   const handlePageChange = useCallback((event, value) => {
     setPage(value);
@@ -76,7 +76,7 @@ const Page = ({ subId, setSubId }) => {
 
 
   function getCountries() {
-      fetchData(`/news/list/?is_top=true`);
+      fetchData(`/announcement/faq/category/list/`);
   }
 
   useEffect(() => {
@@ -99,8 +99,8 @@ const Page = ({ subId, setSubId }) => {
           if (searchValue == "") {
             return user;
           } else if (
-            user?.name?.toLowerCase().includes(searchValue.toString()?.toLowerCase()) ||
-            user?.description?.toLowerCase().includes(searchValue.toString()?.toLowerCase())) {
+            user?.name?.[lang]?.toLowerCase().includes(searchValue.toString()?.toLowerCase()) ||
+            user?.description?.[lang]?.toLowerCase().includes(searchValue.toString()?.toLowerCase())) {
             return user;
           }
         })
@@ -114,7 +114,7 @@ const Page = ({ subId, setSubId }) => {
   return (
     <>
       <Head>
-        <title>News  Banner | TMA Admin </title>
+        <title>News | TMA Admin </title>
       </Head>
       <Box
         component="main"
@@ -129,13 +129,15 @@ const Page = ({ subId, setSubId }) => {
               <Stack spacing={1}>
       
                 <Typography variant="h4" textTransform={"capitalize"}>
-                  {localization.sidebar.top_news}
+                  {localization.sidebar.news}
                 </Typography>
               </Stack>
 
-            
+              <div>
+                <AddCompanyModal getDatas={getCountries} />
+              </div>
             </Stack>
-            <CustomersSearch forLabel={localization.sidebar.top_news} onSearch={onSearch} type={"country"} />
+            <CustomersSearch forLabel={localization.sidebar.news} onSearch={onSearch} type={"country"} />
             <CustomersTable
              isLoading={isLoading}
              
@@ -145,7 +147,7 @@ const Page = ({ subId, setSubId }) => {
               onRowsPerPageChange={handleRowsPerPageChange}
               page={page}
               data={data}
-              type="news-banner"
+              type="category-faq"
               getDate={getCountries}
               rowsPerPage={rowsPerPage}
             />

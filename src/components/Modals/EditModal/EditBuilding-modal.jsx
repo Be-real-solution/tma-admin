@@ -157,9 +157,9 @@ export default function AddCompanyModal({ getDatas, type, row }) {
             nameru: row.name.ru,
             nameen:  row.name.en,
             phoneNumber: row.phoneNumber,
-            descriptionuz: row.description.uz,
-            descriptionru: row.description.ru,
-            descriptionen: row.description.en,
+            descriptionuz: row.description,
+            descriptionru: row.description,
+            descriptionen: row.description,
             open_hour: row.workStartTime,
             close_hour: row.workEndTime,
             submit: null,
@@ -371,9 +371,9 @@ style={{display:"flex", alignItems:"center", justifyContent:"space-between"}}>
                                 />
 
 
-                                {(images.length > 0 || images2.length > 0) ? (
+                                {(images?.length > 0 || images2?.length > 0) ? (
                                     <List>
-                                        {!!images2.length && images2?.map((image, index) => (
+                                        {!!images2?.length && images2?.map((image, index) => (
                                             <ListItem key={image.id}
                                                 divider
                                                 style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>

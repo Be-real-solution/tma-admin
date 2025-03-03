@@ -11,7 +11,7 @@ import { CustomersTable } from 'src/sections/customer/orders-table';
 import { CustomersSearch } from 'src/sections/customer/customers-search';
 import { applyPagination } from 'src/utils/apply-pagination';
 import useFetcher from 'src/hooks/use-fetcher';
-import AddCompanyModal from 'src/components/Modals/AddModal/AddCategory-modal';
+import AddCompanyModal from 'src/components/Modals/AddModal/AddFaqCategory-modal';
 import Content from "src/Localization/Content";
 import { useSelector, useDispatch } from "react-redux";
 import { changePage } from "src/slices/paginationReduser";
@@ -41,7 +41,7 @@ const Page = () => {
    const [page, setPage] = useState(0);
    const { pageCount } = useSelector((state) => state.pageCount);
    const [rowsPerPage, setRowsPerPage] = useState(pageCount || 5);
-    const initalData = data["/news/category/list/"]?.results;
+    const initalData = data["/announcement/faq/category/list/"]?.results;
     const [filtered, setFiltered] = useState(initalData || []);
     const customers = useCustomers(filtered, page, rowsPerPage);
     const [isLoading, setIsLoading] = useState(true);
@@ -79,7 +79,7 @@ console.log(initalData);
 
 
   function getCountries() {
-    fetchData(`/news/category/list/`);
+    fetchData(`/announcement/faq/category/list/`);
     
   }
 
@@ -144,7 +144,7 @@ spacing={4}>
               </Stack>
               {/* {checkAccess && ( */}
                 <div>
-                  <AddCompanyModal getDatas={getCountries} type={"news"}/>
+                  <AddCompanyModal getDatas={getCountries} />
                 </div>
               {/* )} */}
             </Stack>
@@ -158,7 +158,7 @@ type={"country"} />
               onPageChange={handlePageChange}
               onRowsPerPageChange={handleRowsPerPageChange}
               page={page}
-              type="categories"
+              type="faq-categories"
               getDate={getCountries}
               rowsPerPage={rowsPerPage}
             />

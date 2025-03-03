@@ -143,12 +143,6 @@ export default function AddOrderModal({ getDatas, company }) {
   };
   const onFinish = () => {
     formik.values.nameuz = "";
-    formik.values.category_id = [];
-    formik.values.nameen = "";
-    formik.values.nameru = "";
-    formik.values.descriptionuz = "";
-    formik.values.descriptionru = "";
-    formik.values.descriptionen = "";
 setImages([])
 image.current=""
   };
@@ -156,26 +150,16 @@ image.current=""
   
   const formik = useFormik({
     initialValues: {
-      category_id:[] ,
-      nameen: "",
+ 
       nameuz: "",
-      nameru: "",
-      descriptionuz:"",
-      descriptionru:"",
-      descriptionen:"",
-      // isTop: false, // Initialize `isTop`
+    
 
       submit: null,
     },
     validationSchema: Yup.object({
      
       nameuz: Yup.string().min(2).required(" Name is required"),
-      nameru: Yup.string().min(2).required(" Name is required"),
-      nameen: Yup.string().min(2).required(" Name is required"),
-      descriptionuz: Yup.string().min(5).required("Info is required"),
-      descriptionru: Yup.string().min(5).required("Info is required"),
-      descriptionen: Yup.string().min(5).required("Info is required"),
-
+     
     }),
 
     onSubmit: async (values, helpers) => {
@@ -184,29 +168,13 @@ image.current=""
 
 
         const formData = new FormData();
-        for (let index = 0; index < images?.length; index++) {
-         formData.append('images', images?.[index].file);  
-        }
-        mainImage?.length && formData.append('cover_image', mainImage[0]?.file);
-        formData.append("title", values.nameuz);
-        formData.append("title_uz", values.nameuz);
-        formData.append("title_ru", values.nameru);
-        formData.append("title_en", values.nameen);
-        formData.append("title_kaa", values.namekaa);
-        formData.append("content", values.descriptionuz);
-        formData.append("content_uz", values.descriptionuz);
-        formData.append("content_ru", values.descriptionru);
-        formData.append("content_en", values.descriptionen);
-        values.category_id.forEach(id => {
-          formData.append('category', id);
-        });
-        // formData.append('adminId', user?.id);
-        formData.append("is_top", Boolean(values.isTop));
-    
-       
+  
+        mainImage?.length && formData.append('image', mainImage[0]?.file);
+        formData.append("url", values.nameuz);
+      
 
 
-        const response = await fetch(BaseUrl + "/news/create/", {
+        const response = await fetch(BaseUrl + "/advertisement/create/", {
           method: 'POST',
 
           headers: {
@@ -215,6 +183,7 @@ image.current=""
           },
           body: formData,
         });
+console.log(response);
 
         const res = await response.json()
 
@@ -222,7 +191,7 @@ image.current=""
           auth.signOut();
           router.push("/auth/login");
         }
-        if (response.status ===201) {
+        if (response.status === 201) {
           handleClose()
           getDatas()
           
@@ -230,8 +199,8 @@ image.current=""
       
         }
 
-        addToast(res.message || (response.status ===201 ? localization.alerts.added : localization.alerts.warning), {
-          appearance: response.response ===201 ? "success" : "error",
+        addToast(res.message || (response.status === 201 ? localization.alerts.added : localization.alerts.warning), {
+          appearance: response.response === 201 ? "success" : "error",
           autoDismiss: true,
         });
         setIsLoading(false)
@@ -323,94 +292,8 @@ style={{display:"flex", alignItems:"center", justifyContent:"space-between"}}>
       )}
     </Paper>
 
-<Paper elevation={3} 
-    style={{ padding: '16px', marginTop: '16px' }}>
-     <TextField
-                fullWidth
-                name="image"
-                label={localization.table.images}
 
-                inputProps={{
-                  multiple: true
-                }}
-                InputLabelProps={{
-                  shrink: true,
-                }}
-                onBlur={formik.handleBlur}
-                onChange={(e) => {
-                  handleFileChange(e)
-                  // formik.handleChange()}
-                }}
-                type="file"
-                inputRef={image}
-              /> 
-      {/* <input
-        type="file"
-        accept="image/*"
-        multiple
-        onChange={handleFileChange}
-        style={{ marginBottom: '16px' }}
-      /> */}
-      {images.length > 0 ? (
-        <List>
-          {images.map((image, index) => (
-            <ListItem key={index}
-             divider
-style={{display:"flex", alignItems:"center", justifyContent:"space-between"}}>
-    <Box sx={{display:"flex", alignItems:"center"}}>          <CardMedia
-                component="img"
-                image={image.url}
-                alt={`Uploaded preview ${index}`}
-                style={{ width: '100px', height: '100px', marginRight: '16px', objectFit:"contain" }}
-              />
-              <Typography variant="body2">{image.file.name}</Typography></Box>
-              <IconButton edge="end" 
-              onClick={() => handleDelete(index)}>
-                <DeleteIcon />
-              </IconButton>
-            </ListItem>
-          ))}
-        </List>
-      ) : (
-        <Box textAlign="center">
-          <ImageIcon style={{ fontSize: 50, color: 'gray' }} />
-          <Typography variant="body2"
-           color="textSecondary">
-            No images uploaded
-          </Typography>
-        </Box>
-      )}
-    </Paper>
-
-    <FormControl fullWidth error={!!(formik.touched.category_id && formik.errors.category_id)}>
-  <InputLabel  variant="filled" id="demo-simple-select-autowidth-label">{localization.sidebar.category}</InputLabel>
-  <Select
-    labelId="demo-simple-select-autowidth-label"
-  label
-    multiple
-    name="category_id"
-    value={formik.values.category_id}
-    onChange={formik.handleChange}
-    onBlur={formik.handleBlur}
-    renderValue={(selected) => (
-      <Box sx={{ display: 'flex', pt:0.6, flexWrap: 'wrap', gap: 0.5 }}>
-        {selected.map((value) => (
-          <Chip sx={{height:22}} key={value} label={categories.find(category => category.id === value)?.name} />
-        ))}
-      </Box>
-    )}
-  >
-    {categories &&
-      categories.map((item) => (
-        <MenuItem key={item?.id} value={item?.id}>
-          {item?.name}
-        </MenuItem>
-      ))}
-  </Select>
-  {formik.touched.category_id && formik.errors.category_id && (
-    <FormHelperText>{formik.errors.category_id}</FormHelperText>
-  )}
-</FormControl>
+    
 
       
               <TextField
@@ -425,87 +308,7 @@ style={{display:"flex", alignItems:"center", justifyContent:"space-between"}}>
                 type="text"
                 value={formik.values.nameuz}
               />
-                   <TextField
-
-error={!!(formik.touched.nameru && formik.errors.nameru)}
-fullWidth
-helperText={formik.touched.nameru && formik.errors.nameru}
-label={localization.table.name  + " "+ localization.ru}
-name="nameru"
-onBlur={formik.handleBlur}
-onChange={formik.handleChange}
-type="text"
-value={formik.values.nameru}
-/>
-<TextField
-
-error={!!(formik.touched.nameen && formik.errors.nameen)}
-fullWidth
-helperText={formik.touched.nameen && formik.errors.nameen}
-label={localization.table.name + " "+ localization.en}
-name="nameen"
-onBlur={formik.handleBlur}
-onChange={formik.handleChange}
-type="text"
-value={formik.values.nameen}
-/>
-<TextField
-
-error={!!(formik.touched.descriptionuz && formik.errors.descriptionuz)}
-fullWidth
-helperText={formik.touched.descriptionuz && formik.errors.descriptionuz}
-label={localization.table.info + " "+ localization.uz}
-name="descriptionuz"
-onBlur={formik.handleBlur}
-onChange={formik.handleChange}
-type="text"
-value={formik.values.descriptionuz}
-multiline
-            
-minRows={4}
-/>
-<TextField
-
-error={!!(formik.touched.descriptionru && formik.errors.descriptionru)}
-fullWidth
-helperText={formik.touched.descriptionru && formik.errors.descriptionru}
-label={localization.table.info + " "+ localization.ru}
-name="descriptionru"
-onBlur={formik.handleBlur}
-onChange={formik.handleChange}
-type="text"
-value={formik.values.descriptionru}
-multiline
-            
-minRows={4}
-/>
-<TextField
-
-error={!!(formik.touched.descriptionen && formik.errors.descriptionen)}
-fullWidth
-helperText={formik.touched.descriptionen && formik.errors.descriptionen}
-label={localization.table.info + " "+ localization.en}
-name="descriptionen"
-onBlur={formik.handleBlur}
-onChange={formik.handleChange}
-type="text"
-value={formik.values.descriptionen}
-multiline
-            
-minRows={4}
-/>
-<label style={{display:"flex", alignItems:"center"}}>
-    <Typography variant="body2" sx={{ mr: 2 }}>
-      {localization.table.isTop} {/* Label for the switch */}
-    </Typography>
-    <Switch
-      checked={formik.values.isTop}
-      onChange={formik.handleChange}
-      name="isTop"
-      color="primary"
-      title="hello"
-    />
-  </label>
+   
          
            
                
@@ -539,3 +342,6 @@ minRows={4}
     </div>
   );
 }
+
+
+

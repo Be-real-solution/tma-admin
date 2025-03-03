@@ -2,6 +2,7 @@ const header = {
   uz: "uz",
   ru: "ru",
   en: "en",
+  kaa:"kaa",
   action: "actions",
   create: "create",
   delete: "delete",
@@ -34,6 +35,18 @@ const header = {
   },
 
   sidebar: {
+    news_category: "News Category",
+    library_category: "Library Category",
+    library: "Library",
+    faq_category: "FAQ Category",
+    faq: "FAQ",
+    advertisement: "Advertisement",
+    advertisement_category: "Advertisement Category",
+    anouncement: "Anouncement",
+    anouncement_category: "Anouncement Category",
+    anons_network_category: "Anons Network Category",
+    anons_faq: "Anons FAQ",
+    story: "Story",
     category: "Category",
     reviews: "Buildings",
     admins: "Administrators",
@@ -54,6 +67,8 @@ const header = {
   },
 
   table: {
+    link: "Link",
+
     search_by: (e) => `Search for ${e}`,
     loading: "Loading...",
     not_found: "Data not found",

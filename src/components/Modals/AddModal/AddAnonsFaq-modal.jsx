@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-max-props-per-line */
 import * as React from 'react';
 import PropTypes from 'prop-types';
 import { styled } from '@mui/material/styles';
@@ -7,13 +8,14 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@heroicons/react/24/solid/XMarkIcon';
-import { SvgIcon, useMediaQuery } from '@mui/material';
+import { SvgIcon, useMediaQuery, MenuItem, Chip, FormHelperText, FormControl, InputLabel, Select  } from '@mui/material';
 import useFetcher from 'src/hooks/use-fetcher';
 import PlusIcon from '@heroicons/react/24/solid/PlusIcon';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import Content from "src/Localization/Content";
 import { useSelector } from 'react-redux';
+import { useEffect } from 'react';
 const BaseUrl = process.env.NEXT_PUBLIC_ANALYTICS_BASEURL;
 
 import {
@@ -66,7 +68,7 @@ BootstrapDialogTitle.propTypes = {
 };
 
 export default function AddCompanyModal({ getDatas, type, subId }) {
-    const { loading, error, createData } = useFetcher();
+  const { fetchData, data, loading, error, createData } = useFetcher();
     const [open, setOpen] = React.useState(false);
     const { lang } = useSelector((state) => state.localiztion);
     const image = React.useRef("")
@@ -74,6 +76,20 @@ export default function AddCompanyModal({ getDatas, type, subId }) {
 
     const { localization } = Content[lang];
     const matches = useMediaQuery("(min-width:500px)");
+
+  const categories = data["/announcement/faq/category/list/"]?.results;
+
+  function getCountries() {
+    fetchData(`/announcement/faq/category/list/`);
+    
+  }
+
+    useEffect(() => {
+        getCountries();
+
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+  
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -85,6 +101,12 @@ export default function AddCompanyModal({ getDatas, type, subId }) {
         formik.values.nameuz = ""
         formik.values.nameru = ""
         formik.values.nameen = ""
+        formik.values.namekaa = ""
+        formik.values.descriptionuz = ""
+        formik.values.descriptionru = ""
+        formik.values.descriptionen = ""
+        formik.values.descriptionkaa = ""
+        formik.values.category_id = ""
       handleClose()
     }
 
@@ -94,7 +116,11 @@ export default function AddCompanyModal({ getDatas, type, subId }) {
             nameru: "",
             nameen: "",
             namekaa: "",
-           
+            descriptionen: "",
+            descriptionuz: "",
+            descriptionru: "",
+            descriptionkaa: "",
+        category_id: "",
             submit: null,
         },
         validationSchema: Yup.object({
@@ -102,21 +128,33 @@ export default function AddCompanyModal({ getDatas, type, subId }) {
             nameru: Yup.string().min(2).required("Name RU is required"),
             nameen: Yup.string().min(2).required("Name EN is required"),
             namekaa: Yup.string().min(2).required("Name KAA is required"),
-        }),
+       descriptionen: Yup.string().min(2).required("Description EN is required"),
+       descriptionuz: Yup.string().min(2).required("Description UZ is required"),
+       descriptionru: Yup.string().min(2).required("Description RU is required"),
+       descriptionkaa: Yup.string().min(2).required("Description KAA is required"),
+       category_id: Yup.string().required("Category is required"),
+          }),
+
 
 
         onSubmit: async (values, helpers) => {
             setIsLoading(true)
             try {
                 const newData = {
-                    name: values.nameuz,
-                    name_uz: values.nameuz,
-                    name_ru: values.nameru,
-                    name_en: values.nameen,
-name_kaa: values.namekaa,
+                 "question": values.nameuz,
+    "question_ru": values.nameru,
+    "question_uz": values.nameuz,
+    "question_en": values.nameen,
+    "question_kaa": values.namekaa,
+    "answer":values.descriptionuz,
+    "answer_ru":values.descriptionru,
+    "answer_en":values.descriptionen,
+    "answer_uz":values.descriptionuz,
+    "answer_kaa":values.descriptionkaa,
+    "category": values.category_id
                     
                 };
-                createData(type === "news" ? `/news/category/create/` : `/library/category/create/`, newData, "POST", getDatas, onFinish);
+                createData(`/announcement/faq/create/`, newData, "POST", getDatas, onFinish);
                 setIsLoading(false)
             } catch (err) {
                 helpers.setStatus({ success: false });
@@ -157,7 +195,27 @@ onSubmit={formik.handleSubmit}>
                     <DialogContent dividers>
                         <Stack spacing={3}
                             width={matches ? 400 : null}>
-                        
+                            <FormControl fullWidth error={!!(formik.touched.category_id && formik.errors.category_id)}>
+  <InputLabel  variant="filled" id="demo-simple-select-autowidth-label">{localization.sidebar.category}</InputLabel>
+  <Select
+    labelId="demo-simple-select-autowidth-label"
+  label
+    name="category_id"
+    value={formik.values.category_id}
+    onChange={formik.handleChange}
+    onBlur={formik.handleBlur}
+  >
+    {categories &&
+      categories.map((item) => (
+        <MenuItem key={item?.id} value={item?.id}>
+          {item?.name}
+        </MenuItem>
+      ))}
+  </Select>
+  {formik.touched.category_id && formik.errors.category_id && (
+    <FormHelperText>{formik.errors.category_id}</FormHelperText>
+  )}
+</FormControl>
                             <TextField
                                 error={!!(formik.touched.nameuz && formik.errors.nameuz)}
                                 fullWidth
@@ -206,6 +264,66 @@ onSubmit={formik.handleSubmit}>
                                            onChange={formik.handleChange}
                                            type="text"
                                            value={formik.values.namekaa}
+                                         />
+                                         <TextField
+                                         
+                                         error={!!(formik.touched.descriptionuz && formik.errors.descriptionuz)}
+                                         fullWidth
+                                         helperText={formik.touched.descriptionuz && formik.errors.descriptionuz}
+                                         label={localization.table.info + " "+ localization.uz}
+                                         name="descriptionuz"
+                                         onBlur={formik.handleBlur}
+                                         onChange={formik.handleChange}
+                                         type="text"
+                                         value={formik.values.descriptionuz}
+                                         multiline
+                                                     
+                                         minRows={4}
+                                         />
+                                         <TextField
+                                         
+                                         error={!!(formik.touched.descriptionru && formik.errors.descriptionru)}
+                                         fullWidth
+                                         helperText={formik.touched.descriptionru && formik.errors.descriptionru}
+                                         label={localization.table.info + " "+ localization.ru}
+                                         name="descriptionru"
+                                         onBlur={formik.handleBlur}
+                                         onChange={formik.handleChange}
+                                         type="text"
+                                         value={formik.values.descriptionru}
+                                         multiline
+                                                     
+                                         minRows={4}
+                                         />
+                                         <TextField
+                                         
+                                         error={!!(formik.touched.descriptionen && formik.errors.descriptionen)}
+                                         fullWidth
+                                         helperText={formik.touched.descriptionen && formik.errors.descriptionen}
+                                         label={localization.table.info + " "+ localization.en}
+                                         name="descriptionen"
+                                         onBlur={formik.handleBlur}
+                                         onChange={formik.handleChange}
+                                         type="text"
+                                         value={formik.values.descriptionen}
+                                         multiline
+                                                     
+                                         minRows={4}
+                                         />
+                                         <TextField
+                                         
+                                         error={!!(formik.touched.descriptionkaa && formik.errors.descriptionkaa)}
+                                         fullWidth
+                                         helperText={formik.touched.descriptionkaa && formik.errors.descriptionkaa}
+                                         label={localization.table.info + " "+ localization.kaa}
+                                         name="descriptionkaa"
+                                         onBlur={formik.handleBlur}
+                                         onChange={formik.handleChange}
+                                         type="text"
+                                         value={formik.values.descriptionkaa}
+                                         multiline
+                                                     
+                                         minRows={4}
                                          />
                               </Stack>
 

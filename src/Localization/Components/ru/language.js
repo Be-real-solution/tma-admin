@@ -2,6 +2,7 @@ const header = {
   uz: "уз",
   ru: "ру",
   en: "ен",
+  kaa: "каа",
   action: "действия",
   create: "создать",
   delete: "удалить",

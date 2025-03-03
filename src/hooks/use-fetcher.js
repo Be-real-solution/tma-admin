@@ -28,18 +28,18 @@ export default function useFetcher() {
      const response = await fetch(BaseUrl + url, {
        headers: {
          method: "GET",
-         "Authorization": `Bearer ${isAuthenticated}`,
+         "Authorization": `Bearer ${isAuthenticated?.access}`,
           "Accept-Language":lang,
        },
      });
      const json = await response.json();
 
-     if (response.status > 205) {
-      auth.signOut();
-      router.push("/auth/login");
-    }
+    //  if (response.status > 205) {
+    //   auth.signOut();
+    //   router.push("/auth/login");
+    // }
 
-      if (json.status === 200) {
+      if (response.status === 200) {
         
        if (type && type === "mobile") {
          setData((prevData) => ({
@@ -50,19 +50,19 @@ export default function useFetcher() {
        else {
          setData((prevData) => ({
          ...prevData, 
-         [url]: json.data,
+         [url]: json,
        }));
        }
      } else {
-         addToast(json.errorMessage, { appearance: "error", autoDismiss: true });
-       setError(json.errorMessage);
+         addToast(json?.errorMessage || "error", { appearance: "error", autoDismiss: true });
+       setError(json?.errorMessage || "error");
        
      }
     } catch (error) {
-      setError(error.message);
-         addToast(error.message, { appearance: "error", autoDismiss: true });
-         auth.signOut();
-         router.push("/auth/login");
+      setError(error?.message || "error");
+         addToast(error?.message || "error", { appearance: "error", autoDismiss: true });
+        //  auth.signOut();
+        //  router.push("/auth/login");
 
     } finally {
       setLoading(false);
@@ -78,7 +78,7 @@ export default function useFetcher() {
         method: method || "POST",
         headers: {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${isAuthenticated}`,
+          "Authorization": `Bearer ${isAuthenticated?.access}`,
           "Accept-Language": lang,
         },
         body: JSON.stringify(newData),
@@ -96,23 +96,24 @@ if (response.status > 205) {
         throw new Error(json.message);
         
       }
-      if (json.status) {
+     
+      if (response.status >= 200) {
         if (callback && typeof callback === "function") {
           callback();
         }
-        addToast(json.message || (method === "POST" ? localization.alerts.added : localization.alerts.edited), { appearance: "success", autoDismiss: true });
+        addToast(json?.message || (method === "POST" ? localization.alerts.added : localization.alerts.edited), { appearance: "success", autoDismiss: true });
 
       } else {
         
-        setError(json.message);
-        addToast(json.message, { appearance: "error", autoDismiss: true });
+        setError(json?.message || "error"); 
+        addToast(json?.message || "error", { appearance: "error", autoDismiss: true });
 
       }
       // Optional: You can update the fetched data here if needed
       //   fetchData(url);
     } catch (error) {
-      setError(error.message);
-        addToast(error.message, { appearance: "error", autoDismiss: true });
+      setError(error?.message || "error");
+        addToast(error?.message || "error", { appearance: "error", autoDismiss: true });
 
     } finally {
       onFinish &&  onFinish()
