@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-max-props-per-line */
 import { FormLabel, TextField } from "@mui/material";
 import { useState, useEffect, createRef } from "react";
 // import searchIcon from "../../../../public/assets/logos/search-icon.svg";
@@ -29,26 +30,43 @@ const Modal = ({ shown, close, setMapModal, localization }) => {
    const longitude = currentLocation[1] // Replace with the longitude of the location
 
 
+
    useEffect(() => {
       try {
-      
-         fetch(`https://api.express24.uz/client/v4/geocode/by-coordinates?latitude=${latitude}&longitude=${longitude}`)
-            .then(response => response.json())
-            .then(data => {
-               console.log(data);
-               const address =  data.name  
-              //  data.response?.GeoObjectCollection.featureMember[0].GeoObject.metaDataProperty.GeocoderMetaData.Address.formatted;
-
-               setLocationName(address); // Prints the location name to the console
-               setSearchLocation(address);
-            })
-            .catch(error => console.error(error));
-         setSearchList([]);
+        const uri = new URL("https://geocode-maps.yandex.ru/1.x");
+        const params = {
+          apikey: MAP_APIKEY,
+          geocode: `${longitude},${latitude}`,
+          format: "json",
+          lang: "uz",
+        };
+        uri.search = new URLSearchParams(params).toString();
+  
+        fetch(uri)
+          .then((res) => res.json())
+          .then((data) => {
+            setLocationName(
+              data?.response?.GeoObjectCollection?.featureMember?.[0]?.GeoObject
+                ?.metaDataProperty?.GeocoderMetaData?.text
+            );
+            setSearchLocation(
+              data?.response?.GeoObjectCollection?.featureMember?.[0]?.GeoObject
+                ?.metaDataProperty?.GeocoderMetaData?.text
+            );
+          })
+          .catch((error) => {
+            console.error("Error fetching data: ", error);
+          });
+  
+        setSearchList({ open: false, data: [] });
       } catch (error) {
-         console.error(error.message);
+        console.error(error.message);
       }
       // eslint-disable-next-line react-hooks/exhaustive-deps
-   }, [currentLocation]);
+    }, [currentLocation]);
+  
+
+ 
 
 
    function fetchAddress(lat, lng) {
@@ -84,29 +102,50 @@ const Modal = ({ shown, close, setMapModal, localization }) => {
      }
    }, [currentLocation]);
 
-   useEffect(() => {
+   const getPlaces = async (input, lang = "uz") => {
       try {
-         if (searchLocation) {
-            fetch(`https://api.express24.uz/client/v4/geocode/by-address?query=${searchLocation}`)
-               .then((res) => res.json())
-               .then((data) => {
-                if (data.errors) {
-                        setSearchList({ open: searchList.open, data: [] });
-                    }
-                    setSearchList({ open: searchList.open, data: data });
-               })
-               .catch((e) => {
-                  console.error(e.message);
-               });
-         } else {
-            setSearchList({ open: searchList.open, data: [] });
-         }
+        const uri = new URL("https://geocode-maps.yandex.ru/1.x");
+        const params = {
+          apikey: MAP_APIKEY,
+          geocode: input,
+          format: "json",
+          lang,
+        };
+        uri.search = new URLSearchParams(params).toString();
+  
+        const response = await fetch(uri);
+        if (response.ok) {
+          const data = await response.json();
+          const places = data.response.GeoObjectCollection.featureMember.map(
+            (member) => {
+              const coordinationData = member.GeoObject.Point?.pos?.split(" ");
+              const coordination = [
+                Number(coordinationData[1]),
+                Number(coordinationData[0]),
+              ];
+              return {
+                coords: coordination,
+                name: member.GeoObject.metaDataProperty.GeocoderMetaData.text,
+              };
+            }
+          );
+          return places;
+        } else {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
       } catch (error) {
-         console.error(error.message);
-         // router.push("/error");
+        return [];
       }
-   }, [searchLocation]);
+    };
 
+  
+
+   const handleSearch = async (input) => {
+      const language = "uz"; // Replace with the logic to obtain language preference
+      const newPlaces = await getPlaces(input, language);
+      // setPlaces(newPlaces);
+      setSearchList({ open: searchList.open, data: newPlaces });
+    };
 
 function GettingCurrentPosition() {
    navigator.geolocation.getCurrentPosition(
@@ -118,6 +157,20 @@ function GettingCurrentPosition() {
       }
    );
 }
+
+useEffect(() => {
+   try {
+     if (searchLocation && searchLocation?.length > 1) {
+       handleSearch(searchLocation);
+     } else {
+       setSearchList({ open: searchList.open, data: [] });
+     }
+   } catch (error) {
+     console.error(error.message);
+     // router.push("/error")
+   }
+   // eslint-disable-next-line react-hooks/exhaustive-deps
+ }, [searchLocation]);
 
    useEffect(() => {
       !shown.data.lat && GettingCurrentPosition()
@@ -184,9 +237,11 @@ function GettingCurrentPosition() {
                                        key={i}
                                        onClick={() => {
                                           setSearchLocation("");
+                                
+                                          
                                           setCurrentLocation([
-                                             e.coords.latitude,
-                                             e.coords.longitude,
+                                             e.coords[0],
+                                             e.coords[1],
                                           ]);
                                           setSearchList({
                                              open: false,

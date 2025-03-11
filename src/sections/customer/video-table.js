@@ -19,8 +19,8 @@ import {
   TablePagination,
   TableRow,
   Backdrop,
-  Tooltip,
   Typography,
+  Tooltip,
   CircularProgress
 
 } from "@mui/material";
@@ -71,23 +71,18 @@ export const CustomersTable = (props) => {
         <Box sx={{ minWidth: 800 }}>
           <Table>
             <TableHead>
-            {type === "advertisment" ?  <TableRow>
-                <TableCell>{localization.table.name + " uz"}</TableCell>
-                <TableCell>{localization.table.name + " ru"}</TableCell>
-                <TableCell>{localization.table.name + " en"}</TableCell>
-                <TableCell>{localization.table.name + " kaa"}</TableCell>
-                <TableCell>{localization.action}</TableCell>
-              </TableRow> : <TableRow>
-                <TableCell>{localization.table.name + " uz"}</TableCell>
-                <TableCell>{localization.table.name + " ru"}</TableCell>
-                <TableCell>{localization.table.name + " en"}</TableCell>
-                <TableCell>{localization.table.name + " en"}</TableCell>
-                <TableCell>{localization.table.name + " en"}</TableCell>
-                <TableCell>{localization.table.name + " en"}</TableCell>
-                <TableCell>{localization.table.name + " en"}</TableCell>
-                <TableCell>{localization.table.name + " en"}</TableCell>
-                <TableCell>{localization.table.name + " en"}</TableCell>
-                <TableCell>{localization.table.name + " kaa"}</TableCell>
+            { <TableRow>
+                <TableCell>{localization.table.main_image}</TableCell>
+                <TableCell>{localization.table.video}</TableCell>
+                <TableCell>{localization.table.name}</TableCell>
+                <TableCell>{localization.table.info}</TableCell>
+                {/* <TableCell>{localization.table.name + " en"}</TableCell> */}
+                {/* <TableCell>{localization.table.name + " en"}</TableCell> */}
+                <TableCell>{localization.table.like_count}</TableCell>
+                <TableCell>{localization.table.download_count}</TableCell>
+                <TableCell>{localization.table.raiting}</TableCell>
+                <TableCell>{localization.table.cost}</TableCell>
+                <TableCell>{localization.table.created_at}</TableCell>
                 <TableCell>{localization.action}</TableCell>
               </TableRow>}
             </TableHead>
@@ -108,40 +103,20 @@ export const CustomersTable = (props) => {
 
                 return (
                 <>
-                {type === "advertisment" ?  <TableRow hover
+                {  <TableRow hover
                    key={customer.id}>
                     <TableCell>
                       <Image
                       width={50}
                       height={50}
-                        src={customer?.image.toString()?.replace("http", "https")}
-                        alt={"Image"}
-                        style={{ width: 50, height: 50 }}/>
-                    </TableCell>
-
-                    <TableCell><a target="_blank" href={`${customer?.url}`}>Link</a></TableCell>
-                    <TableCell>{customer?.view_count}</TableCell>
-                    <TableCell>{ createdAt}</TableCell>
-              
-     
-            
-                 
-                  
-                     <TableCell>
-                      <EditFaqCategoryModal row={customer} route={`/announcement/update`} getDatas={getDate} />
-                      <DeleteModal route={`/advertisement/delete`} id={customer.id} getDatas={getDate} />
-                    </TableCell> 
-                  </TableRow> :   <TableRow hover
-                   key={customer.id}>
-                    <TableCell>
-                      <Image
-                      width={50}
-                      height={50}
-                        src={customer?.image.toString()?.replace("http", "https")}
+                        src={customer?.cover_image.toString()?.replace("http", "https")}
                         alt={"Image"}
                         style={{ width: 50, height: 50 }}/>
                     </TableCell>
                     <TableCell>
+                      <video src={customer?.video_url?.toString()?.replace("http", "https")}  controls width={100} height={50}/>
+                    </TableCell>
+                                <TableCell>
                                                 <Tooltip arrow title={customer?.[`title_${lang}`]}
                                                 >
                                                   <Typography sx={{
@@ -155,27 +130,26 @@ export const CustomersTable = (props) => {
                                                   </Typography>
                                                 </Tooltip>
                                               </TableCell>
-                                              <TableCell>
-                                                <Tooltip arrow title={customer?.[`description_${lang}`]}
-                                                >
-                                                  <Typography sx={{
-                                                    display: '-webkit-box',
-                                                    WebkitLineClamp: 4,
-                                                    WebkitBoxOrient: 'vertical',
-                                                    overflow: 'hidden',
-                                                    textOverflow: 'ellipsis',
-                                                  }}>
-                                                    {customer?.[`description_${lang}`]}
-                                                  </Typography>
-                                                </Tooltip>
-                                              </TableCell>
-                
-                    <TableCell>{customer?.category?.name}</TableCell>
-                    <TableCell>{customer?.author}</TableCell>
-                    <TableCell>{customer?.price}</TableCell>
+                    <TableCell>
+                            <Tooltip arrow title={customer?.[`description_${lang}`]}
+                            >
+                              <Typography sx={{
+                                display: '-webkit-box',
+                                WebkitLineClamp: 4,
+                                WebkitBoxOrient: 'vertical',
+                                overflow: 'hidden',
+                                textOverflow: 'ellipsis',
+                              }}>
+                                {customer?.[`description_${lang}`]}
+                              </Typography>
+                            </Tooltip>
+                          </TableCell>
+                    {/* <TableCell>{customer?.category?.name}</TableCell> */}
+                    {/* <TableCell>{customer?.author?.first_name + " "+ customer?.author?.last_name}</TableCell> */}
+                    <TableCell>{customer?.like_count}</TableCell>
                     <TableCell>{customer?.download_count}</TableCell>
-                    <TableCell>{customer?.views_count}</TableCell>
-                    <TableCell>{customer?.is_free ? "free" : "paid"}</TableCell>
+                    <TableCell>{customer?.rating}</TableCell>
+                    <TableCell>{customer?.is_free ? "free" : customer?.price}</TableCell>
                     <TableCell>{ createdAt}</TableCell>
                  <TableCell>
                       <EditProductModal row={customer} route={`library`} getDatas={getDate} />

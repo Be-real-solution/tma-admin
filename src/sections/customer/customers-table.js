@@ -345,13 +345,13 @@ export const CustomersTable = (props) => {
                         </TableCell>
                       </TableRow>) : type === "buildings" ? (
                         <TableRow hover key={customer.id}>
-                          <TableCell onClick={() => handleClickOpen([customer?.mainImage, ...customer.images])}>
-                            {!!customer.images && (
+                          <TableCell onClick={() => handleClickOpen([customer?.cover_image?.toString()?.replace("http", "https"), ...customer.images])}>
+                            {!!customer.cover_image && (
                               <Image
                                 priority
                                 placeholder="blur" // You can use "empty" or a custom element as well
                                 blurDataURL="/assets/errors/error-404.png"
-                                src={BaseUrl + "/uploads/images/" + customer.mainImage}
+                                src={customer.cover_image?.toString()?.replace("http", "https")}
                                 alt="image"
                                 width={50}
                                 height={50}
@@ -360,7 +360,7 @@ export const CustomersTable = (props) => {
                             )}
                           </TableCell>
                           <TableCell>
-                            <Tooltip arrow title={customer.name?.[lang]}>
+                            <Tooltip arrow title={customer?.[`name_${lang}`]}>
                               <Typography sx={{
                                 display: '-webkit-box',
                                 WebkitLineClamp: 4,
@@ -368,15 +368,14 @@ export const CustomersTable = (props) => {
                                 overflow: 'hidden',
                                 textOverflow: 'ellipsis',
                               }}>
-                                {customer.name?.[lang]}
-
+                                {customer?.[`name_${lang}`]}
                               </Typography>
                             </Tooltip>
                           </TableCell>
 
                           <TableCell>
 
-                            <Tooltip arrow title={customer.description?.[lang]}>
+                            <Tooltip arrow title={customer?.[`description_${lang}`]}>
                               <Typography sx={{
                                 display: '-webkit-box',
                                 WebkitLineClamp: 4,
@@ -384,7 +383,7 @@ export const CustomersTable = (props) => {
                                 overflow: 'hidden',
                                 textOverflow: 'ellipsis',
                               }}>
-                                {customer.description?.[lang]}
+                                {customer?.[`description_${lang}`]}
 
                               </Typography>
                             </Tooltip>
@@ -401,12 +400,12 @@ export const CustomersTable = (props) => {
                             </a>
                           </TableCell>
                           <TableCell>
-                            <a href={`tel:+${customer?.phoneNumber}`}>+{customer?.phoneNumber}</a>
+                            <a href={`tel:${customer?.contacts}`}>{customer?.contacts}</a>
                           </TableCell>
                           <TableCell>{`${customer?.workStartTime ? `${customer?.workStartTime} - ` : ""} ${customer?.workEndTime ? `${customer?.workEndTime} ` : ""}`}</TableCell>
                           <TableCell sx={{ display: "flex", flexDirection: "row", alignItems: "flex-start", py: '25px' }} onClick={(e) => e.stopPropagation()}>
                             <EditCompanyModal row={customer} route={`building`} getDatas={getDate} />
-                            <DeleteModal route={`building/${customer.id}`} getDatas={getDate} />
+                            <DeleteModal route={`/building/delete`} id={customer.id} getDatas={getDate} />
                           </TableCell>
                         </TableRow>
                       ) : (

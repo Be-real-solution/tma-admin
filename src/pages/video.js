@@ -6,11 +6,11 @@ import { usePathname, useRouter } from "next/navigation";
 
 
 import { Layout as DashboardLayout } from 'src/layouts/dashboard/layout';
-import { CustomersTable } from 'src/sections/customer/advertisment-table';
+import { CustomersTable } from 'src/sections/customer/video-table';
 import { CustomersSearch } from 'src/sections/customer/customers-search';
 import { applyPagination } from 'src/utils/apply-pagination';
 import useFetcher from 'src/hooks/use-fetcher';
-import AddCompanyModal from 'src/components/Modals/AddModal/AddNews-modal';
+import AddCompanyModal from 'src/components/Modals/AddModal/AddVideo-modal';
 import Content from "src/Localization/Content";
 import { useSelector, useDispatch } from "react-redux";
 import { changePage } from "src/slices/paginationReduser";
@@ -129,7 +129,7 @@ useEffect(()=> {
               <Stack spacing={1}>
       
                 <Typography variant="h4" textTransform={"capitalize"}>
-                  {localization.sidebar.news}
+                  {localization.sidebar.videos}
                 </Typography>
               </Stack>
 
@@ -137,7 +137,7 @@ useEffect(()=> {
                 <AddCompanyModal getDatas={getCountries} />
               </div>
             </Stack>
-            <CustomersSearch forLabel={localization.sidebar.news} onSearch={onSearch} type={"country"} />
+            <CustomersSearch forLabel={localization.sidebar.videos} onSearch={onSearch} type={"country"} />
             <CustomersTable
              isLoading={isLoading}
              
@@ -147,7 +147,7 @@ useEffect(()=> {
               onRowsPerPageChange={handleRowsPerPageChange}
               page={page}
               data={data}
-              type="news"
+              type="videos"
               getDate={getCountries}
               rowsPerPage={rowsPerPage}
             />

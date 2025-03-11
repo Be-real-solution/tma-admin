@@ -7,7 +7,7 @@ import BellIcon from "@heroicons/react/24/solid/BellIcon";
 import { SvgIcon } from '@mui/material';
 import Content from "src/Localization/Content";
 import { useSelector } from 'react-redux';
-import { BuildingOfficeIcon, ChatBubbleLeftRightIcon, DocumentTextIcon, LinkIcon, MegaphoneIcon, NewspaperIcon, RectangleStackIcon } from '@heroicons/react/24/solid';
+import { BookOpenIcon, BuildingOfficeIcon, ChatBubbleLeftRightIcon, DocumentTextIcon, LinkIcon, MegaphoneIcon, NewspaperIcon, PlayCircleIcon, RectangleStackIcon } from '@heroicons/react/24/solid';
 export function Items() {
   const { lang } = useSelector((state) => state.localiztion);
 
@@ -154,6 +154,26 @@ export function Items() {
     <SvgIcon fontSize="small">
   
   <BuildingOfficeIcon/>
+ </SvgIcon>
+  ),
+},
+{
+  title: localization.sidebar.library,
+  path: "/library",
+  icon: (
+    <SvgIcon fontSize="small">
+  
+  <BookOpenIcon/>
+ </SvgIcon>
+  ),
+},
+{
+  title: localization.sidebar.videos,
+  path: "/video",
+  icon: (
+    <SvgIcon fontSize="small">
+  
+  <PlayCircleIcon/>
  </SvgIcon>
   ),
 },
