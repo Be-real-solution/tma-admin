@@ -157,7 +157,7 @@ export default function AddCompanyModal({ getDatas, row, type, route }) {
       
             if (response.status === 401) {
               auth.signOut();
-              router.push("/auth/login");
+              // router.push("/auth/login");
             }
             if (response.status === 201) {
               handleClose()
