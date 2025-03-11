@@ -21,7 +21,7 @@ export const Layout = withAuthGuard((props) => {
   const lgUp = useMediaQuery((theme) => theme.breakpoints.up("lg"));
   const pathname = usePathname();
   const [openNav, setOpenNav] = useState(lgUp ? true : false);
-  const [sideNavWidth, setSideNavWidth] = useState(lgUp ? 230 : 0);
+  const [sideNavWidth, setSideNavWidth] = useState(lgUp ? 255 : 0);
 
 const LayoutRoot = styled("div")(({ theme }) => ({
   display: "flex",

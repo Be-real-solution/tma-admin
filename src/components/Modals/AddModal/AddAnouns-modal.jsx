@@ -209,7 +209,6 @@ image.current=""
           },
           body: formData,
         });
-console.log(response);
 
         const res = await response.json()
 

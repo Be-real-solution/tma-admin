@@ -187,7 +187,7 @@ image.current=""
           auth.signOut();
           router.push("/auth/login");
         }
-        if (res.status ===200) {
+        if (response.status ===201) {
           handleClose()
           getDatas()
           
@@ -195,8 +195,8 @@ image.current=""
       
         }
 
-        addToast(res.message || (res.status ===200 ? localization.alerts.added : localization.alerts.warning), {
-          appearance: res.status ===200 ? "success" : "error",
+        addToast(res.message || (response.status ===201 ? localization.alerts.added : localization.alerts.warning), {
+          appearance: response.status ===201 ? "success" : "error",
           autoDismiss: true,
         });
         setIsLoading(false)

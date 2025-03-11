@@ -140,7 +140,7 @@ console.log(initalData);
 justifyContent="space-between"
 spacing={4}>
               <Stack spacing={1}>
-                <Typography variant="h4">{localization.sidebar.category}</Typography>
+                <Typography variant="h4">{localization.sidebar.news_category}</Typography>
               </Stack>
               {/* {checkAccess && ( */}
                 <div>
@@ -148,7 +148,7 @@ spacing={4}>
                 </div>
               {/* )} */}
             </Stack>
-            <CustomersSearch forLabel={localization.sidebar.category} onSearch={onSearch}
+            <CustomersSearch forLabel={localization.sidebar.news_category} onSearch={onSearch}
 type={"country"} />
             <CustomersTable
              isLoading={isLoading}

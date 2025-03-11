@@ -69,13 +69,19 @@ export const CustomersTable = (props) => {
         <Box sx={{ minWidth: 800 }}>
           <Table>
             <TableHead>
-              <TableRow>
+            {type === "advertisment" ?  <TableRow>
                 <TableCell>{localization.table.name + " uz"}</TableCell>
                 <TableCell>{localization.table.name + " ru"}</TableCell>
                 <TableCell>{localization.table.name + " en"}</TableCell>
                 <TableCell>{localization.table.name + " kaa"}</TableCell>
                 <TableCell>{localization.action}</TableCell>
-              </TableRow>
+              </TableRow> : <TableRow>
+                <TableCell>{localization.table.name + " uz"}</TableCell>
+                <TableCell>{localization.table.name + " ru"}</TableCell>
+                <TableCell>{localization.table.name + " en"}</TableCell>
+                <TableCell>{localization.table.name + " kaa"}</TableCell>
+                <TableCell>{localization.action}</TableCell>
+              </TableRow>}
             </TableHead>
             <TableBody>
          
@@ -86,14 +92,15 @@ export const CustomersTable = (props) => {
               </Box> 
               </TableCell>
               </TableRow> : items.length ? items.map((customer) => {
-                const createdAt = format(new Date(customer?.createdAt || null), "dd/MM/yyyy");
+                const createdAt = format(new Date(customer?.createdAt || customer?.published_date || null), "dd/MM/yyyy HH:mm");
                 // const customAt = format(
                 //   new Date(customer?.custom_date ? customer?.custom_date : null)?.getTime(),
                 //   "dd/MM/yyyy HH:mm"
                 // );
 
                 return (
-                  <TableRow hover
+                <>
+                {type === "advertisment" ?  <TableRow hover
                    key={customer.id}>
                     <TableCell>
                       <Image
@@ -106,20 +113,41 @@ export const CustomersTable = (props) => {
 
                     <TableCell><a target="_blank" href={`${customer?.url}`}>Link</a></TableCell>
                     <TableCell>{customer?.view_count}</TableCell>
-                    <TableCell>{customer?.published_date}</TableCell>
+                    <TableCell>{ createdAt}</TableCell>
               
      
             
                  
                   
-              {type === "faq-categories"  ?       <TableCell>
-                      <EditFaqCategoryModal row={customer} route={`/announcement/faq/category/update`} getDatas={getDate} />
-                      <DeleteModal route={`/announcement/faq/category/delete`} id={customer.id} getDatas={getDate} />
-                    </TableCell> :    <TableCell>
-                      <EditProductModal row={customer} route={`category`} getDatas={getDate} />
-                      <DeleteModal route={`/news/category/delete`} id={customer.id} getDatas={getDate} />
-                    </TableCell>}
-                  </TableRow>
+                     <TableCell>
+                      <EditFaqCategoryModal row={customer} route={`/announcement/update`} getDatas={getDate} />
+                      <DeleteModal route={`/advertisement/delete`} id={customer.id} getDatas={getDate} />
+                    </TableCell> 
+                  </TableRow> :   <TableRow hover
+                   key={customer.id}>
+                    <TableCell>
+                      <Image
+                      width={50}
+                      height={50}
+                        src={customer?.cover_image.toString()?.replace("http", "https")}
+                        alt={"Image"}
+                        style={{ width: 50, height: 50 }}/>
+                    </TableCell>
+                    <TableCell>{customer?.title}</TableCell>
+                    <TableCell>{customer?.description}</TableCell>
+                    <TableCell>{customer?.category?.name}</TableCell>
+                    <TableCell>{customer?.author?.first_name + " " + customer?.author?.last_name}</TableCell>
+                    <TableCell>{customer?.price}</TableCell>
+                    <TableCell>{customer?.download_count}</TableCell>
+                    <TableCell>{customer?.views_count}</TableCell>
+                    <TableCell>{customer?.is_free ? "free" : "paid"}</TableCell>
+                    <TableCell>{ createdAt}</TableCell>
+                 <TableCell>
+                      <EditProductModal row={customer} route={`library`} getDatas={getDate} />
+                      <DeleteModal route={`/library/delete`} id={customer.id} getDatas={getDate} />
+                    </TableCell>
+                  </TableRow>}
+                </>
                 );
               }) :      <TableRow >
               <TableCell  colSpan={5}>

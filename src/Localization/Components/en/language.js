@@ -45,6 +45,7 @@ const header = {
     anouncement: "Anouncement",
     anouncement_category: "Anouncement Category",
     anons_network_category: "Anons Network Category",
+    anons_network_link: "Anons Network Link",
     anons_faq: "Anons FAQ",
     story: "Story",
     category: "Category",

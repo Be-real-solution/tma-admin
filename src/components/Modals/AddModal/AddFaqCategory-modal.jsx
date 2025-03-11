@@ -14,6 +14,9 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import Content from "src/Localization/Content";
 import { useSelector } from 'react-redux';
+import { Delete as DeleteIcon, Image as ImageIcon } from '@mui/icons-material';
+import {ListItem, List, CardMedia, Paper} from '@mui/material';
+import { useState } from 'react';
 const BaseUrl = process.env.NEXT_PUBLIC_ANALYTICS_BASEURL;
 
 import {
@@ -71,9 +74,27 @@ export default function AddCompanyModal({ getDatas, type, subId }) {
     const { lang } = useSelector((state) => state.localiztion);
     const image = React.useRef("")
     const [isLoading, setIsLoading] = React.useState(false);
+  const [mainImage, setMainImage] = useState([]);
 
     const { localization } = Content[lang];
     const matches = useMediaQuery("(min-width:500px)");
+
+    const handleFileChange2 = (event) => {
+        const newImages = Array.from(event.target.files).map((file) => ({
+          file,
+          url: URL.createObjectURL(file),
+        }));
+        setMainImage((prevImages) => [...prevImages, ...newImages]);
+      };
+    
+    
+      const handleDelete2 = (index) => {
+    
+        const newImages = [...mainImage];
+        newImages.splice(index, 1);
+        setMainImage(newImages);
+     
+    };
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -116,8 +137,48 @@ export default function AddCompanyModal({ getDatas, type, subId }) {
 name_kaa: values.namekaa,
                     
                 };
-                createData(type === "announcementfaq" ? `/announcement/faq/create/` : type === "announcementnetwork" ?  `/announcement/social/networks/link/category/create/` : `/library/category/create/`, newData, "POST", getDatas, onFinish);
+if (type === "announcementnetwork") {
+    const formData = new FormData();
+  
+    mainImage?.length && formData.append('icon', mainImage[0]?.file);
+    formData.append("name_uz", values.nameuz);
+    formData.append("name_ru", values.nameru);
+    formData.append("name_en", values.nameen);
+    formData.append("name", values.nameuz);
+  
+    const response = await fetch(BaseUrl + "/announcement/social/networks/link/category/create/", {
+        method: 'POST',
+
+        headers: {
+          Authorization: `Bearer ${JSON.parse(window.sessionStorage.getItem("authenticated"))?.access || false}`,
+          lang: lang,
+        },
+        body: formData,
+      });
+
+    //   const res = await response.json()
+
+      if (response.status === 401) {
+        auth.signOut();
+        router.push("/auth/login");
+      }
+      if (response.status === 201) {
+        handleClose()
+        getDatas()
+        setOpen(false)
+        setIsLoading(false)
+        
+        onFinish()
+    
+      }
+}else{
+    createData(type === "announcementfaq" ? `/announcement/faq/create/` : type === "faqcategory" ? `/announcement/faq/category/create/`  : `/library/category/create/`,  newData, "POST", getDatas, onFinish);
                 setIsLoading(false)
+}
+              
+                
+
+            
             } catch (err) {
                 helpers.setStatus({ success: false });
                 helpers.setErrors({ submit: err.message });
@@ -157,7 +218,55 @@ onSubmit={formik.handleSubmit}>
                     <DialogContent dividers>
                         <Stack spacing={3}
                             width={matches ? 400 : null}>
-                        
+                        <Paper elevation={3} 
+    style={{ padding: '16px', marginTop: '16px'}}>
+     <TextField
+                fullWidth
+                name="image"
+                label={localization.table.main_image}
+               disabled={mainImage?.length}
+                InputLabelProps={{
+                  shrink: true,
+                }}
+                onBlur={formik.handleBlur}
+                onChange={(e) => {
+                    handleFileChange2(e)
+                  // formik.handleChange()}
+                }}
+                type="file"
+                inputRef={image}
+              /> 
+  
+      {mainImage?.length > 0 ? (
+        <List>
+          {mainImage.map((image, index) => (
+            <ListItem key={index}
+             divider
+style={{display:"flex", alignItems:"center", justifyContent:"space-between"}}>
+    <Box sx={{display:"flex", alignItems:"center"}}>          <CardMedia
+                component="img"
+                image={image.url}
+                alt={`Uploaded preview ${index}`}
+                style={{ width: '100px', height: '100px', marginRight: '16px', objectFit:"contain" }}
+              />
+              <Typography variant="body2">{image.file.name}</Typography></Box>
+              <IconButton edge="end" 
+              onClick={() => handleDelete2(index)}>
+                <DeleteIcon />
+              </IconButton>
+            </ListItem>
+          ))}
+        </List>
+      ) : (
+        <Box textAlign="center">
+          <ImageIcon style={{ fontSize: 50, color: 'gray' }} />
+          <Typography variant="body2"
+           color="textSecondary">
+            No images uploaded
+          </Typography>
+        </Box>
+      )}
+    </Paper>
                             <TextField
                                 error={!!(formik.touched.nameuz && formik.errors.nameuz)}
                                 fullWidth
@@ -228,7 +337,8 @@ variant="body2">
                             type="submit"
                             variant="contained">
                                 
-                   {isLoading ? <CircularProgress size={26} color='success'/>
+                   {isLoading ? <CircularProgress size={26} 
+                   color='success'/>
                     : localization.modal.add}
 
                         </Button>

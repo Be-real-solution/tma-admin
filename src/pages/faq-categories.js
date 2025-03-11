@@ -140,15 +140,15 @@ console.log(initalData);
 justifyContent="space-between"
 spacing={4}>
               <Stack spacing={1}>
-                <Typography variant="h4">{localization.sidebar.category}</Typography>
+                <Typography variant="h4">{localization.sidebar.faq_category}</Typography>
               </Stack>
               {/* {checkAccess && ( */}
                 <div>
-                  <AddCompanyModal getDatas={getCountries} />
+                  <AddCompanyModal type={"faqcategory"} getDatas={getCountries} />
                 </div>
               {/* )} */}
             </Stack>
-            <CustomersSearch forLabel={localization.sidebar.category} onSearch={onSearch}
+            <CustomersSearch forLabel={localization.sidebar.faq_category} onSearch={onSearch}
 type={"country"} />
             <CustomersTable
              isLoading={isLoading}

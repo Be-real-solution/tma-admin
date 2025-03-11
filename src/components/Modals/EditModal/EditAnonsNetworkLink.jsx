@@ -136,6 +136,7 @@ export default function AddCompanyModal({ getDatas, type, row, subId }) {
                 };
                 createData(`/announcement/social/network/link/update/${row.id}/`, newData, "PATCH", getDatas);
                 setIsLoading(false)
+                setOpen(false)
             } catch (err) {
                 helpers.setStatus({ success: false });
                 helpers.setErrors({ submit: err.message });

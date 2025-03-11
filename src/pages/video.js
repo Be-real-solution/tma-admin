@@ -6,11 +6,11 @@ import { usePathname, useRouter } from "next/navigation";
 
 
 import { Layout as DashboardLayout } from 'src/layouts/dashboard/layout';
-import { CustomersTable } from 'src/sections/customer/story-table';
+import { CustomersTable } from 'src/sections/customer/advertisment-table';
 import { CustomersSearch } from 'src/sections/customer/customers-search';
 import { applyPagination } from 'src/utils/apply-pagination';
 import useFetcher from 'src/hooks/use-fetcher';
-import AddCompanyModal from 'src/components/Modals/AddModal/AddStory-modal';
+import AddCompanyModal from 'src/components/Modals/AddModal/AddNews-modal';
 import Content from "src/Localization/Content";
 import { useSelector, useDispatch } from "react-redux";
 import { changePage } from "src/slices/paginationReduser";
@@ -44,7 +44,7 @@ const Page = ({ subId, setSubId }) => {
   const [rowsPerPage, setRowsPerPage] = useState(pageCount || 5);
   const [isLoading, setIsLoading] = useState(true);
 
-  const initalData = data[`/announcement/story/list/`]?.results;
+  const initalData = data[`/video/lesson/list/`]?.results;
   const [filtered, setFiltered] = useState(initalData || []);
   const customers = useCustomers(filtered, page, rowsPerPage);
 
@@ -76,7 +76,7 @@ useEffect(()=> {
 
 
   function getCountries() {
-      fetchData(`/announcement/story/list/`);
+      fetchData(`/video/lesson/list/`);
   }
 
   useEffect(() => {
@@ -147,7 +147,7 @@ useEffect(()=> {
               onRowsPerPageChange={handleRowsPerPageChange}
               page={page}
               data={data}
-              type="story"
+              type="news"
               getDate={getCountries}
               rowsPerPage={rowsPerPage}
             />

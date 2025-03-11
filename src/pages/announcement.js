@@ -147,7 +147,7 @@ useEffect(()=> {
               onRowsPerPageChange={handleRowsPerPageChange}
               page={page}
               data={data}
-              type="news-banner"
+              type="announcment"
               getDate={getCountries}
               rowsPerPage={rowsPerPage}
             />

@@ -137,10 +137,10 @@ export const CustomersTable = (props) => {
                       <EditProductModal row={customer} route={`/library/category/update`} getDatas={getDate} />
                       <DeleteModal route={`/library/category/delete`} id={customer.id} getDatas={getDate} />
                     </TableCell> :  type === "networkcategory"  ?       <TableCell>
-                      <EditProductModal row={customer} route={`/library/category/update`} getDatas={getDate} />
+                      <EditProductModal type={"announcementnetwork"}  row={customer} route={`/announcement/social/network/link/category/update`} getDatas={getDate} />
                       <DeleteModal route={`/announcement/social/networks/link/category/delete`} id={customer.id} getDatas={getDate} />
                     </TableCell> :    <TableCell>
-                      <EditProductModal row={customer} route={`category`} getDatas={getDate} />
+                      <EditProductModal type={"news"} row={customer} route={`category`} getDatas={getDate} />
                       <DeleteModal route={`/news/category/delete`} id={customer.id} getDatas={getDate} />
                     </TableCell> }
                   </TableRow>)}

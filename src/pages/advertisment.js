@@ -147,7 +147,7 @@ useEffect(()=> {
               onRowsPerPageChange={handleRowsPerPageChange}
               page={page}
               data={data}
-              type="news"
+              type="advertisment"
               getDate={getCountries}
               rowsPerPage={rowsPerPage}
             />

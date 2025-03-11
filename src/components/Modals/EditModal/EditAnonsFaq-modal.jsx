@@ -146,6 +146,7 @@ export default function AddCompanyModal({ getDatas, row, route, subId }) {
                 };
                 createData(`${route}/${row.id}/`, newData, "PATCH", getDatas);
                 setIsLoading(false)
+                setOpen(false)
             } catch (err) {
                 helpers.setStatus({ success: false });
                 helpers.setErrors({ submit: err.message });

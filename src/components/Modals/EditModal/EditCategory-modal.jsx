@@ -11,6 +11,10 @@ import CloseIcon from '@heroicons/react/24/solid/XMarkIcon';
 import { SvgIcon, useMediaQuery, CircularProgress } from '@mui/material';
 import useFetcher from 'src/hooks/use-fetcher';
 import PlusIcon from '@heroicons/react/24/solid/PencilSquareIcon';
+
+import { Delete as DeleteIcon, Image as ImageIcon } from '@mui/icons-material';
+import {ListItem, List, CardMedia, Paper} from '@mui/material';
+import { useState } from 'react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import Content from "src/Localization/Content";
@@ -65,12 +69,13 @@ BootstrapDialogTitle.propTypes = {
   onClose: PropTypes.func.isRequired,
 };
 
-export default function AddCompanyModal({ getDatas, row, type }) {
+export default function AddCompanyModal({ getDatas, row, type, route }) {
   const { loading, error, createData } = useFetcher();
   const [open, setOpen] = React.useState(false);
   const { lang } = useSelector((state) => state.localiztion);
   const image = React.useRef("")
   const [isLoading, setIsLoading] = React.useState(false);
+  const [mainImage, setMainImage] = useState([]);
 
   const { localization } = Content[lang];
   const matches = useMediaQuery("(min-width:500px)");
@@ -81,7 +86,22 @@ export default function AddCompanyModal({ getDatas, row, type }) {
   const handleClose = () => {
     setOpen(false);
   };
+  const handleFileChange2 = (event) => {
+    const newImages = Array.from(event.target.files).map((file) => ({
+      file,
+      url: URL.createObjectURL(file),
+    }));
+    setMainImage((prevImages) => [...prevImages, ...newImages]);
+  };
+
+
+  const handleDelete2 = (index) => {
+
+    const newImages = [...mainImage];
+    newImages.splice(index, 1);
+    setMainImage(newImages);
  
+};
 
   const formik = useFormik({
     initialValues: {
@@ -114,10 +134,45 @@ export default function AddCompanyModal({ getDatas, row, type }) {
          
 
         };
-        createData(type === "news" ? `/news/category/update/${row.id}/` : `/library/category/update/${row.id}/`, newData, "PATCH", getDatas);
+        if (type === "announcementnetwork") {
+          const formData = new FormData();
+        
+          mainImage?.length && formData.append('icon', mainImage[0]?.file);
+          formData.append("name_uz", values.nameuz);
+          formData.append("name_ru", values.nameru);
+          formData.append("name_en", values.nameen);
+          // formData.append("name", values.nameuz);
+      
+          const response = await fetch(BaseUrl + route+`/${row.id}/`, {
+              method: 'PATCH',
+      
+              headers: {
+                Authorization: `Bearer ${JSON.parse(window.sessionStorage.getItem("authenticated"))?.access || false}`,
+                lang: lang,
+              },
+              body: formData,
+            });
+      
+          //   const res = await response.json()
+      
+            if (response.status === 401) {
+              auth.signOut();
+              router.push("/auth/login");
+            }
+            if (response.status === 201) {
+              handleClose()
+              getDatas()
+              setOpen(false)
+              setIsLoading(false)
+              
+              onFinish()
+          
+            }
+      }else{
+        createData(type === "news" ? `/news/category/update/${row.id}/` : `/library/category/update/${row.id}/`, newData, "PUT", getDatas);
         setIsLoading(false)
         handleClose()
-
+      }
       } catch (err) {
         helpers.setStatus({ success: false });
         helpers.setErrors({ submit: err.message });
@@ -155,7 +210,55 @@ export default function AddCompanyModal({ getDatas, row, type }) {
           <DialogContent dividers>
             <Stack spacing={3}
               width={matches ? 400 : null}>
-
+              <Paper elevation={3} 
+    style={{ padding: '16px', marginTop: '16px'}}>
+     <TextField
+                fullWidth
+                name="image"
+                label={localization.table.main_image}
+               disabled={mainImage?.length}
+                InputLabelProps={{
+                  shrink: true,
+                }}
+                onBlur={formik.handleBlur}
+                onChange={(e) => {
+                    handleFileChange2(e)
+                  // formik.handleChange()}
+                }}
+                type="file"
+                inputRef={image}
+              /> 
+  
+      {mainImage?.length > 0 ? (
+        <List>
+          {mainImage.map((image, index) => (
+            <ListItem key={index}
+             divider
+style={{display:"flex", alignItems:"center", justifyContent:"space-between"}}>
+    <Box sx={{display:"flex", alignItems:"center"}}>          <CardMedia
+                component="img"
+                image={image.url}
+                alt={`Uploaded preview ${index}`}
+                style={{ width: '100px', height: '100px', marginRight: '16px', objectFit:"contain" }}
+              />
+              <Typography variant="body2">{image.file.name}</Typography></Box>
+              <IconButton edge="end" 
+              onClick={() => handleDelete2(index)}>
+                <DeleteIcon />
+              </IconButton>
+            </ListItem>
+          ))}
+        </List>
+      ) : (
+        <Box textAlign="center">
+          <ImageIcon style={{ fontSize: 50, color: 'gray' }} />
+          <Typography variant="body2"
+           color="textSecondary">
+            No images uploaded
+          </Typography>
+        </Box>
+      )}
+    </Paper>
               <TextField
                 error={!!(formik.touched.nameuz && formik.errors.nameuz)}
                 fullWidth

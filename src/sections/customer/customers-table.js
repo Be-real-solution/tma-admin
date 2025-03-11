@@ -43,8 +43,8 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up"
-ref={ref}
-{...props} />;
+    ref={ref}
+    {...props} />;
 });
 
 const BaseUrl = process.env.NEXT_PUBLIC_ANALYTICS_BASEURL;
@@ -53,45 +53,45 @@ export const CustomersTable = (props) => {
   const {
     count = 0,
     items = [],
-    onPageChange = () => {},
+    onPageChange = () => { },
     onRowsPerPageChange,
     page = 0,
     rowsPerPage = 0,
     getDate,
     type,
     isLoading, setIsLoading
-  
+
   } = props;
   const router = useRouter();
   const user = JSON.parse(window.sessionStorage.getItem("user")) || false;
- const { lang } = useSelector((state) => state.localiztion);
-const BaseUrl = process.env.NEXT_PUBLIC_ANALYTICS_BASEURL;
+  const { lang } = useSelector((state) => state.localiztion);
+  const BaseUrl = process.env.NEXT_PUBLIC_ANALYTICS_BASEURL;
   const { createData, fetchData, data } = useFetcher();
 
- const { localization } = Content[lang];
+  const { localization } = Content[lang];
 
- const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = React.useState(false);
 
- const handleClickOpen = (images) => {
-   setOpen({ status: true, images });
- };
+  const handleClickOpen = (images) => {
+    setOpen({ status: true, images });
+  };
 
- const handleClose = () => {
-   setOpen({ status: false, images: [] });
- };
+  const handleClose = () => {
+    setOpen({ status: false, images: [] });
+  };
 
 
-  
+
   return (
     <Card>
       <AlertDialogSlide open={open}
-handleClose={handleClose} localization={localization}/>
+        handleClose={handleClose} localization={localization} />
 
       <Scrollbar>
         <Box sx={{ minWidth: 800 }}>
           <Table>
             <TableHead>
-              { (type === "news" || type === "news-banner") ? (
+              {(type === "news" || type === "news-banner") ? (
                 <TableRow>
                   <TableCell>{localization.table.image}</TableCell>
                   <TableCell>{localization.table.title}</TableCell>
@@ -99,9 +99,18 @@ handleClose={handleClose} localization={localization}/>
                   <TableCell>{localization.sidebar.category}</TableCell>
                   <TableCell>{localization.table.creator}</TableCell>
                   <TableCell>{localization.table.created_at}</TableCell>
-                  {type !== "news-banner"  &&  <TableCell>{localization.action}</TableCell>}
+                  {type !== "news-banner" && <TableCell>{localization.action}</TableCell>}
                 </TableRow>
-              )  : type === "buildings" ? (
+              ) : type === "announcment" ? (<TableRow>
+                <TableCell>{localization.table.image}</TableCell>
+
+                <TableCell>{localization.table.title}</TableCell>
+                <TableCell>{localization.table.info}</TableCell>
+                <TableCell>{localization.table.address}</TableCell>
+                <TableCell>{localization.table.phone_number}</TableCell>
+                <TableCell>{localization.table.grafik}</TableCell>
+                <TableCell>{localization.action}</TableCell>
+              </TableRow>) : type === "buildings" ? (
                 <TableRow>
                   <TableCell>{localization.table.image}</TableCell>
 
@@ -114,9 +123,9 @@ handleClose={handleClose} localization={localization}/>
                 </TableRow>
               ) : (type === "category-faq" || type === "library") ? (
                 <TableRow>
-              
+
                   <TableCell>{localization.table.title}</TableCell>
-        
+
                   <TableCell>{localization.table.created_at}</TableCell>
                   <TableCell>{localization.action}</TableCell>
                 </TableRow>
@@ -131,30 +140,149 @@ handleClose={handleClose} localization={localization}/>
               )}
             </TableHead>
 
-            <TableBody> 
-      
-{isLoading ?    <TableRow >
-  <TableCell colSpan={7}>  <Box height={"200px"} display={"flex"} pt={5} flexDirection={"column"} alignItems={"center"} justifyContent={"center"} >
-  <div class="lds-roller"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
-              <h1>{localization.table.loading}</h1>
-              </Box> 
-              </TableCell>
-              </TableRow>
-              : items.length ? items.map((customer) => {
-                const createdAt = (time) => format(new Date(time || customer?.createdAt || customer?.published_date || null), "dd/MM/yyyy HH:mm");
+            <TableBody>
 
-                return (
-                  <>
-                    { type === "news"  ? (
-                      <TableRow hover key={customer.id}>
-                        <TableCell onClick={() => handleClickOpen([customer?.cover_image.replace("http", "https"), ...customer.images])}>
-                          {!!customer.images && (
-                            
+              {isLoading ? <TableRow >
+                <TableCell colSpan={7}>  <Box height={"200px"} display={"flex"} pt={5} flexDirection={"column"} alignItems={"center"} justifyContent={"center"} >
+                  <div class="lds-roller"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+                  <h1>{localization.table.loading}</h1>
+                </Box>
+                </TableCell>
+              </TableRow>
+                : items.length ? items.map((customer) => {
+                  const createdAt = (time) => format(new Date(time || customer?.createdAt || customer?.published_date || null), "dd/MM/yyyy HH:mm");
+
+                  return (
+                    <>
+                      {type === "news" ? (
+                        <TableRow hover key={customer.id}>
+                          <TableCell onClick={() => handleClickOpen([customer?.cover_image?.replace("http", "https"), ...customer.images])}>
+                            {!!customer.images && (
+
+                              <Image
+                                priority
+                                placeholder="blur" // You can use "empty" or a custom element as well
+                                blurDataURL="/assets/errors/error-404.png"
+                                src={customer.cover_image?.replace("http", "https")}
+                                alt="image"
+                                width={50}
+                                height={50}
+                                style={{ borderRadius: 10 }}
+                              />
+                            )}
+                          </TableCell>
+                          <TableCell>
+                            <Tooltip arrow title={customer?.[`title_${lang}`]}
+                            >
+                              <Typography sx={{
+                                display: '-webkit-box',
+                                WebkitLineClamp: 4,
+                                WebkitBoxOrient: 'vertical',
+                                overflow: 'hidden',
+                                textOverflow: 'ellipsis',
+                              }}>
+                                {customer?.[`title_${lang}`]}
+                              </Typography>
+                            </Tooltip>
+                          </TableCell>
+                          <TableCell>
+                            <Tooltip arrow title={customer?.[`content_${lang}`]}
+                            >
+                              <Typography sx={{
+                                display: '-webkit-box',
+                                WebkitLineClamp: 4,
+                                WebkitBoxOrient: 'vertical',
+                                overflow: 'hidden',
+                                textOverflow: 'ellipsis',
+                              }}>
+
+                                {customer?.[`content_${lang}`]}
+
+                              </Typography>
+                            </Tooltip>
+                          </TableCell>
+                          <TableCell>
+                            {customer?.category?.name}
+                          </TableCell>
+                          {/* <TableCell>{customer?.category && customer?.category?.map((el, index)=> (<p key={index}>
+{el.name?.[lang]}
+                        </p>))}</TableCell> */}
+                          <TableCell>{customer?.view_count}</TableCell>
+                          <TableCell>{createdAt()}</TableCell>
+                          <TableCell onClick={(e) => e.stopPropagation()}>
+                            <EditCarModal row={customer} route={`new`} getDatas={getDate} />
+                            <DeleteModal route={`/news/delete`} id={customer.id} getDatas={getDate} />
+                          </TableCell>
+                        </TableRow>
+                      ) : type === "news-banner" ? <TableRow hover key={customer.id}>
+                        <TableCell onClick={() => handleClickOpen([customer?.cover_image?.replace("http", "https"), ...customer.cover_image])}>
+                          {customer.cover_image ? (
+
                             <Image
                               priority
-                               placeholder="blur" // You can use "empty" or a custom element as well
+                              placeholder="blur" // You can use "empty" or a custom element as well
+                              blurDataURL="/assets/errors/error-404.png"
+                              src={customer.cover_image?.replace("http", "https")}
+                              alt="image"
+                              width={50}
+                              height={50}
+                              style={{ borderRadius: 10 }}
+                            />
+                          ) : (<Image
+                            priority
+                            placeholder="blur" // You can use "empty" or a custom element as well
                             blurDataURL="/assets/errors/error-404.png"
-                              src={ customer.cover_image?.replace("http", "https")}
+                            src={"/assets/errors/error-404.png"}
+                            alt="image"
+                            width={50}
+                            height={50}
+                            style={{ borderRadius: 10 }}
+                          />
+                          )}
+                        </TableCell>
+                        <TableCell>
+                          <Tooltip arrow title={customer.name}>
+                            <Typography sx={{
+                              display: '-webkit-box',
+                              WebkitLineClamp: 4,
+                              WebkitBoxOrient: 'vertical',
+                              overflow: 'hidden',
+                              textOverflow: 'ellipsis',
+                            }}>
+                              {customer.title}
+                            </Typography>
+                          </Tooltip>
+                        </TableCell>
+
+                        <TableCell>
+                          <Tooltip arrow title={customer.content}>
+                            <Typography sx={{
+                              display: '-webkit-box',
+                              WebkitLineClamp: 4,
+                              WebkitBoxOrient: 'vertical',
+                              overflow: 'hidden',
+                              textOverflow: 'ellipsis',
+                            }}>
+
+                              {customer.content}
+                            </Typography>
+                          </Tooltip>
+                        </TableCell>
+                        <TableCell><p >
+                          {customer?.category?.name}
+                        </p></TableCell>
+                        <TableCell>{customer?.view_count}</TableCell>
+                        <TableCell>{createdAt(customer?.published_date)}</TableCell>
+
+                      </TableRow> : type === "announcment" ? <TableRow hover key={customer.id}>
+                        <TableCell onClick={() => handleClickOpen([customer?.cover_image?.replace("http", "https"), ...customer.images])}>
+                          {!!customer.images && (
+
+                            <Image
+                              priority
+                              placeholder="blur" // You can use "empty" or a custom element as well
+                              blurDataURL="/assets/errors/error-404.png"
+                              src={customer.cover_image?.replace("http", "https")}
                               alt="image"
                               width={50}
                               height={50}
@@ -163,225 +291,164 @@ handleClose={handleClose} localization={localization}/>
                           )}
                         </TableCell>
                         <TableCell>
-                        <Tooltip   arrow title=                           {customer?.[`title_${lang}`]}
-                        >
-                      <Typography   sx={{
-    display: '-webkit-box',
-    WebkitLineClamp: 4,
-    WebkitBoxOrient: 'vertical',
-    overflow: 'hidden',
-    textOverflow: 'ellipsis',
-  }}>
-                          {customer?.[`title_${lang}`]}
-                          </Typography>
-                         </Tooltip>
-                          </TableCell>
+                          <Tooltip arrow title={customer?.[`title_${lang}`]}
+                          >
+                            <Typography sx={{
+                              display: '-webkit-box',
+                              WebkitLineClamp: 4,
+                              WebkitBoxOrient: 'vertical',
+                              overflow: 'hidden',
+                              textOverflow: 'ellipsis',
+                            }}>
+                              {customer?.[`title_${lang}`]}
+                            </Typography>
+                          </Tooltip>
+                        </TableCell>
                         <TableCell>
-                        <Tooltip   arrow title={customer?.[`content_${lang}`]}
-                        >
-                      <Typography   sx={{
-    display: '-webkit-box',
-    WebkitLineClamp: 4,
-    WebkitBoxOrient: 'vertical',
-    overflow: 'hidden',
-    textOverflow: 'ellipsis',
-  }}>
+                          <Tooltip arrow title={customer?.[`content_${lang}`]}
+                          >
+                            <Typography sx={{
+                              display: '-webkit-box',
+                              WebkitLineClamp: 4,
+                              WebkitBoxOrient: 'vertical',
+                              overflow: 'hidden',
+                              textOverflow: 'ellipsis',
+                            }}>
 
-{customer?.[`content_${lang}`]}
+                              {customer?.[`content_${lang}`]}
 
-                      </Typography>
-                    </Tooltip>
-                    </TableCell>
-                     <TableCell>
-                      {customer?.category?.name}
-                     </TableCell>
+                            </Typography>
+                          </Tooltip>
+                        </TableCell>
+                        <TableCell>
+                          {customer?.category?.name}
+                        </TableCell>
                         {/* <TableCell>{customer?.category && customer?.category?.map((el, index)=> (<p key={index}>
 {el.name?.[lang]}
                         </p>))}</TableCell> */}
                         <TableCell>{customer?.view_count}</TableCell>
                         <TableCell>{createdAt()}</TableCell>
-                      <TableCell onClick={(e) => e.stopPropagation()}>
+                        <TableCell onClick={(e) => e.stopPropagation()}>
                           <EditCarModal row={customer} route={`new`} getDatas={getDate} />
-                          <DeleteModal route={`/news/delete`} id={customer.id} getDatas={getDate} />
+                          <DeleteModal route={`/announcement/delete`} id={customer.id} getDatas={getDate} />
                         </TableCell>
-                      </TableRow>
-                    ) : type === "news-banner" ?     <TableRow hover key={customer.id}>
-                    <TableCell onClick={() => handleClickOpen([customer?.cover_image?.replace("http", "https"), ...customer.cover_image])}>
-                      {customer.cover_image ? (
-                        
-                        <Image
-                          priority
-                           placeholder="blur" // You can use "empty" or a custom element as well
-                        blurDataURL="/assets/errors/error-404.png"
-                          src={customer.cover_image?.replace("http", "https")}
-                          alt="image"
-                          width={50}
-                          height={50}
-                          style={{ borderRadius: 10 }}
-                        />
-                      ) : (<Image
-                        priority
-                         placeholder="blur" // You can use "empty" or a custom element as well
-                      blurDataURL="/assets/errors/error-404.png"
-                        src={"/assets/errors/error-404.png"}
-                        alt="image"
-                        width={50}
-                        height={50}
-                        style={{ borderRadius: 10 }}
-                      />
-                    )}
-                    </TableCell>
-                    <TableCell>
-                        <Tooltip   arrow title= {customer.name}>
-                      <Typography   sx={{
-    display: '-webkit-box',
-    WebkitLineClamp: 4,
-    WebkitBoxOrient: 'vertical',
-    overflow: 'hidden',
-    textOverflow: 'ellipsis',
-  }}>
-                        {customer.title}
-                          </Typography>
-                         </Tooltip>
-                          </TableCell>
-                    
-                    <TableCell>
-                    <Tooltip   arrow title={customer.content}>
-                    <Typography   sx={{
-    display: '-webkit-box',
-    WebkitLineClamp: 4,
-    WebkitBoxOrient: 'vertical',
-    overflow: 'hidden',
-    textOverflow: 'ellipsis',
-  }}>
+                      </TableRow> : type === "category-faq" ? (<TableRow hover key={customer.id}>
 
-                    {customer.content}
-                    </Typography>
-                    </Tooltip>
-                    </TableCell>
-                    <TableCell><p >
-{customer?.category?.name}
-                    </p></TableCell>
-                    <TableCell>{customer?.view_count}</TableCell>
-                    <TableCell>{createdAt(customer?.published_date)}</TableCell>
-              
-                  </TableRow> : type === "category-faq" ? ( <TableRow hover key={customer.id}>
-                    
-                  
-                    <TableCell>{customer.name}</TableCell>
-                    <TableCell>{createdAt(customer.created_at)}</TableCell>
-                   
-                      
-                           <TableCell sx={{display:"flex", flexDirection:"row", alignItems:"flex-start", py:'25px'}} onClick={(e) => e.stopPropagation()}>
+
+                        <TableCell>{customer.name}</TableCell>
+                        <TableCell>{createdAt(customer.created_at)}</TableCell>
+
+
+                        <TableCell sx={{ display: "flex", flexDirection: "row", alignItems: "flex-start", py: '25px' }} onClick={(e) => e.stopPropagation()}>
                           <EditCompanyModal row={customer} route={`building`} getDatas={getDate} />
                           <DeleteModal route={`building/${customer.id}`} getDatas={getDate} />
                         </TableCell>
                       </TableRow>) : type === "buildings" ? (
-                      <TableRow hover key={customer.id}>
+                        <TableRow hover key={customer.id}>
                           <TableCell onClick={() => handleClickOpen([customer?.mainImage, ...customer.images])}>
-                          {!!customer.images && (
+                            {!!customer.images && (
+                              <Image
+                                priority
+                                placeholder="blur" // You can use "empty" or a custom element as well
+                                blurDataURL="/assets/errors/error-404.png"
+                                src={BaseUrl + "/uploads/images/" + customer.mainImage}
+                                alt="image"
+                                width={50}
+                                height={50}
+                                style={{ borderRadius: 10 }}
+                              />
+                            )}
+                          </TableCell>
+                          <TableCell>
+                            <Tooltip arrow title={customer.name?.[lang]}>
+                              <Typography sx={{
+                                display: '-webkit-box',
+                                WebkitLineClamp: 4,
+                                WebkitBoxOrient: 'vertical',
+                                overflow: 'hidden',
+                                textOverflow: 'ellipsis',
+                              }}>
+                                {customer.name?.[lang]}
+
+                              </Typography>
+                            </Tooltip>
+                          </TableCell>
+
+                          <TableCell>
+
+                            <Tooltip arrow title={customer.description?.[lang]}>
+                              <Typography sx={{
+                                display: '-webkit-box',
+                                WebkitLineClamp: 4,
+                                WebkitBoxOrient: 'vertical',
+                                overflow: 'hidden',
+                                textOverflow: 'ellipsis',
+                              }}>
+                                {customer.description?.[lang]}
+
+                              </Typography>
+                            </Tooltip>
+                          </TableCell>
+                          <TableCell>
+                            <a
+
+                              target="_blank"
+                              href={`https://www.google.com/maps?q=${customer?.latitude},${customer?.longitude}&z=15`}
+                              rel="noreferrer"
+
+                            >
+                              {customer.address?.[lang]}
+                            </a>
+                          </TableCell>
+                          <TableCell>
+                            <a href={`tel:+${customer?.phoneNumber}`}>+{customer?.phoneNumber}</a>
+                          </TableCell>
+                          <TableCell>{`${customer?.workStartTime ? `${customer?.workStartTime} - ` : ""} ${customer?.workEndTime ? `${customer?.workEndTime} ` : ""}`}</TableCell>
+                          <TableCell sx={{ display: "flex", flexDirection: "row", alignItems: "flex-start", py: '25px' }} onClick={(e) => e.stopPropagation()}>
+                            <EditCompanyModal row={customer} route={`building`} getDatas={getDate} />
+                            <DeleteModal route={`building/${customer.id}`} getDatas={getDate} />
+                          </TableCell>
+                        </TableRow>
+                      ) : (
+                        <TableRow hover key={customer.id}>
+                          <TableCell>
                             <Image
                               priority
-                               placeholder="blur" // You can use "empty" or a custom element as well
-                            blurDataURL="/assets/errors/error-404.png"
-                              src={BaseUrl + "/uploads/images/" + customer.mainImage}
+                              src={BaseUrl + "/file/banners/" + customer?.image}
                               alt="image"
-                              width={50}
-                              height={50}
+                              width={150}
+                              height={100}
                               style={{ borderRadius: 10 }}
                             />
-                          )}
-                        </TableCell>
-                        <TableCell>
-                        <Tooltip   arrow title={customer.name?.[lang]}>
-                      <Typography   sx={{
-    display: '-webkit-box',
-    WebkitLineClamp: 4,
-    WebkitBoxOrient: 'vertical',
-    overflow: 'hidden',
-    textOverflow: 'ellipsis',
-  }}>
-{customer.name?.[lang]}
-                          
-  </Typography>
-  </Tooltip>
                           </TableCell>
-                        
-                        <TableCell>
-                          
-                        <Tooltip   arrow title={customer.description?.[lang]}>
-                      <Typography   sx={{
-    display: '-webkit-box',
-    WebkitLineClamp: 4,
-    WebkitBoxOrient: 'vertical',
-    overflow: 'hidden',
-    textOverflow: 'ellipsis',
-  }}>
-{customer.description?.[lang]}
-                          
-  </Typography>
-  </Tooltip>
+                          <TableCell>{customer.titleuz}</TableCell>
+                          <TableCell>{customer.titleru}</TableCell>
+                          <TableCell>{customer.titleen}</TableCell>
+                          {/* <TableCell>{createdAt}</TableCell> */}
+                          <TableCell>
+                            <DeleteModal route={`banner/${customer.id}`} getDatas={getDate} />
                           </TableCell>
-                        <TableCell>
-                          <a
+                        </TableRow>
+                      )}
+                    </>
+                  );
+                }) : <TableRow >
+                  <TableCell colSpan={7}>
 
-target="_blank"
-href={`https://www.google.com/maps?q=${customer?.latitude},${customer?.longitude}&z=15`}
-rel="noreferrer"
-                         
-                          >
-                   {customer.address?.[lang]}
-                          </a>
-                          </TableCell>
-                        <TableCell>
-                        <a href={`tel:+${customer?.phoneNumber}`}>+{customer?.phoneNumber}</a>
-                          </TableCell>
-                        <TableCell>{`${customer?.workStartTime ? `${customer?.workStartTime} - ` : ""} ${customer?.workEndTime ? `${customer?.workEndTime} ` : ""}` }</TableCell>
-                        <TableCell sx={{display:"flex", flexDirection:"row", alignItems:"flex-start", py:'25px'}} onClick={(e) => e.stopPropagation()}>
-                          <EditCompanyModal row={customer} route={`building`} getDatas={getDate} />
-                          <DeleteModal route={`building/${customer.id}`} getDatas={getDate} />
-                        </TableCell>
-                      </TableRow>
-                    ) : (
-                      <TableRow hover key={customer.id}>
-                        <TableCell>
-                          <Image
-                            priority
-                            src={BaseUrl + "/file/banners/" + customer?.image}
-                            alt="image"
-                            width={150}
-                            height={100}
-                            style={{ borderRadius: 10 }}
-                          />
-                        </TableCell>
-                        <TableCell>{customer.titleuz}</TableCell>
-                        <TableCell>{customer.titleru}</TableCell>
-                        <TableCell>{customer.titleen}</TableCell>
-                        {/* <TableCell>{createdAt}</TableCell> */}
-                        <TableCell>
-                          <DeleteModal route={`banner/${customer.id}`} getDatas={getDate} />
-                        </TableCell>
-                      </TableRow>
-                    )}
-                  </>
-                );
-              }) :      <TableRow >
-              <TableCell colSpan={7}>
-
-            <Box height={"200px"} display={"flex"} pt={5} flexDirection={"column"} alignItems={"center"} justifyContent={"center"} >
-            <img
-            alt="Under development"
-            src="/assets/errors/error-404.png"
-            style={{
-              display: "inline-block",
-              maxWidth: "100%",
-              width: 120,
-            }}
-          />
-              <h1>{localization.table.not_found}</h1>
-              </Box>
-              </TableCell>
-             </TableRow>}
+                    <Box height={"200px"} display={"flex"} pt={5} flexDirection={"column"} alignItems={"center"} justifyContent={"center"} >
+                      <img
+                        alt="Under development"
+                        src="/assets/errors/error-404.png"
+                        style={{
+                          display: "inline-block",
+                          maxWidth: "100%",
+                          width: 120,
+                        }}
+                      />
+                      <h1>{localization.table.not_found}</h1>
+                    </Box>
+                  </TableCell>
+                </TableRow>}
             </TableBody>
           </Table>
         </Box>
@@ -412,15 +479,15 @@ CustomersTable.propTypes = {
   page: PropTypes.number,
   rowsPerPage: PropTypes.number,
   selected: PropTypes.array,
-  isLoading:PropTypes.bool,
-  setIsLoading:PropTypes.func,
+  isLoading: PropTypes.bool,
+  setIsLoading: PropTypes.func,
 };
 
 
 
 
 
- function AlertDialogSlide({ handleClose, open, localization }) {
+function AlertDialogSlide({ handleClose, open, localization }) {
   // Assuming Transition is defined and imported elsewhere
   // import Transition from '...';
 
@@ -436,23 +503,23 @@ CustomersTable.propTypes = {
         <DialogContent >
           {open.images && (
             <Swiper
-              style={{ width:"100%", height:"100%"}}
+              style={{ width: "100%", height: "100%" }}
               // width={550}
               modules={[Navigation]} // Add Navigation and Pagination modules
               navigation // Enable navigation arrows
-           
+
               spaceBetween={30}
               slidesPerView={1}
             >
               {open.images.map((image, index) => (
                 <SwiperSlide key={image.id} >
                   <Image
-                       placeholder="blur" // You can use "empty" or a custom element as well
-                            blurDataURL="/assets/errors/error-404.png"
+                    placeholder="blur" // You can use "empty" or a custom element as well
+                    blurDataURL="/assets/errors/error-404.png"
                     width={500}
                     height={400}
-                    src={`${image.imageLink ? image.imageLink : image}`}
-                    alt={`Car ${index + 1}`}
+                    src={`${image.image ? image.image.replace("http", "https") : image}`}
+                    alt={`Image ${index + 1}`}
                     style={{ width: "100%", height: "350px" }} // Adjust size as needed
                   />
                 </SwiperSlide>
