@@ -129,14 +129,14 @@ export const CustomersTable = (props) => {
                       <Image
                       width={50}
                       height={50}
-                        src={customer?.cover_image.toString()?.replace("http", "https")}
+                        src={customer?.image.toString()?.replace("http", "https")}
                         alt={"Image"}
                         style={{ width: 50, height: 50 }}/>
                     </TableCell>
                     <TableCell>{customer?.title}</TableCell>
                     <TableCell>{customer?.description}</TableCell>
                     <TableCell>{customer?.category?.name}</TableCell>
-                    <TableCell>{customer?.author?.first_name + " " + customer?.author?.last_name}</TableCell>
+                    <TableCell>{customer?.author}</TableCell>
                     <TableCell>{customer?.price}</TableCell>
                     <TableCell>{customer?.download_count}</TableCell>
                     <TableCell>{customer?.views_count}</TableCell>

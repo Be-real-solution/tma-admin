@@ -36,7 +36,7 @@ const Page = ({subIdSecond, setSubIdSecond}) => {
   const [rowsPerPage, setRowsPerPage] = useState(pageCount || 5);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const initalData =
-    data[`/building/list/`] || [];
+    data[`/building/list/`]?.results || [];
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const [filtered, setFiltered] = useState(initalData);
   const customers = useCustomers(filtered, page, rowsPerPage);

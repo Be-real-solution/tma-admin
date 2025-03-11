@@ -129,7 +129,7 @@ useEffect(()=> {
               <Stack spacing={1}>
       
                 <Typography variant="h4" textTransform={"capitalize"}>
-                  {localization.sidebar.news}
+                  {localization.sidebar.advertisement}
                 </Typography>
               </Stack>
 
@@ -137,7 +137,7 @@ useEffect(()=> {
                 <AddCompanyModal getDatas={getCountries} />
               </div>
             </Stack>
-            <CustomersSearch forLabel={localization.sidebar.news} onSearch={onSearch} type={"country"} />
+            <CustomersSearch forLabel={localization.sidebar.advertisement} onSearch={onSearch} type={"country"} />
             <CustomersTable
              isLoading={isLoading}
              

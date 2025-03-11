@@ -393,11 +393,11 @@ export const CustomersTable = (props) => {
                             <a
 
                               target="_blank"
-                              href={`https://www.google.com/maps?q=${customer?.latitude},${customer?.longitude}&z=15`}
+                              href={`https://www.google.com/maps?q=${customer?.lat},${customer?.lon}&z=15`}
                               rel="noreferrer"
 
                             >
-                              {customer.address?.[lang]}
+                              {customer?.[`address_${lang}`]}
                             </a>
                           </TableCell>
                           <TableCell>

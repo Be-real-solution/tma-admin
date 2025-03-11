@@ -144,6 +144,7 @@ export default function AddOrderModal({ getDatas, company }) {
   const onFinish = () => {
     formik.values.nameuz = "";
 setImages([])
+setMainImage([])
 image.current=""
   };
 
@@ -183,7 +184,6 @@ image.current=""
           },
           body: formData,
         });
-console.log(response);
 
         const res = await response.json()
 
@@ -200,7 +200,7 @@ console.log(response);
         }
 
         addToast(res.message || (response.status === 201 ? localization.alerts.added : localization.alerts.warning), {
-          appearance: response.response === 201 ? "success" : "error",
+          appearance: response.status === 201 ? "success" : "error",
           autoDismiss: true,
         });
         setIsLoading(false)
