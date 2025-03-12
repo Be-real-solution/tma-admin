@@ -27,7 +27,7 @@ import {
 import useFetcher from "src/hooks/use-fetcher";
 import DeleteModal from "src/components/Modals/DeleteModal";
 import EditProductModal from "src/components/Modals/EditModal/EditCategory-modal";
-import EditFaqCategoryModal from "src/components/Modals/EditModal/EditFaqCategory-modal";
+import EditFaqCategoryModal from "src/components/Modals/EditModal/EditAdds-modal";
 
 
 import { Scrollbar } from "src/components/scrollbar";
@@ -128,7 +128,7 @@ export const CustomersTable = (props) => {
                  
                   
                      <TableCell>
-                      <EditFaqCategoryModal row={customer} route={`/announcement/update`} getDatas={getDate} />
+                      <EditFaqCategoryModal row={customer} route={`/advertisement/update`} getDatas={getDate} />
                       <DeleteModal route={`/advertisement/delete`} id={customer.id} getDatas={getDate} />
                     </TableCell> 
                   </TableRow> :   <TableRow hover

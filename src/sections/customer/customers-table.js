@@ -23,7 +23,7 @@ import useFetcher from "src/hooks/use-fetcher";
 import { useEffect } from "react";
 import DeleteModal from "src/components/Modals/DeleteModal";
 import EditCompanyModal from "src/components/Modals/EditModal/EditBuilding-modal";
-import EditCarModal from "src/components/Modals/EditModal/EditNews-modal";
+import EditCarModal from "src/components/Modals/EditModal/EditAnouns-modal";
 import { Scrollbar } from "src/components/scrollbar";
 import Content from "src/Localization/Content";
 import { useSelector } from "react-redux";
@@ -329,7 +329,7 @@ export const CustomersTable = (props) => {
                         <TableCell>{customer?.view_count}</TableCell>
                         <TableCell>{createdAt()}</TableCell>
                         <TableCell onClick={(e) => e.stopPropagation()}>
-                          <EditCarModal row={customer} route={`new`} getDatas={getDate} />
+                          <EditCarModal row={customer} route={`/announcement/update`} getDatas={getDate} />
                           <DeleteModal route={`/announcement/delete`} id={customer.id} getDatas={getDate} />
                         </TableCell>
                       </TableRow> : type === "category-faq" ? (<TableRow hover key={customer.id}>

@@ -13,17 +13,12 @@ import {
   TableHead,
   TablePagination,
   TableRow,
-  Backdrop,
-  Typography,
-  CircularProgress,
-  Tooltip
+
 
 } from "@mui/material";
 import useFetcher from "src/hooks/use-fetcher";
-import { useEffect } from "react";
 import DeleteModal from "src/components/Modals/DeleteModal";
-import EditCompanyModal from "src/components/Modals/EditModal/EditBuilding-modal";
-import EditCarModal from "src/components/Modals/EditModal/EditNews-modal";
+import EditCarModal from "src/components/Modals/EditModal/EditStory-modal";
 import { Scrollbar } from "src/components/scrollbar";
 import Content from "src/Localization/Content";
 import { useSelector } from "react-redux";
@@ -34,8 +29,7 @@ import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
-import DialogContentText from "@mui/material/DialogContentText";
-import DialogTitle from "@mui/material/DialogTitle";
+
 import Slide from "@mui/material/Slide";
 import { Navigation, Pagination } from "swiper/modules";
 import "swiper/css";
@@ -159,7 +153,7 @@ handleClose={handleClose} localization={localization}/>
               
                         <TableCell>{createdAt()}</TableCell>
                       <TableCell onClick={(e) => e.stopPropagation()}>
-                          <EditCarModal row={customer} route={`new`} getDatas={getDate} />
+                          <EditCarModal row={customer} route={`/announcement/story/update`} getDatas={getDate} />
                           <DeleteModal route={`/announcement/story/delete`} id={customer.id} getDatas={getDate} />
                         </TableCell>
                       </TableRow>
