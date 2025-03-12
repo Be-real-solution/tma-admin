@@ -210,7 +210,7 @@ export const CustomersTable = (props) => {
                           <TableCell>{customer?.view_count}</TableCell>
                           <TableCell>{createdAt()}</TableCell>
                           <TableCell onClick={(e) => e.stopPropagation()}>
-                            <EditCarModal row={customer} route={`new`} getDatas={getDate} />
+                            <EditCarModal row={customer} route={`/news/update`} getDatas={getDate} />
                             <DeleteModal route={`/news/delete`} id={customer.id} getDatas={getDate} />
                           </TableCell>
                         </TableRow>

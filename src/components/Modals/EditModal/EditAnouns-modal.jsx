@@ -128,7 +128,7 @@ export default function AddOrderModal({ getDatas, row, route }) {
     setOpen(false);
   };
 
-console.log(row);
+
 
   
   const formik = useFormik({
