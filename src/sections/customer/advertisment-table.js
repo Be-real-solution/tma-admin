@@ -26,7 +26,7 @@ import {
 } from "@mui/material";
 import useFetcher from "src/hooks/use-fetcher";
 import DeleteModal from "src/components/Modals/DeleteModal";
-import EditProductModal from "src/components/Modals/EditModal/EditCategory-modal";
+import EditProductModal from "src/components/Modals/EditModal/EditLibrary-modal";
 import EditFaqCategoryModal from "src/components/Modals/EditModal/EditAdds-modal";
 
 
@@ -80,6 +80,7 @@ export const CustomersTable = (props) => {
               </TableRow> : <TableRow>
                 <TableCell>{localization.table.name + " uz"}</TableCell>
                 <TableCell>{localization.table.name + " ru"}</TableCell>
+                <TableCell>{localization.table.name + " ru"}</TableCell>
                 <TableCell>{localization.table.name + " en"}</TableCell>
                 <TableCell>{localization.table.name + " en"}</TableCell>
                 <TableCell>{localization.table.name + " en"}</TableCell>
@@ -114,7 +115,7 @@ export const CustomersTable = (props) => {
                       <Image
                       width={50}
                       height={50}
-                        src={customer?.image.toString()?.replace("http", "https")}
+                        src={customer?.image}
                         alt={"Image"}
                         style={{ width: 50, height: 50 }}/>
                     </TableCell>
@@ -137,10 +138,13 @@ export const CustomersTable = (props) => {
                       <Image
                       width={50}
                       height={50}
-                        src={customer?.image.toString()?.replace("http", "https")}
+                        src={customer?.image}
                         alt={"Image"}
                         style={{ width: 50, height: 50 }}/>
                     </TableCell>
+                    <TableCell>
+                      <a target="_blank" href={`${customer?.item}`}>File</a></TableCell>
+                    
                     <TableCell>
                                                 <Tooltip arrow title={customer?.[`title_${lang}`]}
                                                 >

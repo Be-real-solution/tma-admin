@@ -68,7 +68,6 @@ BootstrapDialogTitle.propTypes = {
 
 
 export default function AddOrderModal({ getDatas, row, route }) {
-  const user = JSON.parse(window.sessionStorage.getItem("user")) || false;
   const [isLoading, setIsLoading] = React.useState(false);
 
   
@@ -201,7 +200,7 @@ export default function AddOrderModal({ getDatas, row, route }) {
         }
 
         addToast(res.message || (response.status === 200 ? localization.alerts.added : localization.alerts.warning), {
-          appearance: response.response === 200 ? "success" : "error",
+          appearance: response.status === 200 ? "success" : "error",
           autoDismiss: true,
         });
         setIsLoading(false)

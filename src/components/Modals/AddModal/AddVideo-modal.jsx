@@ -229,7 +229,7 @@ image.current=""
         }
 
         addToast(res.message || (response.status ===201 ? localization.alerts.added : localization.alerts.warning), {
-          appearance: response.response ===201 ? "success" : "error",
+          appearance: response.status ===201 ? "success" : "error",
           autoDismiss: true,
         });
         setIsLoading(false)
@@ -343,13 +343,7 @@ style={{display:"flex", alignItems:"center", justifyContent:"space-between"}}>
                 type="file"
                 inputRef={image}
               /> 
-      {/* <input
-        type="file"
-        accept="image/*"
-        multiple
-        onChange={handleFileChange}
-        style={{ marginBottom: '16px' }}
-      /> */}
+ 
       {images.length > 0 ? (
         <List>
           {images.map((image, index) => (

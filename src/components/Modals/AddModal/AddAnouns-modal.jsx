@@ -225,7 +225,7 @@ image.current=""
         }
 
         addToast(res.message || (response.status === 201 ? localization.alerts.added : localization.alerts.warning), {
-          appearance: response.response === 201 ? "success" : "error",
+          appearance: response.status === 201 ? "success" : "error",
           autoDismiss: true,
         });
         setIsLoading(false)

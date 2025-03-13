@@ -183,6 +183,8 @@ export default function AddCompanyModal({ getDatas, row, type, route }) {
 
   });
 
+  
+
   return (
     <>
 
@@ -210,7 +212,7 @@ export default function AddCompanyModal({ getDatas, row, type, route }) {
           <DialogContent dividers>
             <Stack spacing={3}
               width={matches ? 400 : null}>
-              <Paper elevation={3} 
+        {type !== "news" &&      <Paper elevation={3} 
     style={{ padding: '16px', marginTop: '16px'}}>
      <TextField
                 fullWidth
@@ -258,7 +260,7 @@ style={{display:"flex", alignItems:"center", justifyContent:"space-between"}}>
           </Typography>
         </Box>
       )}
-    </Paper>
+    </Paper>}
               <TextField
                 error={!!(formik.touched.nameuz && formik.errors.nameuz)}
                 fullWidth

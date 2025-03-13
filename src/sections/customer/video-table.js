@@ -26,10 +26,7 @@ import {
 } from "@mui/material";
 import useFetcher from "src/hooks/use-fetcher";
 import DeleteModal from "src/components/Modals/DeleteModal";
-import EditProductModal from "src/components/Modals/EditModal/EditCategory-modal";
-import EditFaqCategoryModal from "src/components/Modals/EditModal/EditFaqCategory-modal";
-
-
+import EditProductModal from "src/components/Modals/EditModal/EditVideo-modal";
 import { Scrollbar } from "src/components/scrollbar";
 import Content from "src/Localization/Content";
 import { useSelector } from "react-redux";
@@ -47,7 +44,6 @@ export const CustomersTable = (props) => {
     getDate,
     isLoading, setIsLoading
   } = props;
-  const { createData, fetchData, data } = useFetcher();
 
   const { lang } = useSelector((state) => state.localiztion);
 
@@ -109,12 +105,12 @@ export const CustomersTable = (props) => {
                       <Image
                       width={50}
                       height={50}
-                        src={customer?.cover_image.toString()?.replace("http", "https")}
+                        src={customer?.cover_image}
                         alt={"Image"}
                         style={{ width: 50, height: 50 }}/>
                     </TableCell>
                     <TableCell>
-                      <video src={customer?.video_url?.toString()?.replace("http", "https")}  controls width={100} height={50}/>
+                      <video src={customer?.video_url}  controls width={100} height={50}/>
                     </TableCell>
                                 <TableCell>
                                                 <Tooltip arrow title={customer?.[`title_${lang}`]}
@@ -152,8 +148,8 @@ export const CustomersTable = (props) => {
                     <TableCell>{customer?.is_free ? "free" : customer?.price}</TableCell>
                     <TableCell>{ createdAt}</TableCell>
                  <TableCell>
-                      <EditProductModal row={customer} route={`library`} getDatas={getDate} />
-                      <DeleteModal route={`/library/delete`} id={customer.id} getDatas={getDate} />
+                      <EditProductModal row={customer} route={`/video/lesson/update`} getDatas={getDate} />
+                      <DeleteModal route={`/video/lesson/delete`} id={customer.id} getDatas={getDate} />
                     </TableCell>
                   </TableRow>}
                 </>

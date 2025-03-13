@@ -14,7 +14,6 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import Content from "src/Localization/Content";
 import { useSelector } from 'react-redux';
-const BaseUrl = process.env.NEXT_PUBLIC_ANALYTICS_BASEURL;
 
 import {
     Box,

@@ -120,14 +120,14 @@ handleClose={handleClose} localization={localization}/>
                   <>
                     { type === "story"  ? (
                       <TableRow hover key={customer.id}>
-                        <TableCell onClick={() => handleClickOpen([customer?.cover_image?.replace("http", "https")])}>
+                        <TableCell onClick={() => handleClickOpen([customer?.cover_image])}>
                           {!!customer.cover_image && (
                             
                             <Image
                               priority
                                placeholder="blur" // You can use "empty" or a custom element as well
                             blurDataURL="/assets/errors/error-404.png"
-                              src={ customer.cover_image?.replace("http", "https")}
+                              src={ customer.cover_image}
                               alt="image"
                               width={50}
                               height={50}
@@ -142,7 +142,7 @@ handleClose={handleClose} localization={localization}/>
                               priority
                                placeholder="blur" // You can use "empty" or a custom element as well
                             blurDataURL="/assets/errors/error-404.png"
-                              src={ customer.items[0]?.image?.replace("http", "https")}
+                              src={ customer.items[0]?.image}
                               alt="image"
                               width={50}
                               height={50}
@@ -266,7 +266,7 @@ CustomersTable.propTypes = {
                             blurDataURL="/assets/errors/error-404.png"
                     width={500}
                     height={400}
-                    src={`${image.image ? image?.image?.replace("http", "https") : image}`}
+                    src={`${image.image ? image?.image : image}`}
                     alt={`Image ${index + 1}`}
                     style={{ width: "100%", height: "350px" }} // Adjust size as needed
                   />

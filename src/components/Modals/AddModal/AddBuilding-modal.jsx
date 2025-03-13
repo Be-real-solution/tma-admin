@@ -239,8 +239,8 @@ export default function AddCompanyModal({ getDatas, type, subId }) {
                 formData.append("address_en", mapModal.data.address);
                 formData.append("address_kaa", mapModal.data.address);
                 formData.append("address", mapModal.data.address);
-                values.close_hour && formData.append("workEndTime", values.close_hour);
-                values.open_hour && formData.append("workStartTime", values.open_hour);
+                // values.close_hour && formData.append("workEndTime", values.close_hour);
+                // values.open_hour && formData.append("workStartTime", values.open_hour);
                 formData.append("lat", Number(mapModal.data.lat).toFixed(6));
                 formData.append("lon", Number(mapModal.data.long).toFixed(6));
                 formData.append("city", values.cityuz);

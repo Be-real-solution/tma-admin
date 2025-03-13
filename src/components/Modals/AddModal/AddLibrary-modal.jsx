@@ -73,10 +73,10 @@ export default function AddOrderModal({ getDatas, company }) {
   const [isLoading, setIsLoading] = React.useState(false);
 
   const { fetchData, data, loading, error, createData } = useFetcher();
-  const categories = data["/news/category/list/"]?.results;
+  const categories = data["/library/category/list/"]?.results;
 
   function getCountries() {
-    fetchData(`/news/category/list/`);
+    fetchData(`/library/category/list/`);
     
   }
 
@@ -133,6 +133,7 @@ export default function AddOrderModal({ getDatas, company }) {
   const {addToast} = useToasts()
   const { localization } = Content[lang];
   const image = React.useRef("")
+  const file = React.useRef("")
   const [open, setOpen] = React.useState(false);
 
   const handleClickOpen = () => {
@@ -153,6 +154,7 @@ export default function AddOrderModal({ getDatas, company }) {
     formik.values.descriptionkaa = "";
 setImages([])
 image.current=""
+file.current=""
   };
 
   
@@ -191,7 +193,7 @@ image.current=""
 
         const formData = new FormData();
         for (let index = 0; index < images?.length; index++) {
-         formData.append('images', images?.[index].file);  
+         formData.append('item', images?.[index].file);  
         }
         mainImage?.length && formData.append('image', mainImage[0]?.file);
         formData.append("title", values.nameuz);
@@ -199,22 +201,22 @@ image.current=""
         formData.append("title_ru", values.nameru);
         formData.append("title_en", values.nameen);
         formData.append("title_kaa", values.namekaa);
-        formData.append("content", values.descriptionuz);
-        formData.append("content_uz", values.descriptionuz);
-        formData.append("content_ru", values.descriptionru);
-        formData.append("content_en", values.descriptionen);
+        formData.append("description", values.descriptionuz);
+        formData.append("description_uz", values.descriptionuz);
+        formData.append("description_ru", values.descriptionru);
+        formData.append("description_en", values.descriptionen);
+        formData.append("description_kaa", values.descriptionkaa);
    
           formData.append('category', values.category_id);
           formData.append('price', values.price);
           formData.append('author', values.author);
 
-      // formData.append('adminId', user?.id);
         formData.append("is_free", Boolean(values.isTop));
     
        
 
 
-        const response = await fetch(BaseUrl + "/news/create/", {
+        const response = await fetch(BaseUrl + "/library/item/create/", {
           method: 'POST',
 
           headers: {
@@ -239,7 +241,7 @@ image.current=""
         }
 
         addToast(res.message || (response.status ===201 ? localization.alerts.added : localization.alerts.warning), {
-          appearance: response.response ===201 ? "success" : "error",
+          appearance: response.status ===201 ? "success" : "error",
           autoDismiss: true,
         });
         setIsLoading(false)
@@ -331,35 +333,26 @@ style={{display:"flex", alignItems:"center", justifyContent:"space-between"}}>
       )}
     </Paper>
 
-<Paper elevation={3} 
-    style={{ padding: '16px', marginTop: '16px' }}>
+    <Paper elevation={3} 
+    style={{ padding: '16px', marginTop: '16px'}}>
      <TextField
                 fullWidth
-                name="image"
-                label={localization.table.images}
-
-                inputProps={{
-                  multiple: true
-                }}
+                name="file"
+                label={localization.table.file}
+               disabled={images?.length}
                 InputLabelProps={{
                   shrink: true,
                 }}
                 onBlur={formik.handleBlur}
                 onChange={(e) => {
-                  handleFileChange(e)
+                    handleFileChange(e)
                   // formik.handleChange()}
                 }}
                 type="file"
-                inputRef={image}
+                inputRef={file}
               /> 
-      {/* <input
-        type="file"
-        accept="image/*"
-        multiple
-        onChange={handleFileChange}
-        style={{ marginBottom: '16px' }}
-      /> */}
-      {images.length > 0 ? (
+  
+      {images?.length > 0 ? (
         <List>
           {images.map((image, index) => (
             <ListItem key={index}
@@ -371,7 +364,7 @@ style={{display:"flex", alignItems:"center", justifyContent:"space-between"}}>
                 alt={`Uploaded preview ${index}`}
                 style={{ width: '100px', height: '100px', marginRight: '16px', objectFit:"contain" }}
               />
-              <Typography variant="body2">{image.file.name}</Typography></Box>
+              <Typography variant="body2">{image?.file?.name}</Typography></Box>
               <IconButton edge="end" 
               onClick={() => handleDelete(index)}>
                 <DeleteIcon />
@@ -413,7 +406,30 @@ style={{display:"flex", alignItems:"center", justifyContent:"space-between"}}>
     <FormHelperText>{formik.errors.category_id}</FormHelperText>
   )}
 </FormControl>
+<TextField
 
+error={!!(formik.touched.author && formik.errors.author)}
+fullWidth
+helperText={formik.touched.author && formik.errors.author}
+label={localization.table.author}
+name="author"
+onBlur={formik.handleBlur}
+onChange={formik.handleChange}
+type="text"
+value={formik.values.author}
+/>
+<TextField
+
+error={!!(formik.touched.price && formik.errors.price)}
+fullWidth
+helperText={formik.touched.price && formik.errors.price}
+label={localization.table.cost}
+name="price"
+onBlur={formik.handleBlur}
+onChange={formik.handleChange}
+type="text"
+value={formik.values.price}
+/>
       
               <TextField
 
@@ -498,7 +514,7 @@ minRows={4}
 />
 <label style={{display:"flex", alignItems:"center"}}>
     <Typography variant="body2" sx={{ mr: 2 }}>
-      {localization.table.isTop} {/* Label for the switch */}
+      {localization.table.isFree} {/* Label for the switch */}
     </Typography>
     <Switch
       checked={formik.values.isTop}

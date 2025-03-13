@@ -119,7 +119,7 @@ export const CustomersTable = (props) => {
                    key={customer.id}>
                     {type === "networkcategory" && <TableCell>
                     {customer?.icon &&  <Image
-                        src={customer?.icon?.toString().replace("http", "https")}
+                        src={customer?.icon}
                         alt={customer?.name_uz}
                         sx={{ width: 40, height: 40, borderRadius: 1 }}
                         width={40}
