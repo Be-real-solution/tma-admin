@@ -70,10 +70,10 @@ export const CustomersTable = (props) => {
           <Table>
             <TableHead>
               <TableRow>
-                <TableCell>{localization.table.name + " uz"}</TableCell>
-                <TableCell>{localization.table.name + " ru"}</TableCell>
-                <TableCell>{localization.table.name + " en"}</TableCell>
-                <TableCell>{localization.table.name + " kaa"}</TableCell>
+                <TableCell>{localization.table.country}</TableCell>
+                <TableCell>{localization.table.question}</TableCell>
+                <TableCell>{localization.table.answer}</TableCell>
+                <TableCell>{localization.table.created_at}</TableCell>
                 <TableCell>{localization.action}</TableCell>
               </TableRow>
             </TableHead>

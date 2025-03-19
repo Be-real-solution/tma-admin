@@ -176,9 +176,11 @@ export default function AddCompanyModal({ getDatas, type, subId }) {
             nameuz: "",
             nameru: "",
             nameen: "",
+            namekaa: "",
             descriptionuz: "",
             descriptionru: "",
             descriptionen: "",
+            descriptionkaa: "",
             address: "",
             phone_number: "",
             address: "",
@@ -202,6 +204,7 @@ export default function AddCompanyModal({ getDatas, type, subId }) {
             nameuz: Yup.string().min(2).required("Name is required"),
             nameru: Yup.string().min(2).required("Name is required"),
             nameen: Yup.string().min(2).required("Name is required"),
+            namekaa: Yup.string().min(2).required("Name is required"),
             phone_number: Yup.string().min(2)
             // .required("Phone number is required"),
             // descriptionuz: Yup.string().min(5).required("Info is required"),
@@ -223,12 +226,12 @@ export default function AddCompanyModal({ getDatas, type, subId }) {
                 formData.append("name_uz", values.nameuz);
                 formData.append("name_ru", values.nameru);
                 formData.append("name_en", values.nameen);
-                formData.append("name_kaa", values.nameuz);
+                formData.append("name_kaa", values.namekaa);
                 formData.append("description", values.descriptionuz);
                 formData.append("description_uz", values.descriptionuz);
                 formData.append("description_ru", values.descriptionuz);
                 formData.append("description_en", values.descriptionuz);
-                formData.append("description_kaa", values.descriptionuz);
+                formData.append("description_kaa", values.descriptionkaa);
                 values.phone_number && formData.append("contacts", values.phone_number);
                 values.phone_number && formData.append("contacts_en", values.phone_number);
                 values.phone_number && formData.append("contacts_uz", values.phone_number);
@@ -324,7 +327,7 @@ export default function AddCompanyModal({ getDatas, type, subId }) {
             >
                 <BootstrapDialogTitle id="customized-dialog-title"
                     onClose={handleClose}>
-                    {localization.modal.addBuilding.addbuilding}
+                        { localization.modal.add_title(localization.sidebar.reviews)}
 
                 </BootstrapDialogTitle>
                 <form
@@ -473,6 +476,18 @@ export default function AddCompanyModal({ getDatas, type, subId }) {
                                 type="text"
                                 value={formik.values.nameen}
                             />
+                                <TextField
+
+error={!!(formik.touched.namekaa && formik.errors.namekaa)}
+fullWidth
+helperText={formik.touched.namekaa && formik.errors.namekaa}
+label={localization.table.name + " " + localization.kaa}
+name="namekaa"
+onBlur={formik.handleBlur}
+onChange={formik.handleChange}
+type="text"
+value={formik.values.namekaa}
+/>
                             <TextField
 
                                 error={!!(formik.touched.descriptionuz && formik.errors.descriptionuz)}
@@ -519,6 +534,22 @@ export default function AddCompanyModal({ getDatas, type, subId }) {
 
                                 minRows={4}
                             />
+                                 <TextField
+
+error={!!(formik.touched.descriptionkaa && formik.errors.descriptionkaa)}
+fullWidth
+
+helperText={formik.touched.descriptionkaa && formik.errors.descriptionkaa}
+label={localization.table.info + " " + localization.kaa}
+name="descriptionkaa"
+onBlur={formik.handleBlur}
+onChange={formik.handleChange}
+type="text"
+value={formik.values.descriptionkaa}
+multiline
+
+minRows={4}
+/>
                             <Box display={"flex"} gap={1}>
                                 <TextField
                                     error={!!(formik.touched.tel_number && formik.errors.tel_number)}
@@ -543,7 +574,7 @@ export default function AddCompanyModal({ getDatas, type, subId }) {
                                     fullWidth
                                     helperText={formik.touched.cityuz && formik.errors.cityuz}
                                     autoComplete="off"
-                                    label={localization.table.city}
+                                    label={localization.table.city + " " + localization.uz}
                                     name="cityuz"
                                     onBlur={formik.handleBlur}
                                     onChange={formik.handleChange}
@@ -558,7 +589,7 @@ export default function AddCompanyModal({ getDatas, type, subId }) {
                                     fullWidth
                                     helperText={formik.touched.cityru && formik.errors.cityru}
                                     autoComplete="off"
-                                    label={localization.table.city}
+                                    label={localization.table.city + " " + localization.ru}
                                     name="cityru"
                                     onBlur={formik.handleBlur}
                                     onChange={formik.handleChange}
@@ -576,7 +607,7 @@ export default function AddCompanyModal({ getDatas, type, subId }) {
                                     fullWidth
                                     helperText={formik.touched.cityen && formik.errors.cityen}
                                     autoComplete="off"
-                                    label={localization.table.city}
+                                    label={localization.table.city + " " + localization.en}
                                     name="cityen"
                                     onBlur={formik.handleBlur}
                                     onChange={formik.handleChange}
@@ -591,7 +622,7 @@ export default function AddCompanyModal({ getDatas, type, subId }) {
                                     fullWidth
                                     helperText={formik.touched.citykaa && formik.errors.citykaa}
                                     autoComplete="off"
-                                    label={localization.table.city}
+                                    label={localization.table.city + " " + localization.kaa}
                                     name="citykaa"
                                     onBlur={formik.handleBlur}
                                     onChange={formik.handleChange}
@@ -610,7 +641,7 @@ export default function AddCompanyModal({ getDatas, type, subId }) {
                                     fullWidth
                                     helperText={formik.touched.stateuz && formik.errors.stateuz}
                                     autoComplete="off"
-                                    label={localization.table.state}
+                                    label={localization.table.state + " " + localization.uz}
                                     name="stateuz"
                                     onBlur={formik.handleBlur}
                                     onChange={formik.handleChange}
@@ -625,7 +656,7 @@ export default function AddCompanyModal({ getDatas, type, subId }) {
                                     fullWidth
                                     helperText={formik.touched.stateru && formik.errors.stateru}
                                     autoComplete="off"
-                                    label={localization.table.state}
+                                    label={localization.table.state + " " + localization.ru}
                                     name="stateru"
                                     onBlur={formik.handleBlur}
                                     onChange={formik.handleChange}
@@ -643,7 +674,7 @@ export default function AddCompanyModal({ getDatas, type, subId }) {
                                     fullWidth
                                     helperText={formik.touched.stateen && formik.errors.stateen}
                                     autoComplete="off"
-                                    label={localization.table.state}
+                                    label={localization.table.state + " " + localization.en}
                                     name="stateen"
                                     onBlur={formik.handleBlur}
                                     onChange={formik.handleChange}
@@ -658,7 +689,7 @@ export default function AddCompanyModal({ getDatas, type, subId }) {
                                     fullWidth
                                     helperText={formik.touched.statekaa && formik.errors.statekaa}
                                     autoComplete="off"
-                                    label={localization.table.state}
+                                    label={localization.table.state + " " + localization.kaa}
                                     name="statekaa"
                                     onBlur={formik.handleBlur}
                                     onChange={formik.handleChange}

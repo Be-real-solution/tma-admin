@@ -187,7 +187,7 @@ export default function AddCompanyModal({ getDatas, type, subId }) {
             >
                 <BootstrapDialogTitle id="customized-dialog-title"
 onClose={handleClose}>
-                    { localization.modal.addCategory.title}
+                             { localization.modal.add_title(type === "announcementfaq" ? localization.sidebar.anons_faq : localization.sidebar.library_category)}
 
                 </BootstrapDialogTitle>
                 <form noValidate
@@ -221,7 +221,7 @@ onSubmit={formik.handleSubmit}>
                                 fullWidth
                                 helperText={formik.touched.nameuz && formik.errors.nameuz}
                                 autoComplete="off"
-                                label={localization.table.name + " " + localization.uz}
+                                label={localization.table.question + " " + localization.uz}
                                 name="nameuz"
                                 onBlur={formik.handleBlur}
                                 onChange={formik.handleChange}
@@ -233,7 +233,7 @@ onSubmit={formik.handleSubmit}>
                                 fullWidth
                                 helperText={formik.touched.nameru && formik.errors.nameru}
                                 autoComplete="off"
-                                label={localization.table.name + " " + localization.ru}
+                                label={localization.table.question + " " + localization.ru}
                                 name="nameru"
                                 onBlur={formik.handleBlur}
                                 onChange={formik.handleChange}
@@ -245,7 +245,7 @@ onSubmit={formik.handleSubmit}>
                                 fullWidth
                                 helperText={formik.touched.nameen && formik.errors.nameen}
                                 autoComplete="off"
-                                label={localization.table.name + " " + localization.en}
+                                label={localization.table.question + " " + localization.en}
                                 name="nameen"
                                 onBlur={formik.handleBlur}
                                 onChange={formik.handleChange}
@@ -258,7 +258,7 @@ onSubmit={formik.handleSubmit}>
                                            fullWidth
                                            helperText={formik.touched.namekaa && formik.errors.namekaa}
                                            autoComplete="off"
-                                           label={localization.table.name + " " + localization.kaa}
+                                           label={localization.table.question + " " + localization.kaa}
                                            name="namekaa"
                                            onBlur={formik.handleBlur}
                                            onChange={formik.handleChange}
@@ -270,7 +270,7 @@ onSubmit={formik.handleSubmit}>
                                          error={!!(formik.touched.descriptionuz && formik.errors.descriptionuz)}
                                          fullWidth
                                          helperText={formik.touched.descriptionuz && formik.errors.descriptionuz}
-                                         label={localization.table.info + " "+ localization.uz}
+                                         label={localization.table.answer + " "+ localization.uz}
                                          name="descriptionuz"
                                          onBlur={formik.handleBlur}
                                          onChange={formik.handleChange}
@@ -285,7 +285,7 @@ onSubmit={formik.handleSubmit}>
                                          error={!!(formik.touched.descriptionru && formik.errors.descriptionru)}
                                          fullWidth
                                          helperText={formik.touched.descriptionru && formik.errors.descriptionru}
-                                         label={localization.table.info + " "+ localization.ru}
+                                         label={localization.table.answer + " "+ localization.ru}
                                          name="descriptionru"
                                          onBlur={formik.handleBlur}
                                          onChange={formik.handleChange}
@@ -300,7 +300,7 @@ onSubmit={formik.handleSubmit}>
                                          error={!!(formik.touched.descriptionen && formik.errors.descriptionen)}
                                          fullWidth
                                          helperText={formik.touched.descriptionen && formik.errors.descriptionen}
-                                         label={localization.table.info + " "+ localization.en}
+                                         label={localization.table.answer + " "+ localization.en}
                                          name="descriptionen"
                                          onBlur={formik.handleBlur}
                                          onChange={formik.handleChange}
@@ -315,7 +315,7 @@ onSubmit={formik.handleSubmit}>
                                          error={!!(formik.touched.descriptionkaa && formik.errors.descriptionkaa)}
                                          fullWidth
                                          helperText={formik.touched.descriptionkaa && formik.errors.descriptionkaa}
-                                         label={localization.table.info + " "+ localization.kaa}
+                                         label={localization.table.answer + " "+ localization.kaa}
                                          name="descriptionkaa"
                                          onBlur={formik.handleBlur}
                                          onChange={formik.handleChange}

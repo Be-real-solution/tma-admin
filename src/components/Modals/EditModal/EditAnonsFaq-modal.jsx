@@ -176,7 +176,7 @@ export default function AddCompanyModal({ getDatas, row, route, subId }) {
             >
                 <BootstrapDialogTitle id="customized-dialog-title"
 onClose={handleClose}>
-                    { localization.modal.addCategory.title}
+                { localization.modal.edit_title(localization.sidebar.anons_faq)}
 
                 </BootstrapDialogTitle>
                 <form noValidate

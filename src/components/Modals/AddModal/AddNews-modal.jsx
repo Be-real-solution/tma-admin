@@ -264,7 +264,9 @@ image.current=""
         open={open}>
         <BootstrapDialogTitle id="customized-dialog-title"
           onClose={handleClose}>
-          {localization.modal.addNews.addnews} 
+      { localization.modal.add_title(localization.sidebar.news)}
+
+
         </BootstrapDialogTitle>
         <form noValidate
           onSubmit={formik.handleSubmit}>

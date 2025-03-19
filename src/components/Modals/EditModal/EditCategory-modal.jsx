@@ -141,7 +141,7 @@ export default function AddCompanyModal({ getDatas, row, type, route }) {
           formData.append("name_uz", values.nameuz);
           formData.append("name_ru", values.nameru);
           formData.append("name_en", values.nameen);
-          // formData.append("name", values.nameuz);
+          formData.append("name_kaa", values.namekaa);
       
           const response = await fetch(BaseUrl + route+`/${row.id}/`, {
               method: 'PATCH',
@@ -159,7 +159,7 @@ export default function AddCompanyModal({ getDatas, row, type, route }) {
               auth.signOut();
               // router.push("/auth/login");
             }
-            if (response.status === 201) {
+            if (response.status === 200) {
               handleClose()
               getDatas()
               setOpen(false)
@@ -204,7 +204,7 @@ export default function AddCompanyModal({ getDatas, row, type, route }) {
       >
         <BootstrapDialogTitle id="customized-dialog-title"
           onClose={handleClose}>
-                             { localization.modal.addCategory.edit}
+                                    { localization.modal.edit_title(type === "news" ? localization.sidebar.news_category : type === "announcementnetwork" ? localization.sidebar.anons_network_category : localization.sidebar.library_category)}
 
         </BootstrapDialogTitle>
         <form noValidate

@@ -85,12 +85,12 @@ export const CustomersTable = (props) => {
             <TableBody>
          
               {isLoading ? <TableRow >
-  <TableCell colSpan={7}>  <Box height={"200px"} display={"flex"} pt={5} flexDirection={"column"} alignItems={"center"} justifyContent={"center"} >
-  <div class="lds-roller"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
-              <h1>{localization.table.loading}</h1>
-              </Box> 
-              </TableCell>
-              </TableRow> : items.length ? items.map((customer) => {
+                              <TableCell colSpan={10}>  <Box height={"200px"} display={"flex"} pt={5} flexDirection={"column"} alignItems={"center"} justifyContent={"center"} >
+                                <div class="lds-roller"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+                                <h1>{localization.table.loading}</h1>
+                              </Box>
+                              </TableCell>
+                            </TableRow> : items.length ? items.map((customer) => {
                 const createdAt = format(new Date(customer?.createdAt || customer?.published_date || null), "dd/MM/yyyy HH:mm");
                 // const customAt = format(
                 //   new Date(customer?.custom_date ? customer?.custom_date : null)?.getTime(),

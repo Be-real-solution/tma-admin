@@ -97,7 +97,7 @@ const header = {
     conditioner: "air conditioner",
     false: "not available",
     true: "available",
-
+    view_count:"view count",
     lang: "language",
     star: "star",
     from: "from",
@@ -147,6 +147,8 @@ const header = {
     overall_price: "Total price",
     payed_price: "components",
     status: "status",
+    answer: "answer",
+    question: "question",
     country: "Category",
     country_number: "order number",
     id: "ID",
@@ -187,6 +189,8 @@ const header = {
   modal: {
     add: "Add",
     edit: "Edit",
+    add_title: (title) => `Add ${title}`,
+    edit_title: (title) => `Edit ${title}`,
     addProduct: {
       addproduct: "Add Product",
       editproduct: "Edit Product",

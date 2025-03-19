@@ -131,7 +131,7 @@ export const CustomersTable = (props) => {
                     <TableCell>{customer?.name_en}</TableCell>
                     <TableCell>{customer?.name_kaa}</TableCell>                
               {type === "faq-categories"  ?       <TableCell>
-                      <EditFaqCategoryModal row={customer} route={`/announcement/faq/category/update`} getDatas={getDate} />
+                      <EditFaqCategoryModal type={"faqcategory"} row={customer} route={`/announcement/faq/category/update`} getDatas={getDate} />
                       <DeleteModal route={`/announcement/faq/category/delete`} id={customer.id} getDatas={getDate} />
                     </TableCell> :  type === "librarycategory"  ?       <TableCell>
                       <EditProductModal row={customer} route={`/library/category/update`} getDatas={getDate} />

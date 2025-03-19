@@ -205,7 +205,7 @@ export default function AddOrderModal({ getDatas, row }) {
         formData.append('price', values.price);
         formData.append('author', values.author);
 
-        formData.append("is_free", Boolean(values.isTop));
+        formData.append("is_free", Boolean(values.isTop) ? "True" : "False");
 
 
 

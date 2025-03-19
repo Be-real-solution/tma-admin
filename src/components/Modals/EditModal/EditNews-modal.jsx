@@ -254,7 +254,8 @@ export default function AddOrderModal({ getDatas, row, route }) {
         open={open}>
         <BootstrapDialogTitle id="customized-dialog-title"
           onClose={handleClose}>
-          {localization.modal.addNews.addnews} 
+                  { localization.modal.edit_title(localization.sidebar.news)}
+
         </BootstrapDialogTitle>
         <form noValidate
           onSubmit={formik.handleSubmit}>

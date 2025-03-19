@@ -87,7 +87,7 @@ handleClose={handleClose} localization={localization}/>
             <TableHead>
               {type === "story"  ? (
                 <TableRow>
-                  <TableCell>{localization.table.image}</TableCell>
+                  <TableCell>{localization.table.main_image}</TableCell>
                   <TableCell>{localization.table.image}</TableCell>
                 
                   <TableCell>{localization.table.created_at}</TableCell>

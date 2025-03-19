@@ -148,7 +148,7 @@ name_kaa: values.namekaa,
             >
                 <BootstrapDialogTitle id="customized-dialog-title"
 onClose={handleClose}>
-                    { localization.modal.addCategory.title}
+                    { localization.modal.add_title(type === "news" ? localization.sidebar.news_category : localization.sidebar.library_category)}
 
                 </BootstrapDialogTitle>
                 <form noValidate

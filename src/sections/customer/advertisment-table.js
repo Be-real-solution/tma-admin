@@ -72,10 +72,10 @@ export const CustomersTable = (props) => {
           <Table>
             <TableHead>
             {type === "advertisment" ?  <TableRow>
-                <TableCell>{localization.table.name + " uz"}</TableCell>
-                <TableCell>{localization.table.name + " ru"}</TableCell>
-                <TableCell>{localization.table.name + " en"}</TableCell>
-                <TableCell>{localization.table.name + " kaa"}</TableCell>
+                <TableCell>{localization.table.image}</TableCell>
+                <TableCell>{localization.table.link}</TableCell>
+                <TableCell>{localization.table.view_count}</TableCell>
+                <TableCell>{localization.table.created_at}</TableCell>
                 <TableCell>{localization.action}</TableCell>
               </TableRow> : <TableRow>
                 <TableCell>{localization.table.name + " uz"}</TableCell>
@@ -95,7 +95,7 @@ export const CustomersTable = (props) => {
             <TableBody>
          
               {isLoading ? <TableRow >
-  <TableCell colSpan={7}>  <Box height={"200px"} display={"flex"} pt={5} flexDirection={"column"} alignItems={"center"} justifyContent={"center"} >
+  <TableCell colSpan={12}>  <Box height={"200px"} display={"flex"} pt={5} flexDirection={"column"} alignItems={"center"} justifyContent={"center"} >
   <div class="lds-roller"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
               <h1>{localization.table.loading}</h1>
               </Box> 

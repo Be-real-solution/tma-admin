@@ -95,7 +95,7 @@ export const CustomersTable = (props) => {
                   <TableCell>{localization.table.title}</TableCell>
                   <TableCell>{localization.table.info}</TableCell>
                   <TableCell>{localization.sidebar.category}</TableCell>
-                  <TableCell>{localization.table.creator}</TableCell>
+                  <TableCell>{localization.table.view_count}</TableCell>
                   <TableCell>{localization.table.created_at}</TableCell>
                   {type !== "news-banner" && <TableCell>{localization.action}</TableCell>}
                 </TableRow>
@@ -104,9 +104,8 @@ export const CustomersTable = (props) => {
 
                 <TableCell>{localization.table.title}</TableCell>
                 <TableCell>{localization.table.info}</TableCell>
-                <TableCell>{localization.table.address}</TableCell>
-                <TableCell>{localization.table.phone_number}</TableCell>
-                <TableCell>{localization.table.grafik}</TableCell>
+                <TableCell>{localization.table.view_count}</TableCell>
+                <TableCell>{localization.table.created_at}</TableCell>
                 <TableCell>{localization.action}</TableCell>
               </TableRow>) : type === "buildings" ? (
                 <TableRow>
@@ -211,7 +210,7 @@ export const CustomersTable = (props) => {
                           </TableCell>
                         </TableRow>
                       ) : type === "news-banner" ? <TableRow hover key={customer.id}>
-                        <TableCell onClick={() => handleClickOpen([customer?.cover_image, ...customer.cover_image])}>
+                        <TableCell onClick={() => handleClickOpen([customer?.cover_image, ...customer.images])}>
                           {customer.cover_image ? (
 
                             <Image
@@ -237,37 +236,40 @@ export const CustomersTable = (props) => {
                           )}
                         </TableCell>
                         <TableCell>
-                          <Tooltip arrow title={customer.name}>
-                            <Typography sx={{
-                              display: '-webkit-box',
-                              WebkitLineClamp: 4,
-                              WebkitBoxOrient: 'vertical',
-                              overflow: 'hidden',
-                              textOverflow: 'ellipsis',
-                            }}>
-                              {customer.title}
-                            </Typography>
-                          </Tooltip>
-                        </TableCell>
+                            <Tooltip arrow title={customer?.[`title_${lang}`]}
+                            >
+                              <Typography sx={{
+                                display: '-webkit-box',
+                                WebkitLineClamp: 4,
+                                WebkitBoxOrient: 'vertical',
+                                overflow: 'hidden',
+                                textOverflow: 'ellipsis',
+                              }}>
+                                {customer?.[`title_${lang}`]}
+                              </Typography>
+                            </Tooltip>
+                          </TableCell>
+                          <TableCell>
+                            <Tooltip arrow title={customer?.[`content_${lang}`]}
+                            >
+                              <Typography sx={{
+                                display: '-webkit-box',
+                                WebkitLineClamp: 4,
+                                WebkitBoxOrient: 'vertical',
+                                overflow: 'hidden',
+                                textOverflow: 'ellipsis',
+                              }}>
 
-                        <TableCell>
-                          <Tooltip arrow title={customer.content}>
-                            <Typography sx={{
-                              display: '-webkit-box',
-                              WebkitLineClamp: 4,
-                              WebkitBoxOrient: 'vertical',
-                              overflow: 'hidden',
-                              textOverflow: 'ellipsis',
-                            }}>
+                                {customer?.[`content_${lang}`]}
 
-                              {customer.content}
-                            </Typography>
-                          </Tooltip>
-                        </TableCell>
-                        <TableCell><p >
-                          {customer?.category?.name}
-                        </p></TableCell>
-                        <TableCell>{customer?.view_count}</TableCell>
+                              </Typography>
+                            </Tooltip>
+                          </TableCell>
+                 
+                          <TableCell>{customer?.category && customer?.category?.map((el, index)=> (<p key={index}>
+{el?.[`name_${lang}`]}
+                        </p>))}</TableCell>
+                         <TableCell>{customer?.view_count}</TableCell>
                         <TableCell>{createdAt(customer?.published_date)}</TableCell>
 
                       </TableRow> : type === "announcment" ? <TableRow hover key={customer.id}>
@@ -316,12 +318,7 @@ export const CustomersTable = (props) => {
                             </Typography>
                           </Tooltip>
                         </TableCell>
-                        <TableCell>
-                          {customer?.category?.name}
-                        </TableCell>
-                        {/* <TableCell>{customer?.category && customer?.category?.map((el, index)=> (<p key={index}>
-{el.name?.[lang]}
-                        </p>))}</TableCell> */}
+                  
                         <TableCell>{customer?.view_count}</TableCell>
                         <TableCell>{createdAt()}</TableCell>
                         <TableCell onClick={(e) => e.stopPropagation()}>
