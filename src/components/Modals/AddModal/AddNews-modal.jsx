@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-max-props-per-line */
 import * as React from "react";
 import { useEffect, useRef } from "react";
 import Content from "src/Localization/Content";
@@ -160,9 +161,11 @@ image.current=""
       nameen: "",
       nameuz: "",
       nameru: "",
+      namekaa:"",
       descriptionuz:"",
       descriptionru:"",
       descriptionen:"",
+      descriptionkaa:"",
       // isTop: false, // Initialize `isTop`
 
       submit: null,
@@ -172,9 +175,11 @@ image.current=""
       nameuz: Yup.string().min(2).required(" Name is required"),
       nameru: Yup.string().min(2).required(" Name is required"),
       nameen: Yup.string().min(2).required(" Name is required"),
+      namekaa: Yup.string().min(2).required(" Name is required"),
       descriptionuz: Yup.string().min(5).required("Info is required"),
       descriptionru: Yup.string().min(5).required("Info is required"),
       descriptionen: Yup.string().min(5).required("Info is required"),
+      descriptionkaa: Yup.string().min(5).required("Info is required"),
 
     }),
 
@@ -197,6 +202,7 @@ image.current=""
         formData.append("content_uz", values.descriptionuz);
         formData.append("content_ru", values.descriptionru);
         formData.append("content_en", values.descriptionen);
+        formData.append("content_kaa", values.descriptionkaa);
         values.category_id.forEach(id => {
           formData.append('category', id);
         });
@@ -452,6 +458,18 @@ value={formik.values.nameen}
 />
 <TextField
 
+error={!!(formik.touched.namekaa && formik.errors.namekaa)}
+fullWidth
+helperText={formik.touched.namekaa && formik.errors.namekaa}
+label={localization.table.name + " "+ localization.kaa}
+name="namekaa"
+onBlur={formik.handleBlur}
+onChange={formik.handleChange}
+type="text"
+value={formik.values.namekaa}
+/>
+<TextField
+
 error={!!(formik.touched.descriptionuz && formik.errors.descriptionuz)}
 fullWidth
 helperText={formik.touched.descriptionuz && formik.errors.descriptionuz}
@@ -491,6 +509,21 @@ onBlur={formik.handleBlur}
 onChange={formik.handleChange}
 type="text"
 value={formik.values.descriptionen}
+multiline
+            
+minRows={4}
+/>
+<TextField
+
+error={!!(formik.touched.descriptionkaa && formik.errors.descriptionkaa)}
+fullWidth
+helperText={formik.touched.descriptionkaa && formik.errors.descriptionkaa}
+label={localization.table.info + " "+ localization.kaa}
+name="descriptionkaa"
+onBlur={formik.handleBlur}
+onChange={formik.handleChange}
+type="text"
+value={formik.values.descriptionkaa}
 multiline
             
 minRows={4}

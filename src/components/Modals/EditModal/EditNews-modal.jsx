@@ -149,10 +149,12 @@ export default function AddOrderModal({ getDatas, row, route }) {
       nameen:row.title_en,
       nameuz:row.title_uz,
       nameru:row.title_ru,
+      namekaa:row.title_kaa,
       descriptionuz:row.content_uz,
       descriptionru:row.content_ru,
       descriptionen:row.content_en,
-      // isTop: false, // Initialize `isTop`
+      descriptionkaa:row.content_kaa,
+      isTop: row?.is_top, // Initialize `isTop`
 
       submit: null,
     },
@@ -161,9 +163,11 @@ export default function AddOrderModal({ getDatas, row, route }) {
       nameuz: Yup.string().min(2).required(" Name is required"),
       nameru: Yup.string().min(2).required(" Name is required"),
       nameen: Yup.string().min(2).required(" Name is required"),
+      namekaa: Yup.string().min(2).required(" Name is required"),
       descriptionuz: Yup.string().min(5).required("Info is required"),
       descriptionru: Yup.string().min(5).required("Info is required"),
       descriptionen: Yup.string().min(5).required("Info is required"),
+      descriptionkaa: Yup.string().min(5).required("Info is required"),
 
     }),
 
@@ -187,10 +191,11 @@ export default function AddOrderModal({ getDatas, row, route }) {
         formData.append("content_uz", values.descriptionuz);
         formData.append("content_ru", values.descriptionru);
         formData.append("content_en", values.descriptionen);
+        formData.append("content_kaa", values.descriptionkaa);
         values.category_id.forEach(id => {
           formData.append('category', id);
         });
-        // formData.append("is_top", Boolean(values.isTop));
+        formData.append("is_top", Boolean(values.isTop));
     
        
 
@@ -441,6 +446,18 @@ value={formik.values.nameen}
 />
 <TextField
 
+error={!!(formik.touched.namekaa && formik.errors.namekaa)}
+fullWidth
+helperText={formik.touched.namekaa && formik.errors.namekaa}
+label={localization.table.name + " "+ localization.kaa}
+name="namekaa"
+onBlur={formik.handleBlur}
+onChange={formik.handleChange}
+type="text"
+value={formik.values.namekaa}
+/>
+<TextField
+
 error={!!(formik.touched.descriptionuz && formik.errors.descriptionuz)}
 fullWidth
 helperText={formik.touched.descriptionuz && formik.errors.descriptionuz}
@@ -484,9 +501,35 @@ multiline
             
 minRows={4}
 />
+<TextField
+
+error={!!(formik.touched.descriptionkaa && formik.errors.descriptionkaa)}
+fullWidth
+helperText={formik.touched.descriptionkaa && formik.errors.descriptionkaa}
+label={localization.table.info + " "+ localization.kaa}
+name="descriptionkaa"
+onBlur={formik.handleBlur}
+onChange={formik.handleChange}
+type="text"
+value={formik.values.descriptionkaa}
+multiline
+            
+minRows={4}
+/>
 
          
-           
+         <label style={{display:"flex", alignItems:"center"}}>
+             <Typography variant="body2" sx={{ mr: 2 }}>
+               {localization.table.isTop} {/* Label for the switch */}
+             </Typography>
+             <Switch
+               checked={formik.values.isTop}
+               onChange={formik.handleChange}
+               name="isTop"
+               color="primary"
+               title="hello"
+             />
+           </label>  
                
             </Stack>
 

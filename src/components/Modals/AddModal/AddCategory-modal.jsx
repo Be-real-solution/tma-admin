@@ -84,6 +84,7 @@ export default function AddCompanyModal({ getDatas, type, subId }) {
         formik.values.nameuz = ""
         formik.values.nameru = ""
         formik.values.nameen = ""
+        formik.values.namekaa = ""
       handleClose()
     }
 

@@ -155,7 +155,7 @@ export const CustomersTable = (props) => {
                 </>
                 );
               }) :      <TableRow >
-              <TableCell  colSpan={5}>
+              <TableCell  colSpan={10}>
 
             <Box height={"200px"} display={"flex"} pt={5} flexDirection={"column"} alignItems={"center"} justifyContent={"center"} >
             <img

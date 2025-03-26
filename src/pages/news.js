@@ -44,7 +44,7 @@ const Page = ({ subId, setSubId }) => {
   const [rowsPerPage, setRowsPerPage] = useState(pageCount || 5);
   const [isLoading, setIsLoading] = useState(true);
 
-  const initalData = data[`/news/list/?is_top=false`]?.results;
+  const initalData = data[`/news/list/`]?.results;
   const [filtered, setFiltered] = useState(initalData || []);
   const customers = useCustomers(filtered, page, rowsPerPage);
 
@@ -76,7 +76,7 @@ useEffect(()=> {
 
 
   function getCountries() {
-      fetchData(`/news/list/?is_top=false`);
+      fetchData(`/news/list/`);
   }
 
   useEffect(() => {

@@ -134,7 +134,7 @@ export const CustomersTable = (props) => {
                       <EditFaqCategoryModal type={"faqcategory"} row={customer} route={`/announcement/faq/category/update`} getDatas={getDate} />
                       <DeleteModal route={`/announcement/faq/category/delete`} id={customer.id} getDatas={getDate} />
                     </TableCell> :  type === "librarycategory"  ?       <TableCell>
-                      <EditProductModal row={customer} route={`/library/category/update`} getDatas={getDate} />
+                      <EditProductModal row={customer} route={`/library/category/update`} type={"librarycategory"} getDatas={getDate} />
                       <DeleteModal route={`/library/category/delete`} id={customer.id} getDatas={getDate} />
                     </TableCell> :  type === "networkcategory"  ?       <TableCell>
                       <EditProductModal type={"announcementnetwork"}  row={customer} route={`/announcement/social/network/link/category/update`} getDatas={getDate} />

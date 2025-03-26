@@ -15,6 +15,8 @@ const cartSlice = createSlice({
                return { ...state, lang: "ru" };
             case "uz":
                return { ...state, lang: "uz" };
+               case "kaa":
+                  return { ...state, lang: "kaa" };
             default:
                return state;
          }

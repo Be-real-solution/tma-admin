@@ -41,9 +41,9 @@ const Page = () => {
    const [page, setPage] = useState(0);
    const { pageCount } = useSelector((state) => state.pageCount);
    const [rowsPerPage, setRowsPerPage] = useState(pageCount || 5);
-    const initalData = data["/announcement/faq/category/list/"]?.results;
-    const [filtered, setFiltered] = useState(initalData || []);
-    const customers = useCustomers(filtered, page, rowsPerPage);
+    const initalData = data[`/announcement/faq/category/list/?search=${searchValue}`]?.results;
+ 
+    const customers = useCustomers(initalData, page, rowsPerPage);
     const [isLoading, setIsLoading] = useState(true);
 
  const { lang } = useSelector((state) => state.localiztion);
@@ -56,7 +56,6 @@ const Page = () => {
 // eslint-disable-next-line react-hooks/exhaustive-deps
 }, [data])
 
-console.log(initalData);
 
 
   const handlePageChange = useCallback(
@@ -79,7 +78,7 @@ console.log(initalData);
 
 
   function getCountries() {
-    fetchData(`/announcement/faq/category/list/`);
+    fetchData(`/announcement/faq/category/list/?search=${searchValue}`);
     
   }
 
@@ -87,7 +86,7 @@ console.log(initalData);
         getCountries();
 
       // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, [searchValue]);
   
   function onSearch(e) {
     setSearchValue(e.target.value)
@@ -96,28 +95,28 @@ console.log(initalData);
   
 
 
-    useEffect(() => {
-      try {
-        setPage(0)
-        setFiltered(
-          initalData.filter((user) => {
-              if (searchValue == "") {
-                return user;
-              } else if ((user?.name_uz?.toLowerCase().includes(searchValue.toString()?.toLowerCase())) ||
-                (user?.name_ru?.toLowerCase().includes(searchValue.toString()?.toLowerCase())) ||
-                (user?.name_en?.toLowerCase().includes(searchValue.toString()?.toLowerCase())) ||
-                (user?.name?.toLowerCase().includes(searchValue.toString()?.toLowerCase()) || user?.name_kaa?.toLowerCase().includes(searchValue.toString()?.toLowerCase()))
-              ) {
-                return user;
-              }
-            })
-        );
-      } catch (error) {
-        setFiltered([]);
-        console.error("Filtered Groups Error => ", error.message);
-      }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [initalData, searchValue]);
+    // useEffect(() => {
+    //   try {
+    //     setPage(0)
+    //     setFiltered(
+    //       initalData.filter((user) => {
+    //           if (searchValue == "") {
+    //             return user;
+    //           } else if ((user?.name_uz?.toLowerCase().includes(searchValue.toString()?.toLowerCase())) ||
+    //             (user?.name_ru?.toLowerCase().includes(searchValue.toString()?.toLowerCase())) ||
+    //             (user?.name_en?.toLowerCase().includes(searchValue.toString()?.toLowerCase())) ||
+    //             (user?.name?.toLowerCase().includes(searchValue.toString()?.toLowerCase()) || user?.name_kaa?.toLowerCase().includes(searchValue.toString()?.toLowerCase()))
+    //           ) {
+    //             return user;
+    //           }
+    //         })
+    //     );
+    //   } catch (error) {
+    //     setFiltered([]);
+    //     console.error("Filtered Groups Error => ", error.message);
+    //   }
+    // // eslint-disable-next-line react-hooks/exhaustive-deps
+    // }, [initalData, searchValue]);
 
   
   
@@ -153,7 +152,7 @@ type={"country"} />
             <CustomersTable
              isLoading={isLoading}
 
-              count={filtered?.length}
+              count={initalData?.length}
               items={customers}
               onPageChange={handlePageChange}
               onRowsPerPageChange={handleRowsPerPageChange}

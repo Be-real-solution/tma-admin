@@ -174,9 +174,11 @@ export default function AddOrderModal({ getDatas, row }) {
       nameuz: Yup.string().min(2).required(" Name is required"),
       nameru: Yup.string().min(2).required(" Name is required"),
       nameen: Yup.string().min(2).required(" Name is required"),
+      namekaa: Yup.string().min(2).required(" Name is required"),
       descriptionuz: Yup.string().min(5).required("Info is required"),
       descriptionru: Yup.string().min(5).required("Info is required"),
       descriptionen: Yup.string().min(5).required("Info is required"),
+      descriptionkaa: Yup.string().min(5).required("Info is required"),
 
     }),
 
@@ -460,6 +462,18 @@ export default function AddOrderModal({ getDatas, row }) {
                 type="text"
                 value={formik.values.nameen}
               />
+               <TextField
+
+error={!!(formik.touched.namekaa && formik.errors.namekaa)}
+fullWidth
+helperText={formik.touched.namekaa && formik.errors.namekaa}
+label={localization.table.name + " " + localization.kaa}
+name="namekaa"
+onBlur={formik.handleBlur}
+onChange={formik.handleChange}
+type="text"
+value={formik.values.namekaa}
+/>
               <TextField
 
                 error={!!(formik.touched.descriptionuz && formik.errors.descriptionuz)}
@@ -505,6 +519,21 @@ export default function AddOrderModal({ getDatas, row }) {
 
                 minRows={4}
               />
+                <TextField
+
+error={!!(formik.touched.descriptionkaa && formik.errors.descriptionkaa)}
+fullWidth
+helperText={formik.touched.descriptionkaa && formik.errors.descriptionkaa}
+label={localization.table.info + " " + localization.kaa}
+name="descriptionkaa"
+onBlur={formik.handleBlur}
+onChange={formik.handleChange}
+type="text"
+value={formik.values.descriptionkaa}
+multiline
+
+minRows={4}
+/>
               <label style={{ display: "flex", alignItems: "center" }}>
                 <Typography variant="body2" sx={{ mr: 2 }}>
                   {localization.table.isFree} {/* Label for the switch */}

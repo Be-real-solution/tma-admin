@@ -159,8 +159,9 @@ image.current=""
     },
     validationSchema: Yup.object({
      
-      nameuz: Yup.string().min(2).required(" Name is required"),
-     
+      nameuz: Yup.string()
+                 .url("Invalid URL format")
+             .min(2).required("URL is required"),
     }),
 
     onSubmit: async (values, helpers) => {
@@ -170,7 +171,7 @@ image.current=""
 
         const formData = new FormData();
   
-        mainImage?.length && formData.append('image', mainImage[0]?.file);
+        mainImage[0]?.file && formData.append('image', mainImage[0]?.file);
         formData.append("url", values.nameuz);
       
 
@@ -302,7 +303,7 @@ style={{display:"flex", alignItems:"center", justifyContent:"space-between"}}>
                 error={!!(formik.touched.nameuz && formik.errors.nameuz)}
                 fullWidth
                 helperText={formik.touched.nameuz && formik.errors.nameuz}
-                label={localization.table.name  + " "+ localization.uz}
+                label={localization.table.link}
                 name="nameuz"
                 onBlur={formik.handleBlur}
                 onChange={formik.handleChange}

@@ -212,7 +212,7 @@ export default function AddCompanyModal({ getDatas, row, type, route }) {
           <DialogContent dividers>
             <Stack spacing={3}
               width={matches ? 400 : null}>
-        {type !== "news" &&      <Paper elevation={3} 
+        {!(type === "news" || type === "librarycategory")  &&  <Paper elevation={3} 
     style={{ padding: '16px', marginTop: '16px'}}>
      <TextField
                 fullWidth
