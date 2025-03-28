@@ -33,18 +33,14 @@ const Page = () => {
    const { data, loading, error, fetchData, createData } = useFetcher();
  const dispatch = useDispatch();
 
-    const router = usePathname();
-    const user = JSON.parse(window.sessionStorage.getItem("user")) || false;
-    const checkAccess = routeControler[user.role]?.edit?.find((item) => item == router);
-   
+
    const [searchValue, setSearchValue] = useState("");
    const [page, setPage] = useState(0);
    const { pageCount } = useSelector((state) => state.pageCount);
    const [rowsPerPage, setRowsPerPage] = useState(pageCount || 5);
-    const initalData = data[`/announcement/faq/category/list/?search=${searchValue}`]?.results;
+    const initalData = data[`/announcement/faq/category/list/?page=${page + 1}&page_size=${rowsPerPage}&search=${searchValue}`];
  
-    const customers = useCustomers(initalData, page, rowsPerPage);
-    const [isLoading, setIsLoading] = useState(true);
+     const [isLoading, setIsLoading] = useState(true);
 
  const { lang } = useSelector((state) => state.localiztion);
 
@@ -78,7 +74,7 @@ const Page = () => {
 
 
   function getCountries() {
-    fetchData(`/announcement/faq/category/list/?search=${searchValue}`);
+    fetchData(`/announcement/faq/category/list/?page=${page + 1}&page_size=${rowsPerPage}&search=${searchValue}`);
     
   }
 
@@ -86,45 +82,18 @@ const Page = () => {
         getCountries();
 
       // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [searchValue]);
+    }, [searchValue, rowsPerPage, page]);
   
   function onSearch(e) {
     setSearchValue(e.target.value)
   }
 
-  
-
-
-    // useEffect(() => {
-    //   try {
-    //     setPage(0)
-    //     setFiltered(
-    //       initalData.filter((user) => {
-    //           if (searchValue == "") {
-    //             return user;
-    //           } else if ((user?.name_uz?.toLowerCase().includes(searchValue.toString()?.toLowerCase())) ||
-    //             (user?.name_ru?.toLowerCase().includes(searchValue.toString()?.toLowerCase())) ||
-    //             (user?.name_en?.toLowerCase().includes(searchValue.toString()?.toLowerCase())) ||
-    //             (user?.name?.toLowerCase().includes(searchValue.toString()?.toLowerCase()) || user?.name_kaa?.toLowerCase().includes(searchValue.toString()?.toLowerCase()))
-    //           ) {
-    //             return user;
-    //           }
-    //         })
-    //     );
-    //   } catch (error) {
-    //     setFiltered([]);
-    //     console.error("Filtered Groups Error => ", error.message);
-    //   }
-    // // eslint-disable-next-line react-hooks/exhaustive-deps
-    // }, [initalData, searchValue]);
-
-  
-  
+ 
   
   return (
     <>
       <Head>
-        <title>Categories | TMA </title>
+        <title>FAQ Categories | TMA </title>
       </Head>
       <Box
         component="main"
@@ -151,9 +120,8 @@ spacing={4}>
 type={"country"} />
             <CustomersTable
              isLoading={isLoading}
-
-              count={initalData?.length}
-              items={customers}
+              count={initalData?.total_elements}
+              items={initalData?.current_page}
               onPageChange={handlePageChange}
               onRowsPerPageChange={handleRowsPerPageChange}
               page={page}

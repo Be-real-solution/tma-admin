@@ -1,9 +1,8 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react/jsx-max-props-per-line */
 import { useCallback, useMemo, useState, useEffect, useRef } from 'react';
 import Head from 'next/head';
 import { Box, Button, Container, Stack, SvgIcon, Typography, Breadcrumbs } from "@mui/material";
-import { routeControler } from "src/utils/role-controler";
-import { usePathname, useRouter } from "next/navigation";
 
 
 import { Layout as DashboardLayout } from 'src/layouts/dashboard/layout';
@@ -15,9 +14,6 @@ import AddCompanyModal from 'src/components/Modals/AddModal/AddFaqCategory-modal
 import Content from "src/Localization/Content";
 import { useSelector, useDispatch } from "react-redux";
 import { changePage } from "src/slices/paginationReduser";
-import { useSearchParams } from 'next/navigation';
-
-
 
 const useCustomers = (data, page, rowsPerPage) => {
   return useMemo(() => {
@@ -32,12 +28,7 @@ const useCustomers = (data, page, rowsPerPage) => {
 const Page = ({ subId, setSubId }) => {
   const { data, loading, error, fetchData, createData } = useFetcher();
   const dispatch = useDispatch();
-  const params = useSearchParams();
-  const ParamId = params.get("id");
-  const routers = useRouter();
-  const router = usePathname();
-  const user = JSON.parse(window.sessionStorage.getItem("user")) || false;
-  const checkAccess = routeControler[user.role]?.edit?.find((item) => item == router);
+
 
   const [searchValue, setSearchValue] = useState("");
   const [page, setPage] = useState(0);
@@ -45,10 +36,9 @@ const Page = ({ subId, setSubId }) => {
   const [rowsPerPage, setRowsPerPage] = useState(pageCount || 5);
   const [isLoading, setIsLoading] = useState(true);
 
-  const initalData = data[`/announcement/social/networks/category/list/`]?.results;
-  const [filtered, setFiltered] = useState(initalData || []);
-  const customers = useCustomers(filtered, page, rowsPerPage);
+  const initalData = data[`/announcement/social/networks/category/list/?page=${page + 1}&page_size=${rowsPerPage}`];
 
+  const customers = initalData?.current_page
   const { lang } = useSelector((state) => state.localiztion);
 
   const { localization } = Content[lang];
@@ -77,14 +67,14 @@ useEffect(()=> {
 
 
   function getCountries() {
-      fetchData(`/announcement/social/networks/category/list/`);
+      fetchData(`/announcement/social/networks/category/list/?page=${page + 1}&page_size=${rowsPerPage}`);
   }
 
   useEffect(() => {
     getCountries();
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [page, rowsPerPage]);
 
   function onSearch(e) {
     setSearchValue(e.target.value);
@@ -92,25 +82,6 @@ useEffect(()=> {
 
 
 
-  useEffect(() => {
-    try {
-      setPage(0);
-      setFiltered(
-        initalData.filter((user) => {
-          if (searchValue == "") {
-            return user;
-          } else if (
-            user?.name?.[lang]?.toLowerCase().includes(searchValue.toString()?.toLowerCase()) ||
-            user?.description?.[lang]?.toLowerCase().includes(searchValue.toString()?.toLowerCase())) {
-            return user;
-          }
-        })
-      );
-    } catch (error) {
-      setFiltered([]);
-      console.error("Filtered Groups Error => ", error.message);
-    }
-  }, [initalData, searchValue]);
 
   return (
     <>
@@ -142,7 +113,7 @@ useEffect(()=> {
             <CustomersTable
              isLoading={isLoading}
              
-              count={filtered?.length}
+              count={initalData?.total_elements}
               items={customers}
               onPageChange={handlePageChange}
               onRowsPerPageChange={handleRowsPerPageChange}

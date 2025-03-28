@@ -39,7 +39,6 @@ export const CustomersTable = (props) => {
     count = 0,
     type,
     items = [],
-  
     onPageChange = () => {},
     onRowsPerPageChange,
     page = 0,
@@ -47,19 +46,10 @@ export const CustomersTable = (props) => {
     getDate,
     isLoading, setIsLoading
   } = props;
-  const { createData, fetchData, data } = useFetcher();
 
   const { lang } = useSelector((state) => state.localiztion);
 
   const { localization } = Content[lang];
-  const BaseUrl = process.env.NEXT_PUBLIC_ANALYTICS_BASEURL;
-
-  const router = usePathname();
-  const {addToast} = useToasts();
-  const user = JSON.parse(window.sessionStorage.getItem("user")) || false;
-
-  // const checkAccess = routeControler[user.role]?.edit?.find((item) => item == router);
-
 
 
 
@@ -189,7 +179,7 @@ export const CustomersTable = (props) => {
                 </>
                 );
               }) :      <TableRow >
-              <TableCell  colSpan={5}>
+              <TableCell  colSpan={12}>
 
             <Box height={"200px"} display={"flex"} pt={5} flexDirection={"column"} alignItems={"center"} justifyContent={"center"} >
             <img
