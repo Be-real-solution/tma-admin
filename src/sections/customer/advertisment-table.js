@@ -68,17 +68,17 @@ export const CustomersTable = (props) => {
                 <TableCell>{localization.table.created_at}</TableCell>
                 <TableCell>{localization.action}</TableCell>
               </TableRow> : <TableRow>
-                <TableCell>{localization.table.name + " uz"}</TableCell>
-                <TableCell>{localization.table.name + " ru"}</TableCell>
-                <TableCell>{localization.table.name + " ru"}</TableCell>
-                <TableCell>{localization.table.name + " en"}</TableCell>
-                <TableCell>{localization.table.name + " en"}</TableCell>
-                <TableCell>{localization.table.name + " en"}</TableCell>
-                <TableCell>{localization.table.name + " en"}</TableCell>
-                <TableCell>{localization.table.name + " en"}</TableCell>
-                <TableCell>{localization.table.name + " en"}</TableCell>
-                <TableCell>{localization.table.name + " en"}</TableCell>
-                <TableCell>{localization.table.name + " kaa"}</TableCell>
+                <TableCell>{localization.table.main_image}</TableCell>
+                <TableCell>{localization.table.file}</TableCell>
+                <TableCell>{localization.table.title}</TableCell>
+                <TableCell>{localization.table.info }</TableCell>
+                <TableCell>{localization.table.category}</TableCell>
+                <TableCell>{localization.table.author}</TableCell>
+                <TableCell>{localization.table.cost }</TableCell>
+                <TableCell>{localization.table.download_count}</TableCell>
+                <TableCell>{localization.table.view_count}</TableCell>
+                <TableCell>{localization.table.status}</TableCell>
+                <TableCell>{localization.table.created_at}</TableCell>
                 <TableCell>{localization.action}</TableCell>
               </TableRow>}
             </TableHead>
@@ -91,7 +91,7 @@ export const CustomersTable = (props) => {
               </Box> 
               </TableCell>
               </TableRow> : items.length ? items.map((customer) => {
-                const createdAt = format(new Date(customer?.createdAt || customer?.published_date || null), "dd/MM/yyyy HH:mm");
+                const createdAt = format(new Date(customer?.createdAt || customer?.created_at  || customer?.published_date || null), "dd/MM/yyyy HH:mm");
                 // const customAt = format(
                 //   new Date(customer?.custom_date ? customer?.custom_date : null)?.getTime(),
                 //   "dd/MM/yyyy HH:mm"
