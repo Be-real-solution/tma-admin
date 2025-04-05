@@ -1,3 +1,5 @@
+/* eslint-disable react/jsx-max-props-per-line */
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useCallback, useMemo, useState, useEffect, useRef } from 'react';
 import Head from 'next/head';
 import { Box, Button, Container, Stack, SvgIcon, Typography, Breadcrumbs } from "@mui/material";
@@ -18,35 +20,21 @@ import { useSearchParams } from 'next/navigation';
 
 
 
-const useCustomers = (data, page, rowsPerPage) => {
-  return useMemo(() => {
-    return applyPagination(data, page, rowsPerPage);
-  }, [data, page, rowsPerPage]);
-};
 
 
-
-
-
-const Page = ({ subId, setSubId }) => {
+const Page = () => {
   const { data, loading, error, fetchData, createData } = useFetcher();
   const dispatch = useDispatch();
-  const params = useSearchParams();
-  const ParamId = params.get("id");
-  const routers = useRouter();
-  const router = usePathname();
-  const user = JSON.parse(window.sessionStorage.getItem("user")) || false;
-  const checkAccess = routeControler[user.role]?.edit?.find((item) => item == router);
 
-  const [searchValue, setSearchValue] = useState("");
+
+  // const [searchValue, setSearchValue] = useState("");
   const [page, setPage] = useState(0);
   const { pageCount } = useSelector((state) => state.pageCount);
   const [rowsPerPage, setRowsPerPage] = useState(pageCount || 5);
   const [isLoading, setIsLoading] = useState(true);
 
-  const initalData = data[`/advertisement/list/`]?.results;
-  const [filtered, setFiltered] = useState(initalData || []);
-  const customers = useCustomers(filtered, page, rowsPerPage);
+
+  const initalData = data[`/advertisement/list/?page=${page + 1}&page_size=${rowsPerPage}`];
 
   const { lang } = useSelector((state) => state.localiztion);
 
@@ -76,45 +64,27 @@ useEffect(()=> {
 
 
   function getCountries() {
-      fetchData(`/advertisement/list/`);
+      fetchData(`/advertisement/list/?page=${page + 1}&page_size=${rowsPerPage}`);
   }
 
   useEffect(() => {
     getCountries();
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [rowsPerPage, page]);
 
-  function onSearch(e) {
-    setSearchValue(e.target.value);
-  }
+  // function onSearch(e) {
+  //   setSearchValue(e.target.value);
+  // }
 
 
 
-  useEffect(() => {
-    try {
-      setPage(0);
-      setFiltered(
-        initalData.filter((user) => {
-          if (searchValue == "") {
-            return user;
-          } else if (
-            user?.name?.[lang]?.toLowerCase().includes(searchValue.toString()?.toLowerCase()) ||
-            user?.description?.[lang]?.toLowerCase().includes(searchValue.toString()?.toLowerCase())) {
-            return user;
-          }
-        })
-      );
-    } catch (error) {
-      setFiltered([]);
-      console.error("Filtered Groups Error => ", error.message);
-    }
-  }, [initalData, searchValue]);
+  
 
   return (
     <>
       <Head>
-        <title>News | TMA Admin </title>
+        <title>Advertisment | TMA Admin </title>
       </Head>
       <Box
         component="main"
@@ -129,7 +99,7 @@ useEffect(()=> {
               <Stack spacing={1}>
       
                 <Typography variant="h4" textTransform={"capitalize"}>
-                  {localization.sidebar.news}
+                  {localization.sidebar.advertisement}
                 </Typography>
               </Stack>
 
@@ -137,16 +107,15 @@ useEffect(()=> {
                 <AddCompanyModal getDatas={getCountries} />
               </div>
             </Stack>
-            <CustomersSearch forLabel={localization.sidebar.news} onSearch={onSearch} type={"country"} />
+            {/* <CustomersSearch forLabel={localization.sidebar.advertisement} onSearch={onSearch} type={"country"} /> */}
+    
             <CustomersTable
-             isLoading={isLoading}
-             
-              count={filtered?.length}
-              items={customers}
+             isLoading={isLoading}    
+              count={initalData?.total_elements}
+              items={initalData?.current_page}
               onPageChange={handlePageChange}
               onRowsPerPageChange={handleRowsPerPageChange}
               page={page}
-              data={data}
               type="advertisment"
               getDate={getCountries}
               rowsPerPage={rowsPerPage}

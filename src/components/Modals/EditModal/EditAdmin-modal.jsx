@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-max-props-per-line */
 import * as React from "react";
 import PropTypes from "prop-types";
 import { useEffect, useCallback } from 'react';

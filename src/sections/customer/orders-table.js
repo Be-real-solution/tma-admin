@@ -119,7 +119,7 @@ export const CustomersTable = (props) => {
                    key={customer.id}>
                     {type === "networkcategory" && <TableCell>
                     {customer?.icon &&  <Image
-                        src={customer?.icon?.toString().replace("http", "https")}
+                        src={customer?.icon}
                         alt={customer?.name_uz}
                         sx={{ width: 40, height: 40, borderRadius: 1 }}
                         width={40}
@@ -131,10 +131,10 @@ export const CustomersTable = (props) => {
                     <TableCell>{customer?.name_en}</TableCell>
                     <TableCell>{customer?.name_kaa}</TableCell>                
               {type === "faq-categories"  ?       <TableCell>
-                      <EditFaqCategoryModal row={customer} route={`/announcement/faq/category/update`} getDatas={getDate} />
+                      <EditFaqCategoryModal type={"faqcategory"} row={customer} route={`/announcement/faq/category/update`} getDatas={getDate} />
                       <DeleteModal route={`/announcement/faq/category/delete`} id={customer.id} getDatas={getDate} />
                     </TableCell> :  type === "librarycategory"  ?       <TableCell>
-                      <EditProductModal row={customer} route={`/library/category/update`} getDatas={getDate} />
+                      <EditProductModal row={customer} route={`/library/category/update`} type={"librarycategory"} getDatas={getDate} />
                       <DeleteModal route={`/library/category/delete`} id={customer.id} getDatas={getDate} />
                     </TableCell> :  type === "networkcategory"  ?       <TableCell>
                       <EditProductModal type={"announcementnetwork"}  row={customer} route={`/announcement/social/network/link/category/update`} getDatas={getDate} />

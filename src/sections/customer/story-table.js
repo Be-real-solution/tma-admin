@@ -13,17 +13,12 @@ import {
   TableHead,
   TablePagination,
   TableRow,
-  Backdrop,
-  Typography,
-  CircularProgress,
-  Tooltip
+
 
 } from "@mui/material";
 import useFetcher from "src/hooks/use-fetcher";
-import { useEffect } from "react";
 import DeleteModal from "src/components/Modals/DeleteModal";
-import EditCompanyModal from "src/components/Modals/EditModal/EditBuilding-modal";
-import EditCarModal from "src/components/Modals/EditModal/EditNews-modal";
+import EditCarModal from "src/components/Modals/EditModal/EditStory-modal";
 import { Scrollbar } from "src/components/scrollbar";
 import Content from "src/Localization/Content";
 import { useSelector } from "react-redux";
@@ -34,8 +29,7 @@ import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
-import DialogContentText from "@mui/material/DialogContentText";
-import DialogTitle from "@mui/material/DialogTitle";
+
 import Slide from "@mui/material/Slide";
 import { Navigation, Pagination } from "swiper/modules";
 import "swiper/css";
@@ -93,7 +87,7 @@ handleClose={handleClose} localization={localization}/>
             <TableHead>
               {type === "story"  ? (
                 <TableRow>
-                  <TableCell>{localization.table.image}</TableCell>
+                  <TableCell>{localization.table.main_image}</TableCell>
                   <TableCell>{localization.table.image}</TableCell>
                 
                   <TableCell>{localization.table.created_at}</TableCell>
@@ -126,14 +120,14 @@ handleClose={handleClose} localization={localization}/>
                   <>
                     { type === "story"  ? (
                       <TableRow hover key={customer.id}>
-                        <TableCell onClick={() => handleClickOpen([customer?.cover_image?.replace("http", "https")])}>
+                        <TableCell onClick={() => handleClickOpen([customer?.cover_image])}>
                           {!!customer.cover_image && (
                             
                             <Image
                               priority
                                placeholder="blur" // You can use "empty" or a custom element as well
                             blurDataURL="/assets/errors/error-404.png"
-                              src={ customer.cover_image?.replace("http", "https")}
+                              src={ customer.cover_image}
                               alt="image"
                               width={50}
                               height={50}
@@ -148,7 +142,7 @@ handleClose={handleClose} localization={localization}/>
                               priority
                                placeholder="blur" // You can use "empty" or a custom element as well
                             blurDataURL="/assets/errors/error-404.png"
-                              src={ customer.items[0]?.image?.replace("http", "https")}
+                              src={ customer.items[0]?.image}
                               alt="image"
                               width={50}
                               height={50}
@@ -159,7 +153,7 @@ handleClose={handleClose} localization={localization}/>
               
                         <TableCell>{createdAt()}</TableCell>
                       <TableCell onClick={(e) => e.stopPropagation()}>
-                          <EditCarModal row={customer} route={`new`} getDatas={getDate} />
+                          <EditCarModal row={customer} route={`/announcement/story/update`} getDatas={getDate} />
                           <DeleteModal route={`/announcement/story/delete`} id={customer.id} getDatas={getDate} />
                         </TableCell>
                       </TableRow>
@@ -272,7 +266,7 @@ CustomersTable.propTypes = {
                             blurDataURL="/assets/errors/error-404.png"
                     width={500}
                     height={400}
-                    src={`${image.image ? image?.image?.replace("http", "https") : image}`}
+                    src={`${image.image ? image?.image : image}`}
                     alt={`Image ${index + 1}`}
                     style={{ width: "100%", height: "350px" }} // Adjust size as needed
                   />

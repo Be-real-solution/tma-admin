@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-max-props-per-line */
 import * as React from "react";
 import { useEffect, useRef } from "react";
 import Content from "src/Localization/Content";
@@ -73,7 +74,7 @@ export default function AddOrderModal({ getDatas, company }) {
   const [isLoading, setIsLoading] = React.useState(false);
 
   const { fetchData, data, loading, error, createData } = useFetcher();
-  const categories = data["/news/category/list/"]?.results;
+  const categories = data["/news/category/list/"]?.current_page;
 
   function getCountries() {
     fetchData(`/news/category/list/`);
@@ -160,9 +161,11 @@ image.current=""
       nameen: "",
       nameuz: "",
       nameru: "",
+      namekaa: "",
       descriptionuz:"",
       descriptionru:"",
       descriptionen:"",
+      descriptionkaa:"",
       // isTop: false, // Initialize `isTop`
 
       submit: null,
@@ -172,9 +175,11 @@ image.current=""
       nameuz: Yup.string().min(2).required(" Name is required"),
       nameru: Yup.string().min(2).required(" Name is required"),
       nameen: Yup.string().min(2).required(" Name is required"),
+      namekaa: Yup.string().min(2).required(" Name is required"),
       descriptionuz: Yup.string().min(5).required("Info is required"),
       descriptionru: Yup.string().min(5).required("Info is required"),
       descriptionen: Yup.string().min(5).required("Info is required"),
+      descriptionkaa: Yup.string().min(5).required("Info is required"),
 
     }),
 
@@ -197,6 +202,7 @@ image.current=""
         formData.append("content_uz", values.descriptionuz);
         formData.append("content_ru", values.descriptionru);
         formData.append("content_en", values.descriptionen);
+        formData.append("content_kaa", values.descriptionkaa);
        
 
 
@@ -225,7 +231,7 @@ image.current=""
         }
 
         addToast(res.message || (response.status === 201 ? localization.alerts.added : localization.alerts.warning), {
-          appearance: response.response === 201 ? "success" : "error",
+          appearance: response.status === 201 ? "success" : "error",
           autoDismiss: true,
         });
         setIsLoading(false)
@@ -259,7 +265,9 @@ image.current=""
         open={open}>
         <BootstrapDialogTitle id="customized-dialog-title"
           onClose={handleClose}>
-          {localization.modal.addNews.addnews} 
+          {/* {localization.modal.addNews.addnews}  */}
+          { localization.modal.add_title(localization.sidebar.anouncement)}
+
         </BootstrapDialogTitle>
         <form noValidate
           onSubmit={formik.handleSubmit}>
@@ -417,6 +425,18 @@ value={formik.values.nameen}
 />
 <TextField
 
+error={!!(formik.touched.namekaa && formik.errors.namekaa)}
+fullWidth
+helperText={formik.touched.namekaa && formik.errors.namekaa}
+label={localization.table.name + " "+ localization.kaa}
+name="namekaa"
+onBlur={formik.handleBlur}
+onChange={formik.handleChange}
+type="text"
+value={formik.values.namekaa}
+/>
+<TextField
+
 error={!!(formik.touched.descriptionuz && formik.errors.descriptionuz)}
 fullWidth
 helperText={formik.touched.descriptionuz && formik.errors.descriptionuz}
@@ -456,6 +476,21 @@ onBlur={formik.handleBlur}
 onChange={formik.handleChange}
 type="text"
 value={formik.values.descriptionen}
+multiline
+            
+minRows={4}
+/>
+<TextField
+
+error={!!(formik.touched.descriptionkaa && formik.errors.descriptionkaa)}
+fullWidth
+helperText={formik.touched.descriptionkaa && formik.errors.descriptionkaa}
+label={localization.table.info + " "+ localization.kaa}
+name="descriptionkaa"
+onBlur={formik.handleBlur}
+onChange={formik.handleChange}
+type="text"
+value={formik.values.descriptionkaa}
 multiline
             
 minRows={4}

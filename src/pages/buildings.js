@@ -36,10 +36,10 @@ const Page = ({subIdSecond, setSubIdSecond}) => {
   const [rowsPerPage, setRowsPerPage] = useState(pageCount || 5);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const initalData =
-    data[`/building/list/`] || [];
+    data[`/building/list/?page=${page + 1}&page_size=${rowsPerPage}`] || [];
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  const [filtered, setFiltered] = useState(initalData);
-  const customers = useCustomers(filtered, page, rowsPerPage);
+
+  const customers = initalData?.current_page
 
   
   useEffect(()=> {
@@ -54,29 +54,6 @@ const Page = ({subIdSecond, setSubIdSecond}) => {
   const { localization } = Content[lang];
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    try {
-      setPage(0);
-      setFiltered(
-        initalData?.filter((user) => {
-          if (searchValue == "") {
-            return user;
-          } else if (
-            user?.name?.[lang || "uz"].toLowerCase().includes(searchValue.toString().toLowerCase()) ||
-            user?.description?.[lang].toLowerCase().includes(searchValue.toString().toLowerCase()) ||
-            user?.address?.[lang].toLowerCase().includes(searchValue.toString().toLowerCase()) ||
-            user?.phoneNumber?.toString().toLowerCase().includes(searchValue.toString().toLowerCase())
-          ) {
-            return user;
-          }
-        })
-      );
-    } catch (error) {
-      setFiltered([]);
-      console.error("Filtered Groups Error => ", error.message);
-    }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [initalData, searchValue]);
 
   const handlePageChange = useCallback((event, value) => {
     setPage(value);
@@ -92,7 +69,7 @@ const Page = ({subIdSecond, setSubIdSecond}) => {
 
   
   function getCountries() {
-    fetchData(`/building/list/`);
+    fetchData(`/building/list/?page=${page + 1}&page_size=${rowsPerPage}`);
   }
 
  
@@ -101,7 +78,7 @@ const Page = ({subIdSecond, setSubIdSecond}) => {
       getCountries();
       
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [page, rowsPerPage])
 
 
   function onSearch(e) {
@@ -145,7 +122,7 @@ spacing={4}>
             <CustomersTable
              isLoading={isLoading}
               type="buildings"
-              count={filtered?.length}
+              count={initalData?.total_elements}
               items={customers}
               onPageChange={handlePageChange}
               onRowsPerPageChange={handleRowsPerPageChange}

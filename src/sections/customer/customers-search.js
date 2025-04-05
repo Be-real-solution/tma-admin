@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-max-props-per-line */
 import { useEffect, useState, useRef } from 'react';
 import MagnifyingGlassIcon from '@heroicons/react/24/solid/MagnifyingGlassIcon';
 import { Card, InputAdornment, OutlinedInput, SvgIcon, Box, TextField, MenuItem } from '@mui/material';

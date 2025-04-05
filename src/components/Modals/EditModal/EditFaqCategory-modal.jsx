@@ -65,7 +65,7 @@ BootstrapDialogTitle.propTypes = {
   onClose: PropTypes.func.isRequired,
 };
 
-export default function AddCompanyModal({ getDatas, row, route }) {
+export default function AddCompanyModal({ getDatas, row, route, type }) {
   const { loading, error, createData } = useFetcher();
   const [open, setOpen] = React.useState(false);
   const { lang } = useSelector((state) => state.localiztion);
@@ -147,7 +147,8 @@ export default function AddCompanyModal({ getDatas, row, route }) {
       >
         <BootstrapDialogTitle id="customized-dialog-title"
           onClose={handleClose}>
-                             { localization.modal.addCategory.edit}
+                       { localization.modal.edit_title(type === "faqcategory" ? localization.sidebar.faq_category : type === "announcementnetwork" ?  localization.sidebar.anons_network_category : localization.sidebar.library_category)}
+
 
         </BootstrapDialogTitle>
         <form noValidate

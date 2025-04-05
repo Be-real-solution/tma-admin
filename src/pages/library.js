@@ -1,3 +1,5 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable react/jsx-max-props-per-line */
 import { useCallback, useMemo, useState, useEffect, useRef } from 'react';
 import Head from 'next/head';
 import { Box, Button, Container, Stack, SvgIcon, Typography, Breadcrumbs } from "@mui/material";
@@ -10,7 +12,7 @@ import { CustomersTable } from 'src/sections/customer/advertisment-table';
 import { CustomersSearch } from 'src/sections/customer/customers-search';
 import { applyPagination } from 'src/utils/apply-pagination';
 import useFetcher from 'src/hooks/use-fetcher';
-import AddCompanyModal from 'src/components/Modals/AddModal/AddNews-modal';
+import AddCompanyModal from 'src/components/Modals/AddModal/AddLibrary-modal';
 import Content from "src/Localization/Content";
 import { useSelector, useDispatch } from "react-redux";
 import { changePage } from "src/slices/paginationReduser";
@@ -44,9 +46,9 @@ const Page = ({ subId, setSubId }) => {
   const [rowsPerPage, setRowsPerPage] = useState(pageCount || 5);
   const [isLoading, setIsLoading] = useState(true);
 
-  const initalData = data[`/library/items/list/`]?.results;
-  const [filtered, setFiltered] = useState(initalData || []);
-  const customers = useCustomers(filtered, page, rowsPerPage);
+  const initalData = data[`/library/items/list/?page=${page + 1}&page_size=${rowsPerPage}`];
+
+  const customers = initalData?.current_page
 
   const { lang } = useSelector((state) => state.localiztion);
 
@@ -76,45 +78,24 @@ useEffect(()=> {
 
 
   function getCountries() {
-      fetchData(`/library/items/list/`);
+      fetchData(`/library/items/list/?page=${page + 1}&page_size=${rowsPerPage}`);
   }
 
   useEffect(() => {
     getCountries();
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [page, rowsPerPage]);
 
   function onSearch(e) {
     setSearchValue(e.target.value);
   }
 
 
-
-  useEffect(() => {
-    try {
-      setPage(0);
-      setFiltered(
-        initalData.filter((user) => {
-          if (searchValue == "") {
-            return user;
-          } else if (
-            user?.name?.[lang]?.toLowerCase().includes(searchValue.toString()?.toLowerCase()) ||
-            user?.description?.[lang]?.toLowerCase().includes(searchValue.toString()?.toLowerCase())) {
-            return user;
-          }
-        })
-      );
-    } catch (error) {
-      setFiltered([]);
-      console.error("Filtered Groups Error => ", error.message);
-    }
-  }, [initalData, searchValue]);
-
   return (
     <>
       <Head>
-        <title>News | TMA Admin </title>
+        <title>Library | TMA Admin </title>
       </Head>
       <Box
         component="main"
@@ -129,7 +110,7 @@ useEffect(()=> {
               <Stack spacing={1}>
       
                 <Typography variant="h4" textTransform={"capitalize"}>
-                  {localization.sidebar.news}
+                  {localization.sidebar.library}
                 </Typography>
               </Stack>
 
@@ -137,17 +118,17 @@ useEffect(()=> {
                 <AddCompanyModal getDatas={getCountries} />
               </div>
             </Stack>
-            <CustomersSearch forLabel={localization.sidebar.news} onSearch={onSearch} type={"country"} />
+            <CustomersSearch forLabel={localization.sidebar.library} onSearch={onSearch} type={"country"} />
             <CustomersTable
              isLoading={isLoading}
              
-              count={filtered?.length}
+              count={initalData?.total_elements}
               items={customers}
               onPageChange={handlePageChange}
               onRowsPerPageChange={handleRowsPerPageChange}
               page={page}
               data={data}
-              type="news"
+              type="library"
               getDate={getCountries}
               rowsPerPage={rowsPerPage}
             />

@@ -13,8 +13,6 @@ import DialogActions from "@mui/material/DialogActions";
 import CloseIcon from "@heroicons/react/24/solid/XMarkIcon";
 import { SvgIcon, useMediaQuery } from "@mui/material";
 import useFetcher from "src/hooks/use-fetcher";
-import PlusIcon from "@heroicons/react/24/solid/PlusIcon";
-import {  Select, FormControl, FormHelperText, InputLabel, Chip } from '@mui/material';
 
 import { useFormik } from "formik";
 import { useAuth } from 'src/hooks/use-auth';
@@ -69,44 +67,15 @@ BootstrapDialogTitle.propTypes = {
 };
 
 
-export default function AddOrderModal({ getDatas, company }) {
+export default function AddOrderModal({ getDatas, route, row }) {
   const user = JSON.parse(window.sessionStorage.getItem("user")) || false;
   const [isLoading, setIsLoading] = React.useState(false);
 
-  const { fetchData, data, loading, error, createData } = useFetcher();
-  const categories = data["/news/category/list/"]?.current_page;
-
-  function getCountries() {
-    fetchData(`/news/category/list/`);
-    
-  }
-
-    useEffect(() => {
-        getCountries();
-
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
-  
-  
-  
-  const [images, setImages] = useState([]);
-  const [mainImage, setMainImage] = useState([]);
+  const [mainImage, setMainImage] = useState([
+    { file: null, url:  row?.image?.replace("http://", "https://") },
+  ]);
 
 
-
-  const handleFileChange = (event) => {
-    const newImages = Array.from(event.target.files).map((file) => ({
-      file,
-      url: URL.createObjectURL(file),
-    }));
-    setImages((prevImages) => [...prevImages, ...newImages]);
-  };
-
-  const handleDelete = (index) => {
-    const newImages = [...images];
-    newImages.splice(index, 1);
-    setImages(newImages);
-  };
 
   const handleFileChange2 = (event) => {
     const newImages = Array.from(event.target.files).map((file) => ({
@@ -142,20 +111,22 @@ export default function AddOrderModal({ getDatas, company }) {
   const handleClose = () => {
     setOpen(false);
   };
-  const onFinish = () => {
-setImages([])
-image.current=""
-  };
+
 
   
   const formik = useFormik({
     initialValues: {
+ 
+      nameuz:row.url,
     
+
       submit: null,
     },
     validationSchema: Yup.object({
      
-     
+      nameuz:  Yup.string()
+                       .url("Invalid URL format")
+                   .min(2).required("URL is required"),
     }),
 
     onSubmit: async (values, helpers) => {
@@ -164,16 +135,14 @@ image.current=""
 
 
         const formData = new FormData();
-        for (let index = 0; index < images?.length; index++) {
-         formData.append('images', images?.[index].file);  
-        }
-        mainImage?.length && formData.append('cover_image', mainImage[0]?.file);
-    
-       
+  
+        mainImage[0]?.file && formData.append('image', mainImage[0]?.file);
+        formData.append("url", values.nameuz);
+      
 
 
-        const response = await fetch(BaseUrl + "/announcement/story/create/", {
-          method: 'POST',
+        const response = await fetch(BaseUrl + `${route}/${row.id}/`, {
+          method: 'PUT',
 
           headers: {
             Authorization: `Bearer ${JSON.parse(window.sessionStorage.getItem("authenticated"))?.access || false}`,
@@ -188,16 +157,16 @@ image.current=""
           auth.signOut();
           router.push("/auth/login");
         }
-        if (response.status ===201) {
+        if (response.status === 200) {
           handleClose()
           getDatas()
           
-          onFinish()
+
       
         }
 
-        addToast(res.message || (response.status ===201 ? localization.alerts.added : localization.alerts.warning), {
-          appearance: response.status ===201 ? "success" : "error",
+        addToast(res.message || (response.status === 200 ? localization.alerts.added : localization.alerts.warning), {
+          appearance: response.status === 200 ? "success" : "error",
           autoDismiss: true,
         });
         setIsLoading(false)
@@ -214,24 +183,24 @@ image.current=""
 
 
   return (
-    <div>
-      <Button
+    <>
+      <IconButton
         onClick={handleClickOpen}
-        startIcon={
-          <SvgIcon fontSize="small">
-            <PlusIcon />
-          </SvgIcon>
-        }
-        variant="contained"
       >
-        {localization.modal.add}
-      </Button>
+        <SvgIcon >
+        <svg width="24px" height="24px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M11 2H9C4 2 2 4 2 9V15C2 20 4 22 9 22H15C20 22 22 20 22 15V13" stroke="#292D32" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M16.04 3.02001L8.16 10.9C7.86 11.2 7.56 11.79 7.5 12.22L7.07 15.23C6.91 16.32 7.68 17.08 8.77 16.93L11.78 16.5C12.2 16.44 12.79 16.14 13.1 15.84L20.98 7.96001C22.34 6.60001 22.98 5.02001 20.98 3.02001C18.98 1.02001 17.4 1.66001 16.04 3.02001Z" stroke="#292D32" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M14.91 4.1499C15.58 6.5399 17.45 8.4099 19.85 9.0899" stroke="#292D32" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
+        </SvgIcon>
+      </IconButton>
       <BootstrapDialog maxWidth="md" fullWidth onClose={handleClose}
         aria-labelledby="customized-dialog-title"
         open={open}>
         <BootstrapDialogTitle id="customized-dialog-title"
           onClose={handleClose}>
-         { localization.modal.add_title(localization.sidebar.story)}
+            { localization.modal.edit_title(localization.sidebar.advertisement)}
 
         </BootstrapDialogTitle>
         <form noValidate
@@ -267,11 +236,11 @@ image.current=""
 style={{display:"flex", alignItems:"center", justifyContent:"space-between"}}>
     <Box sx={{display:"flex", alignItems:"center"}}>          <CardMedia
                 component="img"
-                image={image.url}
+                image={image?.url}
                 alt={`Uploaded preview ${index}`}
                 style={{ width: '100px', height: '100px', marginRight: '16px', objectFit:"contain" }}
               />
-              <Typography variant="body2">{image.file.name}</Typography></Box>
+              <Typography variant="body2">{image?.file?.name || "image"}</Typography></Box>
               <IconButton edge="end" 
               onClick={() => handleDelete2(index)}>
                 <DeleteIcon />
@@ -290,66 +259,23 @@ style={{display:"flex", alignItems:"center", justifyContent:"space-between"}}>
       )}
     </Paper>
 
-<Paper elevation={3} 
-    style={{ padding: '16px', marginTop: '16px' }}>
-     <TextField
+
+    
+
+      
+              <TextField
+
+                error={!!(formik.touched.nameuz && formik.errors.nameuz)}
                 fullWidth
-                name="image"
-                label={localization.table.images}
-
-                inputProps={{
-                  multiple: true
-                }}
-                InputLabelProps={{
-                  shrink: true,
-                }}
+                helperText={formik.touched.nameuz && formik.errors.nameuz}
+                label={localization.table.link}
+                name="nameuz"
                 onBlur={formik.handleBlur}
-                onChange={(e) => {
-                  handleFileChange(e)
-                  // formik.handleChange()}
-                }}
-                type="file"
-                inputRef={image}
-              /> 
-      {/* <input
-        type="file"
-        accept="image/*"
-        multiple
-        onChange={handleFileChange}
-        style={{ marginBottom: '16px' }}
-      /> */}
-      {images.length > 0 ? (
-        <List>
-          {images.map((image, index) => (
-            <ListItem key={index}
-             divider
-style={{display:"flex", alignItems:"center", justifyContent:"space-between"}}>
-    <Box sx={{display:"flex", alignItems:"center"}}>          <CardMedia
-                component="img"
-                image={image.url}
-                alt={`Uploaded preview ${index}`}
-                style={{ width: '100px', height: '100px', marginRight: '16px', objectFit:"contain" }}
+                onChange={formik.handleChange}
+                type="text"
+                value={formik.values.nameuz}
               />
-              <Typography variant="body2">{image.file.name}</Typography></Box>
-              <IconButton edge="end" 
-              onClick={() => handleDelete(index)}>
-                <DeleteIcon />
-              </IconButton>
-            </ListItem>
-          ))}
-        </List>
-      ) : (
-        <Box textAlign="center">
-          <ImageIcon style={{ fontSize: 50, color: 'gray' }} />
-          <Typography variant="body2"
-           color="textSecondary">
-            No images uploaded
-          </Typography>
-        </Box>
-      )}
-    </Paper>
-
-
+   
          
            
                
@@ -380,6 +306,9 @@ style={{display:"flex", alignItems:"center", justifyContent:"space-between"}}>
           </DialogActions>
         </form>
       </BootstrapDialog>
-    </div>
+    </>
   );
 }
+
+
+

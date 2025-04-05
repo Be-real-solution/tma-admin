@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-max-props-per-line */
 import * as React from 'react';
 import PropTypes from 'prop-types';
 import { styled } from '@mui/material/styles';
@@ -14,7 +15,6 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import Content from "src/Localization/Content";
 import { useSelector } from 'react-redux';
-const BaseUrl = process.env.NEXT_PUBLIC_ANALYTICS_BASEURL;
 
 import {
     Box,
@@ -85,6 +85,7 @@ export default function AddCompanyModal({ getDatas, type, subId }) {
         formik.values.nameuz = ""
         formik.values.nameru = ""
         formik.values.nameen = ""
+        formik.values.namekaa = ""
       handleClose()
     }
 
@@ -149,7 +150,7 @@ name_kaa: values.namekaa,
             >
                 <BootstrapDialogTitle id="customized-dialog-title"
 onClose={handleClose}>
-                    { localization.modal.addCategory.title}
+                    { localization.modal.add_title(type === "news" ? localization.sidebar.news_category : localization.sidebar.library_category)}
 
                 </BootstrapDialogTitle>
                 <form noValidate

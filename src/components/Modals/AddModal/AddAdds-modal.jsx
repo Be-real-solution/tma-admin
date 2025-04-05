@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-max-props-per-line */
 import * as React from "react";
 import { useEffect, useRef } from "react";
 import Content from "src/Localization/Content";
@@ -73,7 +74,7 @@ export default function AddOrderModal({ getDatas, company }) {
   const [isLoading, setIsLoading] = React.useState(false);
 
   const { fetchData, data, loading, error, createData } = useFetcher();
-  const categories = data["/news/category/list/"]?.results;
+  const categories = data["/news/category/list/"]?.current_page;
 
   function getCountries() {
     fetchData(`/news/category/list/`);
@@ -144,6 +145,7 @@ export default function AddOrderModal({ getDatas, company }) {
   const onFinish = () => {
     formik.values.nameuz = "";
 setImages([])
+setMainImage([])
 image.current=""
   };
 
@@ -158,8 +160,9 @@ image.current=""
     },
     validationSchema: Yup.object({
      
-      nameuz: Yup.string().min(2).required(" Name is required"),
-     
+      nameuz: Yup.string()
+                 .url("Invalid URL format")
+             .min(2).required("URL is required"),
     }),
 
     onSubmit: async (values, helpers) => {
@@ -169,7 +172,7 @@ image.current=""
 
         const formData = new FormData();
   
-        mainImage?.length && formData.append('image', mainImage[0]?.file);
+        mainImage[0]?.file && formData.append('image', mainImage[0]?.file);
         formData.append("url", values.nameuz);
       
 
@@ -183,7 +186,6 @@ image.current=""
           },
           body: formData,
         });
-console.log(response);
 
         const res = await response.json()
 
@@ -200,7 +202,7 @@ console.log(response);
         }
 
         addToast(res.message || (response.status === 201 ? localization.alerts.added : localization.alerts.warning), {
-          appearance: response.response === 201 ? "success" : "error",
+          appearance: response.status === 201 ? "success" : "error",
           autoDismiss: true,
         });
         setIsLoading(false)
@@ -234,7 +236,8 @@ console.log(response);
         open={open}>
         <BootstrapDialogTitle id="customized-dialog-title"
           onClose={handleClose}>
-          {localization.modal.addNews.addnews} 
+   { localization.modal.add_title(localization.sidebar.advertisement)}
+
         </BootstrapDialogTitle>
         <form noValidate
           onSubmit={formik.handleSubmit}>
@@ -301,7 +304,7 @@ style={{display:"flex", alignItems:"center", justifyContent:"space-between"}}>
                 error={!!(formik.touched.nameuz && formik.errors.nameuz)}
                 fullWidth
                 helperText={formik.touched.nameuz && formik.errors.nameuz}
-                label={localization.table.name  + " "+ localization.uz}
+                label={localization.table.link}
                 name="nameuz"
                 onBlur={formik.handleBlur}
                 onChange={formik.handleChange}

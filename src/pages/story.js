@@ -1,3 +1,5 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable react/jsx-max-props-per-line */
 import { useCallback, useMemo, useState, useEffect, useRef } from 'react';
 import Head from 'next/head';
 import { Box, Button, Container, Stack, SvgIcon, Typography, Breadcrumbs } from "@mui/material";
@@ -44,10 +46,9 @@ const Page = ({ subId, setSubId }) => {
   const [rowsPerPage, setRowsPerPage] = useState(pageCount || 5);
   const [isLoading, setIsLoading] = useState(true);
 
-  const initalData = data[`/announcement/story/list/`]?.results;
-  const [filtered, setFiltered] = useState(initalData || []);
-  const customers = useCustomers(filtered, page, rowsPerPage);
+  const initalData = data[`/announcement/story/list/?page=${page + 1}&page_size=${rowsPerPage}`];
 
+  const customers = initalData?.current_page
   const { lang } = useSelector((state) => state.localiztion);
 
   const { localization } = Content[lang];
@@ -76,7 +77,7 @@ useEffect(()=> {
 
 
   function getCountries() {
-      fetchData(`/announcement/story/list/`);
+      fetchData(`/announcement/story/list/?page=${page + 1}&page_size=${rowsPerPage}`);
   }
 
   useEffect(() => {
@@ -91,30 +92,12 @@ useEffect(()=> {
 
 
 
-  useEffect(() => {
-    try {
-      setPage(0);
-      setFiltered(
-        initalData.filter((user) => {
-          if (searchValue == "") {
-            return user;
-          } else if (
-            user?.name?.[lang]?.toLowerCase().includes(searchValue.toString()?.toLowerCase()) ||
-            user?.description?.[lang]?.toLowerCase().includes(searchValue.toString()?.toLowerCase())) {
-            return user;
-          }
-        })
-      );
-    } catch (error) {
-      setFiltered([]);
-      console.error("Filtered Groups Error => ", error.message);
-    }
-  }, [initalData, searchValue]);
+  
 
   return (
     <>
       <Head>
-        <title>News | TMA Admin </title>
+        <title>Story | TMA Admin </title>
       </Head>
       <Box
         component="main"
@@ -129,7 +112,7 @@ useEffect(()=> {
               <Stack spacing={1}>
       
                 <Typography variant="h4" textTransform={"capitalize"}>
-                  {localization.sidebar.news}
+                  {localization.sidebar.story}
                 </Typography>
               </Stack>
 
@@ -137,11 +120,11 @@ useEffect(()=> {
                 <AddCompanyModal getDatas={getCountries} />
               </div>
             </Stack>
-            <CustomersSearch forLabel={localization.sidebar.news} onSearch={onSearch} type={"country"} />
+            <CustomersSearch forLabel={localization.sidebar.story} onSearch={onSearch} type={"country"} />
             <CustomersTable
              isLoading={isLoading}
              
-              count={filtered?.length}
+              count={initalData?.total_elements}
               items={customers}
               onPageChange={handlePageChange}
               onRowsPerPageChange={handleRowsPerPageChange}

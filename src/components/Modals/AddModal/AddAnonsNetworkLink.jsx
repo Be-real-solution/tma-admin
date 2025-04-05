@@ -77,7 +77,7 @@ export default function AddCompanyModal({ getDatas, type, subId }) {
     const { localization } = Content[lang];
     const matches = useMediaQuery("(min-width:500px)");
 
-  const categories = data["/announcement/social/networks/category/list/"]?.results;
+  const categories = data["/announcement/social/networks/category/list/"]?.current_page;
 
   function getCountries() {
     fetchData(`/announcement/social/networks/category/list/`);
@@ -122,7 +122,9 @@ export default function AddCompanyModal({ getDatas, type, subId }) {
             nameru: Yup.string().min(2).required("Name RU is required"),
             nameen: Yup.string().min(2).required("Name EN is required"),
             namekaa: Yup.string().min(2).required("Name KAA is required"),
-            url: Yup.string().min(2).required("Name KAA is required"),
+            url: Yup.string()
+            .url("Invalid URL format")
+        .min(2).required("URL is required"),
      
        category_id: Yup.string().required("Category is required"),
           }),
@@ -174,7 +176,7 @@ export default function AddCompanyModal({ getDatas, type, subId }) {
             >
                 <BootstrapDialogTitle id="customized-dialog-title"
 onClose={handleClose}>
-                    { localization.modal.addCategory.title}
+                  { localization.modal.add_title(localization.sidebar.anons_network_link)}
 
                 </BootstrapDialogTitle>
                 <form noValidate

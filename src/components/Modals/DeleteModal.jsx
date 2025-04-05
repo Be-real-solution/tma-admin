@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-max-props-per-line */
 import * as React from "react";
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";

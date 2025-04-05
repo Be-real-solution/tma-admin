@@ -69,28 +69,20 @@ BootstrapDialogTitle.propTypes = {
 };
 
 
-export default function AddOrderModal({ getDatas, company }) {
+export default function AddOrderModal({ getDatas, route, row }) {
   const user = JSON.parse(window.sessionStorage.getItem("user")) || false;
   const [isLoading, setIsLoading] = React.useState(false);
 
-  const { fetchData, data, loading, error, createData } = useFetcher();
-  const categories = data["/news/category/list/"]?.current_page;
 
-  function getCountries() {
-    fetchData(`/news/category/list/`);
-    
-  }
-
-    useEffect(() => {
-        getCountries();
-
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
   
   
   
-  const [images, setImages] = useState([]);
-  const [mainImage, setMainImage] = useState([]);
+  
+  const [images, setImages] = useState(row?.items?.map((el) => ( { file: null, url:  el?.image?.replace("http://", "https://") }))) 
+  const [mainImage, setMainImage] = useState([{
+    file: null,
+    url: row?.cover_image?.replace("http://", "https://"),
+  }]);
 
 
 
@@ -143,13 +135,6 @@ export default function AddOrderModal({ getDatas, company }) {
     setOpen(false);
   };
   const onFinish = () => {
-    formik.values.nameuz = "";
-    formik.values.category_id = [];
-    formik.values.nameen = "";
-    formik.values.nameru = "";
-    formik.values.descriptionuz = "";
-    formik.values.descriptionru = "";
-    formik.values.descriptionen = "";
 setImages([])
 image.current=""
   };
@@ -157,30 +142,12 @@ image.current=""
   
   const formik = useFormik({
     initialValues: {
-      category_id:[] ,
-      nameen: "",
-      nameuz: "",
-      nameru: "",
-      namekaa:"",
-      descriptionuz:"",
-      descriptionru:"",
-      descriptionen:"",
-      descriptionkaa:"",
-      // isTop: false, // Initialize `isTop`
-
+    
       submit: null,
     },
     validationSchema: Yup.object({
      
-      nameuz: Yup.string().min(2).required(" Name is required"),
-      nameru: Yup.string().min(2).required(" Name is required"),
-      nameen: Yup.string().min(2).required(" Name is required"),
-      namekaa: Yup.string().min(2).required(" Name is required"),
-      descriptionuz: Yup.string().min(5).required("Info is required"),
-      descriptionru: Yup.string().min(5).required("Info is required"),
-      descriptionen: Yup.string().min(5).required("Info is required"),
-      descriptionkaa: Yup.string().min(5).required("Info is required"),
-
+     
     }),
 
     onSubmit: async (values, helpers) => {
@@ -190,29 +157,15 @@ image.current=""
 
         const formData = new FormData();
         for (let index = 0; index < images?.length; index++) {
-         formData.append('images', images?.[index].file);  
+          images?.[index].file && formData.append('images', images?.[index].file);  
         }
-        mainImage?.length && formData.append('cover_image', mainImage[0]?.file);
-        formData.append("title", values.nameuz);
-        formData.append("title_uz", values.nameuz);
-        formData.append("title_ru", values.nameru);
-        formData.append("title_en", values.nameen);
-        formData.append("title_kaa", values.namekaa);
-        formData.append("content", values.descriptionuz);
-        formData.append("content_uz", values.descriptionuz);
-        formData.append("content_ru", values.descriptionru);
-        formData.append("content_en", values.descriptionen);
-        formData.append("content_kaa", values.descriptionkaa);
-        values.category_id.forEach(id => {
-          formData.append('category', id);
-        });
-        formData.append("is_top", Boolean(values.isTop));
+        mainImage[0]?.file && formData.append('cover_image', mainImage[0]?.file);
     
        
 
 
-        const response = await fetch(BaseUrl + "/news/create/", {
-          method: 'POST',
+        const response = await fetch(BaseUrl + `${route}/${row.id}/`, {
+          method: 'PUT',
 
           headers: {
             Authorization: `Bearer ${JSON.parse(window.sessionStorage.getItem("authenticated"))?.access || false}`,
@@ -227,7 +180,7 @@ image.current=""
           auth.signOut();
           router.push("/auth/login");
         }
-        if (response.status ===201) {
+        if (response.status ===200) {
           handleClose()
           getDatas()
           
@@ -235,8 +188,8 @@ image.current=""
       
         }
 
-        addToast(res.message || (response.status ===201 ? localization.alerts.added : localization.alerts.warning), {
-          appearance: response.status ===201 ? "success" : "error",
+        addToast(res.message || (response.status ===200 ? localization.alerts.added : localization.alerts.warning), {
+          appearance: response.status ===200 ? "success" : "error",
           autoDismiss: true,
         });
         setIsLoading(false)
@@ -253,25 +206,24 @@ image.current=""
 
 
   return (
-    <div>
-      <Button
-        onClick={handleClickOpen}
-        startIcon={
-          <SvgIcon fontSize="small">
-            <PlusIcon />
-          </SvgIcon>
-        }
-        variant="contained"
-      >
-        {localization.modal.add}
-      </Button>
+    <>
+           <IconButton
+              onClick={handleClickOpen}
+            >
+              <SvgIcon >
+              <svg width="24px" height="24px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M11 2H9C4 2 2 4 2 9V15C2 20 4 22 9 22H15C20 22 22 20 22 15V13" stroke="#292D32" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M16.04 3.02001L8.16 10.9C7.86 11.2 7.56 11.79 7.5 12.22L7.07 15.23C6.91 16.32 7.68 17.08 8.77 16.93L11.78 16.5C12.2 16.44 12.79 16.14 13.1 15.84L20.98 7.96001C22.34 6.60001 22.98 5.02001 20.98 3.02001C18.98 1.02001 17.4 1.66001 16.04 3.02001Z" stroke="#292D32" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M14.91 4.1499C15.58 6.5399 17.45 8.4099 19.85 9.0899" stroke="#292D32" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+              </SvgIcon>
+            </IconButton>
       <BootstrapDialog maxWidth="md" fullWidth onClose={handleClose}
         aria-labelledby="customized-dialog-title"
         open={open}>
         <BootstrapDialogTitle id="customized-dialog-title"
           onClose={handleClose}>
-      { localization.modal.add_title(localization.sidebar.news)}
-
+                  { localization.modal.edit_title(localization.sidebar.story)}
 
         </BootstrapDialogTitle>
         <form noValidate
@@ -301,7 +253,7 @@ image.current=""
   
       {mainImage?.length > 0 ? (
         <List>
-          {mainImage.map((image, index) => (
+          {mainImage?.map((image, index) => (
             <ListItem key={index}
              divider
 style={{display:"flex", alignItems:"center", justifyContent:"space-between"}}>
@@ -311,7 +263,7 @@ style={{display:"flex", alignItems:"center", justifyContent:"space-between"}}>
                 alt={`Uploaded preview ${index}`}
                 style={{ width: '100px', height: '100px', marginRight: '16px', objectFit:"contain" }}
               />
-              <Typography variant="body2">{image.file.name}</Typography></Box>
+              <Typography variant="body2">{image?.file?.name}</Typography></Box>
               <IconButton edge="end" 
               onClick={() => handleDelete2(index)}>
                 <DeleteIcon />
@@ -370,7 +322,7 @@ style={{display:"flex", alignItems:"center", justifyContent:"space-between"}}>
                 alt={`Uploaded preview ${index}`}
                 style={{ width: '100px', height: '100px', marginRight: '16px', objectFit:"contain" }}
               />
-              <Typography variant="body2">{image.file.name}</Typography></Box>
+              <Typography variant="body2">{image?.file?.name}</Typography></Box>
               <IconButton edge="end" 
               onClick={() => handleDelete(index)}>
                 <DeleteIcon />
@@ -389,157 +341,7 @@ style={{display:"flex", alignItems:"center", justifyContent:"space-between"}}>
       )}
     </Paper>
 
-    <FormControl fullWidth error={!!(formik.touched.category_id && formik.errors.category_id)}>
-  <InputLabel  variant="filled" id="demo-simple-select-autowidth-label">{localization.sidebar.category}</InputLabel>
-  <Select
-    labelId="demo-simple-select-autowidth-label"
-  label
-    multiple
-    name="category_id"
-    value={formik.values.category_id}
-    onChange={formik.handleChange}
-    onBlur={formik.handleBlur}
-    renderValue={(selected) => (
-      <Box sx={{ display: 'flex', pt:0.6, flexWrap: 'wrap', gap: 0.5 }}>
-        {selected.map((value) => (
-          <Chip sx={{height:22}} key={value} label={categories.find(category => category.id === value)?.name} />
-        ))}
-      </Box>
-    )}
-  >
-    {categories &&
-      categories.map((item) => (
-        <MenuItem key={item?.id} value={item?.id}>
-          {item?.name}
-        </MenuItem>
-      ))}
-  </Select>
-  {formik.touched.category_id && formik.errors.category_id && (
-    <FormHelperText>{formik.errors.category_id}</FormHelperText>
-  )}
-</FormControl>
 
-      
-              <TextField
-
-                error={!!(formik.touched.nameuz && formik.errors.nameuz)}
-                fullWidth
-                helperText={formik.touched.nameuz && formik.errors.nameuz}
-                label={localization.table.name  + " "+ localization.uz}
-                name="nameuz"
-                onBlur={formik.handleBlur}
-                onChange={formik.handleChange}
-                type="text"
-                value={formik.values.nameuz}
-              />
-                   <TextField
-
-error={!!(formik.touched.nameru && formik.errors.nameru)}
-fullWidth
-helperText={formik.touched.nameru && formik.errors.nameru}
-label={localization.table.name  + " "+ localization.ru}
-name="nameru"
-onBlur={formik.handleBlur}
-onChange={formik.handleChange}
-type="text"
-value={formik.values.nameru}
-/>
-<TextField
-
-error={!!(formik.touched.nameen && formik.errors.nameen)}
-fullWidth
-helperText={formik.touched.nameen && formik.errors.nameen}
-label={localization.table.name + " "+ localization.en}
-name="nameen"
-onBlur={formik.handleBlur}
-onChange={formik.handleChange}
-type="text"
-value={formik.values.nameen}
-/>
-<TextField
-
-error={!!(formik.touched.namekaa && formik.errors.namekaa)}
-fullWidth
-helperText={formik.touched.namekaa && formik.errors.namekaa}
-label={localization.table.name + " "+ localization.kaa}
-name="namekaa"
-onBlur={formik.handleBlur}
-onChange={formik.handleChange}
-type="text"
-value={formik.values.namekaa}
-/>
-<TextField
-
-error={!!(formik.touched.descriptionuz && formik.errors.descriptionuz)}
-fullWidth
-helperText={formik.touched.descriptionuz && formik.errors.descriptionuz}
-label={localization.table.info + " "+ localization.uz}
-name="descriptionuz"
-onBlur={formik.handleBlur}
-onChange={formik.handleChange}
-type="text"
-value={formik.values.descriptionuz}
-multiline
-            
-minRows={4}
-/>
-<TextField
-
-error={!!(formik.touched.descriptionru && formik.errors.descriptionru)}
-fullWidth
-helperText={formik.touched.descriptionru && formik.errors.descriptionru}
-label={localization.table.info + " "+ localization.ru}
-name="descriptionru"
-onBlur={formik.handleBlur}
-onChange={formik.handleChange}
-type="text"
-value={formik.values.descriptionru}
-multiline
-            
-minRows={4}
-/>
-<TextField
-
-error={!!(formik.touched.descriptionen && formik.errors.descriptionen)}
-fullWidth
-helperText={formik.touched.descriptionen && formik.errors.descriptionen}
-label={localization.table.info + " "+ localization.en}
-name="descriptionen"
-onBlur={formik.handleBlur}
-onChange={formik.handleChange}
-type="text"
-value={formik.values.descriptionen}
-multiline
-            
-minRows={4}
-/>
-<TextField
-
-error={!!(formik.touched.descriptionkaa && formik.errors.descriptionkaa)}
-fullWidth
-helperText={formik.touched.descriptionkaa && formik.errors.descriptionkaa}
-label={localization.table.info + " "+ localization.kaa}
-name="descriptionkaa"
-onBlur={formik.handleBlur}
-onChange={formik.handleChange}
-type="text"
-value={formik.values.descriptionkaa}
-multiline
-            
-minRows={4}
-/>
-<label style={{display:"flex", alignItems:"center"}}>
-    <Typography variant="body2" sx={{ mr: 2 }}>
-      {localization.table.isTop} {/* Label for the switch */}
-    </Typography>
-    <Switch
-      checked={formik.values.isTop}
-      onChange={formik.handleChange}
-      name="isTop"
-      color="primary"
-      title="hello"
-    />
-  </label>
          
            
                
@@ -570,6 +372,6 @@ minRows={4}
           </DialogActions>
         </form>
       </BootstrapDialog>
-    </div>
+    </>
   );
 }

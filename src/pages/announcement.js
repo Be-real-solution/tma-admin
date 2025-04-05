@@ -1,42 +1,25 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable react/jsx-max-props-per-line */
 import { useCallback, useMemo, useState, useEffect, useRef } from 'react';
 import Head from 'next/head';
 import { Box, Button, Container, Stack, SvgIcon, Typography, Breadcrumbs } from "@mui/material";
-import { routeControler } from "src/utils/role-controler";
-import { usePathname, useRouter } from "next/navigation";
 
 
 import { Layout as DashboardLayout } from 'src/layouts/dashboard/layout';
 import { CustomersTable } from 'src/sections/customer/customers-table';
 import { CustomersSearch } from 'src/sections/customer/customers-search';
-import { applyPagination } from 'src/utils/apply-pagination';
+
 import useFetcher from 'src/hooks/use-fetcher';
 import AddCompanyModal from 'src/components/Modals/AddModal/AddAnouns-modal';
 import Content from "src/Localization/Content";
 import { useSelector, useDispatch } from "react-redux";
 import { changePage } from "src/slices/paginationReduser";
-import { useSearchParams } from 'next/navigation';
 
 
 
-const useCustomers = (data, page, rowsPerPage) => {
-  return useMemo(() => {
-    return applyPagination(data, page, rowsPerPage);
-  }, [data, page, rowsPerPage]);
-};
-
-
-
-
-
-const Page = ({ subId, setSubId }) => {
+const Page = () => {
   const { data, loading, error, fetchData, createData } = useFetcher();
   const dispatch = useDispatch();
-  const params = useSearchParams();
-  const ParamId = params.get("id");
-  const routers = useRouter();
-  const router = usePathname();
-  const user = JSON.parse(window.sessionStorage.getItem("user")) || false;
-  const checkAccess = routeControler[user.role]?.edit?.find((item) => item == router);
 
   const [searchValue, setSearchValue] = useState("");
   const [page, setPage] = useState(0);
@@ -44,9 +27,7 @@ const Page = ({ subId, setSubId }) => {
   const [rowsPerPage, setRowsPerPage] = useState(pageCount || 5);
   const [isLoading, setIsLoading] = useState(true);
 
-  const initalData = data[`/announcement/list/`]?.results;
-  const [filtered, setFiltered] = useState(initalData || []);
-  const customers = useCustomers(filtered, page, rowsPerPage);
+  const initalData = data[`/announcement/list/?page=${page + 1}&page_size=${rowsPerPage}&search=${searchValue}`];
 
   const { lang } = useSelector((state) => state.localiztion);
 
@@ -76,14 +57,14 @@ useEffect(()=> {
 
 
   function getCountries() {
-      fetchData(`/announcement/list/`);
+      fetchData(`/announcement/list/?page=${page + 1}&page_size=${rowsPerPage}&search=${searchValue}`);
   }
 
   useEffect(() => {
     getCountries();
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [rowsPerPage, page, searchValue]);
 
   function onSearch(e) {
     setSearchValue(e.target.value);
@@ -91,30 +72,11 @@ useEffect(()=> {
 
 
 
-  useEffect(() => {
-    try {
-      setPage(0);
-      setFiltered(
-        initalData.filter((user) => {
-          if (searchValue == "") {
-            return user;
-          } else if (
-            user?.name?.[lang]?.toLowerCase().includes(searchValue.toString()?.toLowerCase()) ||
-            user?.description?.[lang]?.toLowerCase().includes(searchValue.toString()?.toLowerCase())) {
-            return user;
-          }
-        })
-      );
-    } catch (error) {
-      setFiltered([]);
-      console.error("Filtered Groups Error => ", error.message);
-    }
-  }, [initalData, searchValue]);
 
   return (
     <>
       <Head>
-        <title>News | TMA Admin </title>
+        <title>Anons | TMA Admin </title>
       </Head>
       <Box
         component="main"
@@ -129,7 +91,7 @@ useEffect(()=> {
               <Stack spacing={1}>
       
                 <Typography variant="h4" textTransform={"capitalize"}>
-                  {localization.sidebar.news}
+                  {localization.sidebar.anouncement}
                 </Typography>
               </Stack>
 
@@ -137,16 +99,15 @@ useEffect(()=> {
                 <AddCompanyModal getDatas={getCountries} />
               </div>
             </Stack>
-            <CustomersSearch forLabel={localization.sidebar.news} onSearch={onSearch} type={"country"} />
+            <CustomersSearch forLabel={localization.sidebar.anouncement} onSearch={onSearch} type={"country"} />
             <CustomersTable
              isLoading={isLoading}
-             
-              count={filtered?.length}
-              items={customers}
+             count={initalData?.total_elements}
+             items={initalData?.current_page}
               onPageChange={handlePageChange}
               onRowsPerPageChange={handleRowsPerPageChange}
               page={page}
-              data={data}
+        
               type="announcment"
               getDate={getCountries}
               rowsPerPage={rowsPerPage}

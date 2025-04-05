@@ -106,6 +106,7 @@ export default function AddCompanyModal({ getDatas, type, subId }) {
         formik.values.nameuz = ""
         formik.values.nameru = ""
         formik.values.nameen = ""
+        formik.values.namekaa = ""
       handleClose()
     }
 
@@ -144,6 +145,7 @@ if (type === "announcementnetwork") {
     formData.append("name_uz", values.nameuz);
     formData.append("name_ru", values.nameru);
     formData.append("name_en", values.nameen);
+    formData.append("name_kaa", values.namekaa);
     formData.append("name", values.nameuz);
   
     const response = await fetch(BaseUrl + "/announcement/social/networks/link/category/create/", {
@@ -172,7 +174,7 @@ if (type === "announcementnetwork") {
     
       }
 }else{
-    createData(type === "announcementfaq" ? `/announcement/faq/create/` : type === "faqcategory" ? `/announcement/faq/category/create/`  : `/library/category/create/`,  newData, "POST", getDatas, onFinish);
+    createData(type === "announcementfaq" ? `/announcement/faq/create/` : type === "faqcategory" ? `/announcement/faq/category/create/`  : type === "announcementnetwork" ?  `/announcement/social/networks/link/category/create/` : `/library/category/create/`,  newData, "POST", getDatas, onFinish);
                 setIsLoading(false)
 }
               
@@ -210,7 +212,7 @@ if (type === "announcementnetwork") {
             >
                 <BootstrapDialogTitle id="customized-dialog-title"
 onClose={handleClose}>
-                    { localization.modal.addCategory.title}
+                { localization.modal.add_title(type === "faqcategory" ? localization.sidebar.faq_category : type === "announcementnetwork" ?  localization.sidebar.anons_network_category : localization.sidebar.library_category)}
 
                 </BootstrapDialogTitle>
                 <form noValidate
@@ -218,7 +220,7 @@ onSubmit={formik.handleSubmit}>
                     <DialogContent dividers>
                         <Stack spacing={3}
                             width={matches ? 400 : null}>
-                        <Paper elevation={3} 
+           {type !== "faqcategory" &&            <Paper elevation={3} 
     style={{ padding: '16px', marginTop: '16px'}}>
      <TextField
                 fullWidth
@@ -266,7 +268,7 @@ style={{display:"flex", alignItems:"center", justifyContent:"space-between"}}>
           </Typography>
         </Box>
       )}
-    </Paper>
+    </Paper>}
                             <TextField
                                 error={!!(formik.touched.nameuz && formik.errors.nameuz)}
                                 fullWidth

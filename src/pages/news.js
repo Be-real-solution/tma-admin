@@ -1,3 +1,5 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable react/jsx-max-props-per-line */
 import { useCallback, useMemo, useState, useEffect, useRef } from 'react';
 import Head from 'next/head';
 import { Box, Button, Container, Stack, SvgIcon, Typography, Breadcrumbs } from "@mui/material";
@@ -44,10 +46,9 @@ const Page = ({ subId, setSubId }) => {
   const [rowsPerPage, setRowsPerPage] = useState(pageCount || 5);
   const [isLoading, setIsLoading] = useState(true);
 
-  const initalData = data[`/news/list/?is_top=false`]?.results;
-  const [filtered, setFiltered] = useState(initalData || []);
-  const customers = useCustomers(filtered, page, rowsPerPage);
+  const initalData = data[`/news/list/?page=${page + 1}&page_size=${rowsPerPage}`];
 
+  const customers = initalData?.current_page
   const { lang } = useSelector((state) => state.localiztion);
 
   const { localization } = Content[lang];
@@ -76,14 +77,14 @@ useEffect(()=> {
 
 
   function getCountries() {
-      fetchData(`/news/list/?is_top=false`);
+      fetchData(`/news/list/?page=${page + 1}&page_size=${rowsPerPage}`);
   }
 
   useEffect(() => {
     getCountries();
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [page, rowsPerPage]);
 
   function onSearch(e) {
     setSearchValue(e.target.value);
@@ -91,25 +92,6 @@ useEffect(()=> {
 
 
 
-  useEffect(() => {
-    try {
-      setPage(0);
-      setFiltered(
-        initalData.filter((user) => {
-          if (searchValue == "") {
-            return user;
-          } else if (
-            user?.name?.[lang]?.toLowerCase().includes(searchValue.toString()?.toLowerCase()) ||
-            user?.description?.[lang]?.toLowerCase().includes(searchValue.toString()?.toLowerCase())) {
-            return user;
-          }
-        })
-      );
-    } catch (error) {
-      setFiltered([]);
-      console.error("Filtered Groups Error => ", error.message);
-    }
-  }, [initalData, searchValue]);
 
   return (
     <>
@@ -141,7 +123,7 @@ useEffect(()=> {
             <CustomersTable
              isLoading={isLoading}
              
-              count={filtered?.length}
+              count={initalData?.total_elements}
               items={customers}
               onPageChange={handlePageChange}
               onRowsPerPageChange={handleRowsPerPageChange}

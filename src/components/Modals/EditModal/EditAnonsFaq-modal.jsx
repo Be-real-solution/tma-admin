@@ -77,7 +77,7 @@ export default function AddCompanyModal({ getDatas, row, route, subId }) {
     const { localization } = Content[lang];
     const matches = useMediaQuery("(min-width:500px)");
 
-  const categories = data["/announcement/faq/category/list/"]?.results;
+  const categories = data["/announcement/faq/category/list/"]?.current_page;
 
   function getCountries() {
     fetchData(`/announcement/faq/category/list/`);
@@ -176,7 +176,7 @@ export default function AddCompanyModal({ getDatas, row, route, subId }) {
             >
                 <BootstrapDialogTitle id="customized-dialog-title"
 onClose={handleClose}>
-                    { localization.modal.addCategory.title}
+                { localization.modal.edit_title(localization.sidebar.anons_faq)}
 
                 </BootstrapDialogTitle>
                 <form noValidate

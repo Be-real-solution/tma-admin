@@ -19,17 +19,14 @@ import {
   TablePagination,
   TableRow,
   Backdrop,
-  Tooltip,
   Typography,
+  Tooltip,
   CircularProgress
 
 } from "@mui/material";
 import useFetcher from "src/hooks/use-fetcher";
 import DeleteModal from "src/components/Modals/DeleteModal";
-import EditProductModal from "src/components/Modals/EditModal/EditLibrary-modal";
-import EditFaqCategoryModal from "src/components/Modals/EditModal/EditAdds-modal";
-
-
+import EditProductModal from "src/components/Modals/EditModal/EditVideo-modal";
 import { Scrollbar } from "src/components/scrollbar";
 import Content from "src/Localization/Content";
 import { useSelector } from "react-redux";
@@ -39,6 +36,7 @@ export const CustomersTable = (props) => {
     count = 0,
     type,
     items = [],
+  
     onPageChange = () => {},
     onRowsPerPageChange,
     page = 0,
@@ -50,6 +48,14 @@ export const CustomersTable = (props) => {
   const { lang } = useSelector((state) => state.localiztion);
 
   const { localization } = Content[lang];
+  const BaseUrl = process.env.NEXT_PUBLIC_ANALYTICS_BASEURL;
+
+  const router = usePathname();
+  const {addToast} = useToasts();
+  const user = JSON.parse(window.sessionStorage.getItem("user")) || false;
+
+  // const checkAccess = routeControler[user.role]?.edit?.find((item) => item == router);
+
 
 
 
@@ -61,23 +67,17 @@ export const CustomersTable = (props) => {
         <Box sx={{ minWidth: 800 }}>
           <Table>
             <TableHead>
-            {type === "advertisment" ?  <TableRow>
-                <TableCell>{localization.table.image}</TableCell>
-                <TableCell>{localization.table.link}</TableCell>
-                <TableCell>{localization.table.view_count}</TableCell>
-                <TableCell>{localization.table.created_at}</TableCell>
-                <TableCell>{localization.action}</TableCell>
-              </TableRow> : <TableRow>
+            { <TableRow>
                 <TableCell>{localization.table.main_image}</TableCell>
-                <TableCell>{localization.table.file}</TableCell>
-                <TableCell>{localization.table.title}</TableCell>
-                <TableCell>{localization.table.info }</TableCell>
-                <TableCell>{localization.table.category}</TableCell>
-                <TableCell>{localization.table.author}</TableCell>
-                <TableCell>{localization.table.cost }</TableCell>
+                <TableCell>{localization.table.video}</TableCell>
+                <TableCell>{localization.table.name}</TableCell>
+                <TableCell>{localization.table.info}</TableCell>
+                {/* <TableCell>{localization.table.name + " en"}</TableCell> */}
+                {/* <TableCell>{localization.table.name + " en"}</TableCell> */}
+                <TableCell>{localization.table.like_count}</TableCell>
                 <TableCell>{localization.table.download_count}</TableCell>
-                <TableCell>{localization.table.view_count}</TableCell>
-                <TableCell>{localization.table.status}</TableCell>
+                <TableCell>{localization.table.raiting}</TableCell>
+                <TableCell>{localization.table.cost}</TableCell>
                 <TableCell>{localization.table.created_at}</TableCell>
                 <TableCell>{localization.action}</TableCell>
               </TableRow>}
@@ -85,13 +85,13 @@ export const CustomersTable = (props) => {
             <TableBody>
          
               {isLoading ? <TableRow >
-  <TableCell colSpan={12}>  <Box height={"200px"} display={"flex"} pt={5} flexDirection={"column"} alignItems={"center"} justifyContent={"center"} >
-  <div class="lds-roller"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
-              <h1>{localization.table.loading}</h1>
-              </Box> 
-              </TableCell>
-              </TableRow> : items.length ? items.map((customer) => {
-                const createdAt = format(new Date(customer?.createdAt || customer?.created_at  || customer?.published_date || null), "dd/MM/yyyy HH:mm");
+                              <TableCell colSpan={10}>  <Box height={"200px"} display={"flex"} pt={5} flexDirection={"column"} alignItems={"center"} justifyContent={"center"} >
+                                <div class="lds-roller"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+                                <h1>{localization.table.loading}</h1>
+                              </Box>
+                              </TableCell>
+                            </TableRow> : items.length ? items.map((customer) => {
+                const createdAt = format(new Date(customer?.createdAt || customer?.published_date || null), "dd/MM/yyyy HH:mm");
                 // const customAt = format(
                 //   new Date(customer?.custom_date ? customer?.custom_date : null)?.getTime(),
                 //   "dd/MM/yyyy HH:mm"
@@ -99,43 +99,20 @@ export const CustomersTable = (props) => {
 
                 return (
                 <>
-                {type === "advertisment" ?  <TableRow hover
+                {  <TableRow hover
                    key={customer.id}>
                     <TableCell>
                       <Image
                       width={50}
                       height={50}
-                        src={customer?.image}
-                        alt={"Image"}
-                        style={{ width: 50, height: 50 }}/>
-                    </TableCell>
-
-                    <TableCell><a target="_blank" href={`${customer?.url}`}>Link</a></TableCell>
-                    <TableCell>{customer?.view_count}</TableCell>
-                    <TableCell>{ createdAt}</TableCell>
-              
-     
-            
-                 
-                  
-                     <TableCell>
-                      <EditFaqCategoryModal row={customer} route={`/advertisement/update`} getDatas={getDate} />
-                      <DeleteModal route={`/advertisement/delete`} id={customer.id} getDatas={getDate} />
-                    </TableCell> 
-                  </TableRow> :   <TableRow hover
-                   key={customer.id}>
-                    <TableCell>
-                      <Image
-                      width={50}
-                      height={50}
-                        src={customer?.image}
+                        src={customer?.cover_image}
                         alt={"Image"}
                         style={{ width: 50, height: 50 }}/>
                     </TableCell>
                     <TableCell>
-                      <a target="_blank" href={`${customer?.item}`}>File</a></TableCell>
-                    
-                    <TableCell>
+                      <video src={customer?.video_url}  controls width={100} height={50}/>
+                    </TableCell>
+                                <TableCell>
                                                 <Tooltip arrow title={customer?.[`title_${lang}`]}
                                                 >
                                                   <Typography sx={{
@@ -149,37 +126,36 @@ export const CustomersTable = (props) => {
                                                   </Typography>
                                                 </Tooltip>
                                               </TableCell>
-                                              <TableCell>
-                                                <Tooltip arrow title={customer?.[`description_${lang}`]}
-                                                >
-                                                  <Typography sx={{
-                                                    display: '-webkit-box',
-                                                    WebkitLineClamp: 4,
-                                                    WebkitBoxOrient: 'vertical',
-                                                    overflow: 'hidden',
-                                                    textOverflow: 'ellipsis',
-                                                  }}>
-                                                    {customer?.[`description_${lang}`]}
-                                                  </Typography>
-                                                </Tooltip>
-                                              </TableCell>
-                
-                    <TableCell>{customer?.category?.name}</TableCell>
-                    <TableCell>{customer?.author}</TableCell>
-                    <TableCell>{customer?.price}</TableCell>
+                    <TableCell>
+                            <Tooltip arrow title={customer?.[`description_${lang}`]}
+                            >
+                              <Typography sx={{
+                                display: '-webkit-box',
+                                WebkitLineClamp: 4,
+                                WebkitBoxOrient: 'vertical',
+                                overflow: 'hidden',
+                                textOverflow: 'ellipsis',
+                              }}>
+                                {customer?.[`description_${lang}`]}
+                              </Typography>
+                            </Tooltip>
+                          </TableCell>
+                    {/* <TableCell>{customer?.category?.name}</TableCell> */}
+                    {/* <TableCell>{customer?.author?.first_name + " "+ customer?.author?.last_name}</TableCell> */}
+                    <TableCell>{customer?.like_count}</TableCell>
                     <TableCell>{customer?.download_count}</TableCell>
-                    <TableCell>{customer?.views_count}</TableCell>
-                    <TableCell>{customer?.is_free ? "free" : "paid"}</TableCell>
+                    <TableCell>{customer?.rating}</TableCell>
+                    <TableCell>{customer?.is_free ? "free" : customer?.price}</TableCell>
                     <TableCell>{ createdAt}</TableCell>
                  <TableCell>
-                      <EditProductModal row={customer} route={`library`} getDatas={getDate} />
-                      <DeleteModal route={`/library/delete`} id={customer.id} getDatas={getDate} />
+                      <EditProductModal row={customer} route={`/video/lesson/update`} getDatas={getDate} />
+                      <DeleteModal route={`/video/lesson/delete`} id={customer.id} getDatas={getDate} />
                     </TableCell>
                   </TableRow>}
                 </>
                 );
               }) :      <TableRow >
-              <TableCell  colSpan={12}>
+              <TableCell  colSpan={10}>
 
             <Box height={"200px"} display={"flex"} pt={5} flexDirection={"column"} alignItems={"center"} justifyContent={"center"} >
             <img

@@ -106,6 +106,7 @@ spacing={2}>
               <MenuItem value="uz">UZ</MenuItem>
               <MenuItem value="ru">RU</MenuItem>
               <MenuItem value="en">EN</MenuItem>
+              <MenuItem value="kaa">KAA</MenuItem>
             </Select>
             <Avatar
               onClick={accountPopover.handleOpen}

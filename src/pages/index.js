@@ -1,3 +1,5 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable react/jsx-max-props-per-line */
 import { useCallback, useMemo, useState, useEffect, useRef } from 'react';
 import Head from 'next/head';
 import { Box, Button, Container, Stack, SvgIcon, Typography, Breadcrumbs } from "@mui/material";
@@ -8,22 +10,12 @@ import { usePathname, useRouter } from "next/navigation";
 import { Layout as DashboardLayout } from 'src/layouts/dashboard/layout';
 import { CustomersTable } from 'src/sections/customer/customers-table';
 import { CustomersSearch } from 'src/sections/customer/customers-search';
-import { applyPagination } from 'src/utils/apply-pagination';
+
 import useFetcher from 'src/hooks/use-fetcher';
-import AddCompanyModal from 'src/components/Modals/AddModal/AddNews-modal';
 import Content from "src/Localization/Content";
 import { useSelector, useDispatch } from "react-redux";
 import { changePage } from "src/slices/paginationReduser";
 import { useSearchParams } from 'next/navigation';
-
-
-
-const useCustomers = (data, page, rowsPerPage) => {
-  return useMemo(() => {
-    return applyPagination(data, page, rowsPerPage);
-  }, [data, page, rowsPerPage]);
-};
-
 
 
 
@@ -32,20 +24,17 @@ const Page = ({ subId, setSubId }) => {
   const { data, loading, error, fetchData, createData } = useFetcher();
   const dispatch = useDispatch();
   const params = useSearchParams();
-  const ParamId = params.get("id");
-  const routers = useRouter();
+
   const router = usePathname();
   const user = JSON.parse(window.sessionStorage.getItem("user")) || false;
-  const checkAccess = routeControler[user.role]?.edit?.find((item) => item == router);
 
   const [searchValue, setSearchValue] = useState("");
   const [page, setPage] = useState(0);
   const { pageCount } = useSelector((state) => state.pageCount);
   const [rowsPerPage, setRowsPerPage] = useState(pageCount || 5);
 
-  const initalData = data[`/new/carousel`];
-  const [filtered, setFiltered] = useState(initalData || []);
-  const customers = useCustomers(filtered, page, rowsPerPage);
+  const initalData = data[`/news/list/?is_top=true&page=${page + 1}&page_size=${rowsPerPage}`];
+
   const [isLoading, setIsLoading] = useState(true);
 
   const { lang } = useSelector((state) => state.localiztion);
@@ -76,14 +65,14 @@ const Page = ({ subId, setSubId }) => {
 
 
   function getCountries() {
-      fetchData(`/new/carousel`);
+      fetchData(`/news/list/?is_top=true&page=${page + 1}&page_size=${rowsPerPage}`);
   }
 
   useEffect(() => {
     getCountries();
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [searchValue, page, rowsPerPage]);
 
   function onSearch(e) {
     setSearchValue(e.target.value);
@@ -91,25 +80,6 @@ const Page = ({ subId, setSubId }) => {
 
 
 
-  useEffect(() => {
-    try {
-      setPage(0);
-      setFiltered(
-        initalData.filter((user) => {
-          if (searchValue == "") {
-            return user;
-          } else if (
-            user?.name?.toLowerCase().includes(searchValue.toString()?.toLowerCase()) ||
-            user?.description?.toLowerCase().includes(searchValue.toString()?.toLowerCase())) {
-            return user;
-          }
-        })
-      );
-    } catch (error) {
-      setFiltered([]);
-      console.error("Filtered Groups Error => ", error.message);
-    }
-  }, [initalData, searchValue]);
 
   return (
     <>
@@ -139,8 +109,8 @@ const Page = ({ subId, setSubId }) => {
             <CustomersTable
              isLoading={isLoading}
              
-              count={filtered?.length}
-              items={customers}
+              count={initalData?.total_elements}
+              items={initalData?.current_page}
               onPageChange={handlePageChange}
               onRowsPerPageChange={handleRowsPerPageChange}
               page={page}

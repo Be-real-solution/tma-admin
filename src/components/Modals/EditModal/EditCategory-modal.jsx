@@ -141,7 +141,7 @@ export default function AddCompanyModal({ getDatas, row, type, route }) {
           formData.append("name_uz", values.nameuz);
           formData.append("name_ru", values.nameru);
           formData.append("name_en", values.nameen);
-          // formData.append("name", values.nameuz);
+          formData.append("name_kaa", values.namekaa);
       
           const response = await fetch(BaseUrl + route+`/${row.id}/`, {
               method: 'PATCH',
@@ -157,9 +157,9 @@ export default function AddCompanyModal({ getDatas, row, type, route }) {
       
             if (response.status === 401) {
               auth.signOut();
-              router.push("/auth/login");
+              // router.push("/auth/login");
             }
-            if (response.status === 201) {
+            if (response.status === 200) {
               handleClose()
               getDatas()
               setOpen(false)
@@ -183,6 +183,8 @@ export default function AddCompanyModal({ getDatas, row, type, route }) {
 
   });
 
+  
+
   return (
     <>
 
@@ -202,7 +204,7 @@ export default function AddCompanyModal({ getDatas, row, type, route }) {
       >
         <BootstrapDialogTitle id="customized-dialog-title"
           onClose={handleClose}>
-                             { localization.modal.addCategory.edit}
+                                    { localization.modal.edit_title(type === "news" ? localization.sidebar.news_category : type === "announcementnetwork" ? localization.sidebar.anons_network_category : localization.sidebar.library_category)}
 
         </BootstrapDialogTitle>
         <form noValidate
@@ -210,7 +212,7 @@ export default function AddCompanyModal({ getDatas, row, type, route }) {
           <DialogContent dividers>
             <Stack spacing={3}
               width={matches ? 400 : null}>
-              <Paper elevation={3} 
+        {!(type === "news" || type === "librarycategory")  &&  <Paper elevation={3} 
     style={{ padding: '16px', marginTop: '16px'}}>
      <TextField
                 fullWidth
@@ -258,7 +260,7 @@ style={{display:"flex", alignItems:"center", justifyContent:"space-between"}}>
           </Typography>
         </Box>
       )}
-    </Paper>
+    </Paper>}
               <TextField
                 error={!!(formik.touched.nameuz && formik.errors.nameuz)}
                 fullWidth
