@@ -37,7 +37,7 @@ const Page = () => {
    const [page, setPage] = useState(0);
    const { pageCount } = useSelector((state) => state.pageCount);
    const [rowsPerPage, setRowsPerPage] = useState(pageCount || 5);
-    const initalData = data[`/news/category/list/?page=${page+1}&page_size=${rowsPerPage}`];
+    const initalData = data[`/news/category/list/?page=${page+1}&page_size=${rowsPerPage}&name=${searchValue}`];
 
 
     const [isLoading, setIsLoading] = useState(true);
@@ -50,7 +50,7 @@ const Page = () => {
     setIsLoading(loading)
   }, 500);
 // eslint-disable-next-line react-hooks/exhaustive-deps
-}, [data])
+}, [data, loading])
 
 
 
@@ -74,7 +74,7 @@ const Page = () => {
 
 
   function getCountries() {
-    fetchData(`/news/category/list/?page=${page +1}&page_size=${rowsPerPage}`);
+    fetchData(`/news/category/list/?page=${page +1}&page_size=${rowsPerPage}&name=${searchValue}`);
     
   }
 
@@ -82,7 +82,7 @@ const Page = () => {
         getCountries();
 
       // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [rowsPerPage, page]);
+    }, [rowsPerPage, page,searchValue]);
   
   function onSearch(e) {
     setSearchValue(e.target.value)

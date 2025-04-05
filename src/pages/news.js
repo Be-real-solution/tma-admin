@@ -46,7 +46,7 @@ const Page = ({ subId, setSubId }) => {
   const [rowsPerPage, setRowsPerPage] = useState(pageCount || 5);
   const [isLoading, setIsLoading] = useState(true);
 
-  const initalData = data[`/news/list/?page=${page + 1}&page_size=${rowsPerPage}`];
+  const initalData = data[`/news/list/?page=${page + 1}&page_size=${rowsPerPage}&search=${searchValue}`];
 
   const customers = initalData?.current_page
   const { lang } = useSelector((state) => state.localiztion);
@@ -77,14 +77,14 @@ useEffect(()=> {
 
 
   function getCountries() {
-      fetchData(`/news/list/?page=${page + 1}&page_size=${rowsPerPage}`);
+      fetchData(`/news/list/?page=${page + 1}&page_size=${rowsPerPage}&search=${searchValue}`);
   }
 
   useEffect(() => {
     getCountries();
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [page, rowsPerPage]);
+  }, [page, rowsPerPage,searchValue]);
 
   function onSearch(e) {
     setSearchValue(e.target.value);

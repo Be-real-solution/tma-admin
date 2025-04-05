@@ -33,7 +33,7 @@ const Page = ({ subId, setSubId }) => {
   const { pageCount } = useSelector((state) => state.pageCount);
   const [rowsPerPage, setRowsPerPage] = useState(pageCount || 5);
 
-  const initalData = data[`/news/list/?is_top=true&page=${page + 1}&page_size=${rowsPerPage}`];
+  const initalData = data[`/news/list/?is_top=true&page=${page + 1}&page_size=${rowsPerPage}&search=${searchValue}`];
 
   const [isLoading, setIsLoading] = useState(true);
 
@@ -65,7 +65,7 @@ const Page = ({ subId, setSubId }) => {
 
 
   function getCountries() {
-      fetchData(`/news/list/?is_top=true&page=${page + 1}&page_size=${rowsPerPage}`);
+      fetchData(`/news/list/?is_top=true&page=${page + 1}&page_size=${rowsPerPage}&search=${searchValue}`);
   }
 
   useEffect(() => {

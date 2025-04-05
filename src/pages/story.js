@@ -120,7 +120,7 @@ useEffect(()=> {
                 <AddCompanyModal getDatas={getCountries} />
               </div>
             </Stack>
-            <CustomersSearch forLabel={localization.sidebar.story} onSearch={onSearch} type={"country"} />
+            {/* <CustomersSearch forLabel={localization.sidebar.story} onSearch={onSearch} type={"country"} /> */}
             <CustomersTable
              isLoading={isLoading}
              

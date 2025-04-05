@@ -45,7 +45,7 @@ const Page = ({ subId, setSubId }) => {
   const [rowsPerPage, setRowsPerPage] = useState(pageCount || 5);
   const [isLoading, setIsLoading] = useState(true);
 
-  const initalData = data[`/video/lesson/list/?page=${page + 1}&page_size=${rowsPerPage}`];
+  const initalData = data[`/video/lesson/list/?page=${page + 1}&page_size=${rowsPerPage}&search=${searchValue}`];
 
   const customers = initalData?.current_page
 
@@ -78,14 +78,14 @@ useEffect(()=> {
 
 
   function getCountries() {
-      fetchData(`/video/lesson/list/?page=${page + 1}&page_size=${rowsPerPage}`);
+      fetchData(`/video/lesson/list/?page=${page + 1}&page_size=${rowsPerPage}&search=${searchValue}`);
   }
 
   useEffect(() => {
     getCountries();
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [page, rowsPerPage, searchValue]);
 
   function onSearch(e) {
     setSearchValue(e.target.value);
