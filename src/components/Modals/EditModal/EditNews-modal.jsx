@@ -70,7 +70,7 @@ BootstrapDialogTitle.propTypes = {
 export default function AddOrderModal({ getDatas, row, route }) {
   const [isLoading, setIsLoading] = React.useState(false);
   const { fetchData, data, loading, error, createData } = useFetcher();
-  const categories = data["/news/category/list/"]?.results;
+  const categories = data["/news/category/list/"]?.current_page;
 
   function getCountries() {
     fetchData(`/news/category/list/`);

@@ -77,7 +77,7 @@ export default function AddCompanyModal({ getDatas, row, route, subId }) {
     const { localization } = Content[lang];
     const matches = useMediaQuery("(min-width:500px)");
 
-  const categories = data["/announcement/faq/category/list/"]?.results;
+  const categories = data["/announcement/faq/category/list/"]?.current_page;
 
   function getCountries() {
     fetchData(`/announcement/faq/category/list/`);

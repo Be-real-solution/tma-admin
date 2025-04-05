@@ -77,7 +77,7 @@ export default function AddCompanyModal({ getDatas, type, subId }) {
     const { localization } = Content[lang];
     const matches = useMediaQuery("(min-width:500px)");
 
-  const categories = data["/announcement/social/networks/category/list/"]?.results;
+  const categories = data["/announcement/social/networks/category/list/"]?.current_page;
 
   function getCountries() {
     fetchData(`/announcement/social/networks/category/list/`);

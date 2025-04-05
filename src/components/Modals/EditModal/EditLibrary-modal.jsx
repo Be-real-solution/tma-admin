@@ -74,7 +74,7 @@ export default function AddOrderModal({ getDatas, row }) {
   const [isLoading, setIsLoading] = React.useState(false);
 
   const { fetchData, data, loading, error, createData } = useFetcher();
-  const categories = data["/library/category/list/"]?.results;
+  const categories = data["/library/category/list/"]?.current_page;
 
   function getCountries() {
     fetchData(`/library/category/list/`);

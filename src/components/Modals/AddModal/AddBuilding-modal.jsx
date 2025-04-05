@@ -218,9 +218,9 @@ export default function AddCompanyModal({ getDatas, type, subId }) {
             try {
                 setIsLoading(true)
                 const formData = new FormData();
-                for (let index = 0; index < images?.length; index++) {
-                    images?.[index].file && formData.append('images', images?.[index].file);
-                }
+                // for (let index = 0; index < images?.length; index++) {
+                //     images?.[index].file && formData.append('images', images?.[index].file);
+                // }
                 mainImage?.length && formData.append('cover_image', mainImage[0]?.file);
                 formData.append("name", values.nameuz);
                 formData.append("name_uz", values.nameuz);
@@ -259,7 +259,7 @@ export default function AddCompanyModal({ getDatas, type, subId }) {
                 formData.append("zip_code", values.zip_code);
                 formData.append("floors", values.floors);
                 formData.append("construction_date", values.construction_date);
-                formData.append("working_hours", "");
+                // formData.append("working_hours", "");
 
 
 
@@ -292,6 +292,8 @@ export default function AddCompanyModal({ getDatas, type, subId }) {
                 });
 
             } catch (err) {
+                setIsLoading(false)
+
                 helpers.setStatus({ success: false });
                 helpers.setErrors({ submit: err.message });
                 helpers.setSubmitting(false);
