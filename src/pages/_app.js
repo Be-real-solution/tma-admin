@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-max-props-per-line */
 import Head from "next/head";
 import { useState } from "react";
 import { CacheProvider } from "@emotion/react";

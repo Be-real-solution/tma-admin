@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-max-props-per-line */
 import * as React from "react";
 import { useEffect, useRef } from "react";
 import Content from "src/Localization/Content";

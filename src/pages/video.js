@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-max-props-per-line */
 import { useCallback, useMemo, useState, useEffect, useRef } from 'react';
 import Head from 'next/head';
 import { Box, Button, Container, Stack, SvgIcon, Typography, Breadcrumbs } from "@mui/material";
@@ -57,6 +58,7 @@ useEffect(()=> {
   setTimeout(() => {
     setIsLoading(loading)
   }, 500);
+// eslint-disable-next-line react-hooks/exhaustive-deps
 }, [data])
 
   const handlePageChange = useCallback((event, value) => {
