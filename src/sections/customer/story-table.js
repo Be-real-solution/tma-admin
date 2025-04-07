@@ -134,6 +134,7 @@ handleClose={handleClose} localization={localization}/>
                               style={{ borderRadius: 10 }}
                             />
                           )}
+                    
                         </TableCell>
                         <TableCell onClick={() => handleClickOpen(customer.items)}>
                           {!!customer.items && (
