@@ -135,12 +135,14 @@ export default function AddCompanyModal({ getDatas, type, row }) {
     
 
     useEffect(() => {
+        console.log(row);
+        
         if (row) {
             formik.setFieldValue("phoneNumber", row.phoneNumber)
             setImages2(row.images)
             setMainImage([{
                 file: null,
-                url: row?.mainImage,
+                url: row?.cover_image,
             }])
             setMapModal({
                 status: false, data: {
@@ -266,6 +268,7 @@ export default function AddCompanyModal({ getDatas, type, row }) {
 
 
 
+
     return (
         <div>
 
@@ -325,7 +328,7 @@ export default function AddCompanyModal({ getDatas, type, row }) {
 style={{display:"flex", alignItems:"center", justifyContent:"space-between"}}>
     <Box sx={{display:"flex", alignItems:"center"}}>          <CardMedia
                 component="img"
-                image={image?.file ?  image.url : BaseUrl + "/uploads/images/" + image.url}
+                image={image.url}
                 alt={`Uploaded preview ${index}`}
                 style={{ width: '100px', height: '100px', marginRight: '16px', objectFit:"contain" }}
               />

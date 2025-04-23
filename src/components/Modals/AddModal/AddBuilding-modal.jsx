@@ -8,7 +8,19 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@heroicons/react/24/solid/XMarkIcon';
-import { MenuItem, Select, SvgIcon, useMediaQuery, Paper, CircularProgress } from '@mui/material';
+import { MenuItem, Select, SvgIcon, useMediaQuery, Paper, CircularProgress,  
+    Grid,
+    TextField,
+    Switch,
+    FormControlLabel,
+    Typography,
+    Box,
+    Button,
+    Stack,
+    InputLabel,
+    FormControl
+
+} from '@mui/material';
 import useFetcher from 'src/hooks/use-fetcher';
 import PlusIcon from '@heroicons/react/24/solid/PlusIcon';
 import { useFormik } from 'formik';
@@ -20,16 +32,11 @@ import Content from "src/Localization/Content";
 import { useSelector } from 'react-redux';
 import { List, ListItem, CardMedia } from '@mui/material';
 import { Delete as DeleteIcon, Image as ImageIcon } from '@mui/icons-material';
+import AddIcon from '@mui/icons-material/Add';
+
 import LocationModal from 'src/components/Modals/MapModal';
 const BaseUrl = process.env.NEXT_PUBLIC_ANALYTICS_BASEURL;
 import { useState } from 'react';
-import {
-    Box,
-    Button,
-    Stack,
-    TextField,
-    Typography
-} from '@mui/material';
 
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
@@ -71,6 +78,17 @@ BootstrapDialogTitle.propTypes = {
     onClose: PropTypes.func.isRequired,
 };
 
+const defaultDay = {
+    day_of_week: '',
+    start_time: '08:00',
+    end_time: '17:00',
+    is_open: true
+  };
+
+  const dayOptions = [
+    'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'
+  ];
+
 export default function AddCompanyModal({ getDatas, type, subId }) {
     const router = useRouter();
     const auth = useAuth();
@@ -81,6 +99,7 @@ export default function AddCompanyModal({ getDatas, type, subId }) {
     const { addToast } = useToasts()
     const [images, setImages] = useState([]);
     const [mainImage, setMainImage] = useState([]);
+    const [workingHours, setWorkingHours] = useState([ { ...defaultDay } ]);
 
     const [mapModal, setMapModal] = React.useState({
         status: false, data: {
@@ -261,7 +280,12 @@ export default function AddCompanyModal({ getDatas, type, subId }) {
                 formData.append("construction_date", values.construction_date);
                 // formData.append("working_hours", "");
 
-
+                workingHours.forEach((day, index) => {
+                    formData.append(`working_hours[${index}][day_of_week]`, day.day_of_week);
+                    formData.append(`working_hours[${index}][start_time]`, day.start_time);
+                    formData.append(`working_hours[${index}][end_time]`, day.end_time);
+                    formData.append(`working_hours[${index}][is_open]`, day.is_open ? 'True' : 'False');
+                  });
 
                 const response = await fetch(BaseUrl + "/building/create/", {
                     method: 'POST',
@@ -305,6 +329,24 @@ export default function AddCompanyModal({ getDatas, type, subId }) {
 
 
 
+    const handleChange = (index, field, value) => {
+        const updated = [...workingHours];
+        updated[index][field] = value;
+        setWorkingHours(updated);
+      };
+    
+      const handleAddDay = () => {
+        if (workingHours?.length < 7) {
+            setWorkingHours([...workingHours, { ...defaultDay }]);
+        }
+      };
+    
+      const handleRemoveDay = (index) => {
+        const updated = workingHours.filter((_, i) => i !== index);
+        setWorkingHours(updated);
+      };
+
+      const exists =  (day) => workingHours.some(day => day.day_of_week === day);
 
     return (
         <div>
@@ -767,38 +809,85 @@ minRows={4}
                                 /> */}
                             </Box>
 
-                            <Box display={"flex"} gap={1}>
-                                <TextField
-                                    error={!!(formik.touched.open_hour && formik.errors.open_hour)}
-                                    fullWidth
-                                    helperText={formik.touched.open_hour && formik.errors.open_hour}
-                                    autoComplete="off"
-                                    label={localization.table.open_hour}
-                                    name="open_hour"
-                                    onBlur={formik.handleBlur}
-                                    onChange={formik.handleChange}
-                                    type="time"
-                                    InputLabelProps={{
-                                        shrink: true,
-                                    }}
-                                    value={formik.values.open_hour}
-                                />
-                                <TextField
-                                    error={!!(formik.touched.close_hour && formik.errors.close_hour)}
-                                    fullWidth
-                                    helperText={formik.touched.close_hour && formik.errors.close_hour}
-                                    autoComplete="off"
-                                    label={localization.table.close_hour}
-                                    name="close_hour"
-                                    onBlur={formik.handleBlur}
-                                    onChange={formik.handleChange}
-                                    type="time"
-                                    value={formik.values.close_hour}
-                                    InputLabelProps={{
-                                        shrink: true,
-                                    }}
-                                />
-                            </Box>
+                            {workingHours.map((day, index) => (
+        <Grid container spacing={2} key={index} alignItems="center" sx={{ mb: 2 }}>
+          <Grid item xs={12} sm={2}>
+            <FormControl fullWidth>
+              <InputLabel id={`select-day-${index}`}>Day</InputLabel>
+              <Select
+    labelId={`select-day-${index}`}
+    value={day.day_of_week}
+    label="Day"
+    onChange={(e) => handleChange(index, 'day_of_week', e.target.value)}
+  >
+    {dayOptions.map((option) => {
+      const isAlreadySelected = workingHours.some(
+        (d, i) => d.day_of_week === option && i !== index
+      );
+      return (
+        <MenuItem
+          key={option}
+          value={option}
+          disabled={isAlreadySelected}
+        >
+          {option}
+        </MenuItem>
+      );
+    })}
+  </Select>
+            </FormControl>
+          </Grid>
+
+          <Grid item xs={12} sm={2}>
+            <TextField
+              type="time"
+              label={localization.table.open_hour}
+              value={day.start_time}
+              onChange={(e) => handleChange(index, 'start_time', e.target.value)}
+              fullWidth
+              disabled={!day.is_open}
+            />
+          </Grid>
+
+          <Grid item xs={12} sm={2}>
+            <TextField
+              type="time"
+              label={localization.table.close_hour}
+              value={day.end_time}
+              onChange={(e) => handleChange(index, 'end_time', e.target.value)}
+              fullWidth
+              disabled={!day.is_open}
+            />
+          </Grid>
+
+          <Grid item xs={12} sm={3}>
+            <FormControlLabel
+              control={
+                <Switch
+                  checked={day.is_open}
+                  onChange={(e) => handleChange(index, 'is_open', e.target.checked)}
+                />
+              }
+              label={day.is_open ? 'Open' : 'Closed'}
+            />
+          </Grid>
+
+          <Grid item xs={12} sm={1}>
+            <IconButton onClick={() => handleRemoveDay(index)} color="error">
+              <DeleteIcon />
+            </IconButton>
+          </Grid>
+        </Grid>
+      ))}
+              <Button
+              disabled={workingHours?.length === 7}
+          variant="outlined"
+          startIcon={<AddIcon />}
+          onClick={handleAddDay}
+        >
+          Add Day
+        </Button>
+                          
 
                         </Stack>
 

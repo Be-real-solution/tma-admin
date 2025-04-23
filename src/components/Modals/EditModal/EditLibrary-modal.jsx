@@ -81,6 +81,9 @@ export default function AddOrderModal({ getDatas, row }) {
 
   }
 
+console.log(row);
+
+
   useEffect(() => {
     getCountries();
 
@@ -355,7 +358,7 @@ export default function AddOrderModal({ getDatas, row }) {
                         style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
                         <Box sx={{ display: "flex", alignItems: "center" }}>          <CardMedia
                           component="img"
-                          image={image.url}
+                          image={'https://w7.pngwing.com/pngs/76/925/png-transparent-pdf-icon-thumbnail.png'}
                           alt={`Uploaded preview ${index}`}
                           style={{ width: '100px', height: '100px', marginRight: '16px', objectFit: "contain" }}
                         />
