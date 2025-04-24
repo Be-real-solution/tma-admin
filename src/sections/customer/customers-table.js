@@ -393,7 +393,7 @@ export const CustomersTable = (props) => {
                         </TableCell>
                       </TableRow>) : type === "buildings" ? (
                         <TableRow hover key={customer.id}>
-                          <TableCell onClick={() => {customer?.cover_image && handleClickOpen([customer?.cover_image, ...customer.images])}}>
+                          <TableCell onClick={() => {customer?.cover_image && handleClickOpen([customer?.cover_image?.replace('http://', 'https://'), ...customer.images])}}>
                             {!!customer.cover_image && (
                               <Image
                                 priority
@@ -568,7 +568,7 @@ function AlertDialogSlide({ handleClose, open, localization }) {
             >
               {open.images.map((image, index) => (
                 <SwiperSlide key={image?.id} >
-                 {image?.image && <Image
+                 <Image
                     placeholder="blur" // You can use "empty" or a custom element as well
                     blurDataURL="/assets/errors/error-404.png"
                     width={500}
@@ -576,7 +576,7 @@ function AlertDialogSlide({ handleClose, open, localization }) {
                     src={`${image.image ? image.image.replace('http://', 'https://') : image.replace('http://', 'https://')}`}
                     alt={`Image ${index + 1}`}
                     style={{ width: "100%", height: "350px" }} // Adjust size as needed
-                  />}
+                  />
                 </SwiperSlide>
               ))}
             </Swiper>
