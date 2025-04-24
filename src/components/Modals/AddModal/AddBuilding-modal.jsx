@@ -237,9 +237,12 @@ export default function AddCompanyModal({ getDatas, type, subId }) {
             try {
                 setIsLoading(true)
                 const formData = new FormData();
-                // for (let index = 0; index < images?.length; index++) {
-                //     images?.[index].file && formData.append('images', images?.[index].file);
-                // }
+                for (let index = 0; index < images?.length; index++) {
+                    if (images?.[index].file) {
+                        formData.append(`images[${index}][image]`, images[index].file);
+                        formData.append(`images[${index}][caption]`, `caption ${index}`);
+                      }
+                }
                 mainImage?.length && formData.append('cover_image', mainImage[0]?.file);
                 formData.append("name", values.nameuz);
                 formData.append("name_uz", values.nameuz);
