@@ -16,11 +16,13 @@ import {
   Backdrop,
   Typography,
   CircularProgress,
-  Tooltip
+  Tooltip,
+  Divider,
+  Popover
 
 } from "@mui/material";
 import useFetcher from "src/hooks/use-fetcher";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import DeleteModal from "src/components/Modals/DeleteModal";
 import EditCompanyModal from "src/components/Modals/EditModal/EditBuilding-modal";
 import EditCarModal from "src/components/Modals/EditModal/EditAnouns-modal";
@@ -69,9 +71,12 @@ export const CustomersTable = (props) => {
   const { localization } = Content[lang];
 
   const [open, setOpen] = React.useState(false);
+  const [workDays, setWorkDays] = React.useState(null);
 
   const handleClickOpen = (images) => {
     setOpen({ status: true, images });
+  
+
   };
 
   const handleClose = () => {
@@ -79,9 +84,59 @@ export const CustomersTable = (props) => {
   };
 
 
+  const [anchorEl, setAnchorEl] = useState(null);
+
+  const handleClick2 = (event, days) => {
+    setAnchorEl(event.currentTarget);
+    setWorkDays(days)
+  };
+
+  const handleClose2 = () => {
+    setAnchorEl(null);
+    setWorkDays(null)
+
+  };
+
+  const openss = Boolean(anchorEl);
+  const idss = open ? 'working-hours-popover' : undefined;
+
+  console.log(workDays);
+  
 
   return (
     <Card>
+            <Popover
+        id={idss}
+        open={openss}
+        anchorEl={anchorEl}
+        onClose={handleClose2}
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'left',
+        }}
+      >
+        <Box sx={{ p: 2, minWidth: 300 }}>
+          <Typography variant="h6" gutterBottom>
+            Working Hours
+          </Typography>
+
+          {workDays && workDays?.map((day) => (
+            <Box key={day.id} sx={{ mb: 1 }}>
+              <Typography variant="subtitle1" fontWeight="bold">
+                {day.day_of_week}
+              </Typography>
+            {!!day.is_open &&  <Typography variant="body2">
+                {`Start: ${day.start_time} | End: ${day.end_time}`}
+              </Typography>}
+              <Typography variant="body2" color={day.is_open ? 'green' : 'red'}>
+                Status: {day.is_open ? 'Open' : 'Closed'}
+              </Typography>
+              <Divider sx={{ my: 1 }} />
+            </Box>
+          ))}
+        </Box>
+      </Popover>
+
       <AlertDialogSlide open={open}
         handleClose={handleClose} localization={localization} />
 
@@ -338,13 +393,13 @@ export const CustomersTable = (props) => {
                         </TableCell>
                       </TableRow>) : type === "buildings" ? (
                         <TableRow hover key={customer.id}>
-                          <TableCell onClick={() => handleClickOpen([customer?.cover_image?.toString(), ...customer.images])}>
+                          <TableCell onClick={() => {customer?.cover_image && handleClickOpen([customer?.cover_image?.replace('http://', 'https://'), ...customer.images])}}>
                             {!!customer.cover_image && (
                               <Image
                                 priority
                                 placeholder="blur" // You can use "empty" or a custom element as well
                                 blurDataURL="/assets/errors/error-404.png"
-                                src={customer.cover_image?.toString()}
+                                src={customer.cover_image?.replace('http://', 'https://')}
                                 alt="image"
                                 width={50}
                                 height={50}
@@ -395,7 +450,15 @@ export const CustomersTable = (props) => {
                           <TableCell>
                             <a href={`tel:${customer?.contacts}`}>{customer?.contacts}</a>
                           </TableCell>
-                          <TableCell>{`${customer?.workStartTime ? `${customer?.workStartTime} - ` : ""} ${customer?.workEndTime ? `${customer?.workEndTime} ` : ""}`}</TableCell>
+                          <TableCell colSpan={1}>
+                          {!!customer?.working_hours?.length && <Button variant="contained" onClick={(event) => {
+                            console.log(customer);
+                            
+                            handleClick2(event, customer?.working_hours)}} aria-describedby={idss} >
+        View
+      </Button>}
+         
+            </TableCell>
                           <TableCell sx={{ display: "flex", flexDirection: "row", alignItems: "flex-start", py: '25px' }} onClick={(e) => e.stopPropagation()}>
                             <EditCompanyModal row={customer} route={`building`} getDatas={getDate} />
                             <DeleteModal route={`/building/delete`} id={customer.id} getDatas={getDate} />
@@ -504,13 +567,13 @@ function AlertDialogSlide({ handleClose, open, localization }) {
               slidesPerView={1}
             >
               {open.images.map((image, index) => (
-                <SwiperSlide key={image.id} >
-                  <Image
+                <SwiperSlide key={image?.id} >
+                 <Image
                     placeholder="blur" // You can use "empty" or a custom element as well
                     blurDataURL="/assets/errors/error-404.png"
                     width={500}
                     height={400}
-                    src={`${image.image ? image.image : image}`}
+                    src={`${image.image ? image.image.replace('http://', 'https://') : image.replace('http://', 'https://')}`}
                     alt={`Image ${index + 1}`}
                     style={{ width: "100%", height: "350px" }} // Adjust size as needed
                   />
