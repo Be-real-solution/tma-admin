@@ -118,7 +118,7 @@ export const CustomersTable = (props) => {
                  </TableRow>) : ( <TableRow hover
                    key={customer.id}>
                     {type === "networkcategory" && <TableCell>
-                    {customer?.icon &&  <Image
+                    {customer?.icon &&  <img
                         src={customer?.icon}
                         alt={customer?.name_uz}
                         sx={{ width: 40, height: 40, borderRadius: 1 }}

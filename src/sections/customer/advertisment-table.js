@@ -102,7 +102,7 @@ export const CustomersTable = (props) => {
                 {type === "advertisment" ?  <TableRow hover
                    key={customer.id}>
                     <TableCell>
-                      <Image
+                      <img
                       width={50}
                       height={50}
                         src={customer?.image}
@@ -125,7 +125,7 @@ export const CustomersTable = (props) => {
                   </TableRow> :   <TableRow hover
                    key={customer.id}>
                     <TableCell>
-                      <Image
+                      <img
                       width={50}
                       height={50}
                         src={customer?.image}
