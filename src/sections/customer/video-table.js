@@ -102,7 +102,7 @@ export const CustomersTable = (props) => {
                 {  <TableRow hover
                    key={customer.id}>
                     <TableCell>
-                      <Image
+                      <img
                       width={50}
                       height={50}
                         src={customer?.cover_image}

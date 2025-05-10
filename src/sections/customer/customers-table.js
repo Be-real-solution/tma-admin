@@ -211,7 +211,7 @@ export const CustomersTable = (props) => {
                           <TableCell onClick={() => handleClickOpen([customer?.cover_image, ...customer?.images])}>
                             {!!customer?.cover_image && (
 
-                              <Image
+                              <img
                                 priority
                                 placeholder="blur" // You can use "empty" or a custom element as well
                                 blurDataURL="/assets/errors/error-404.png"
@@ -268,20 +268,20 @@ export const CustomersTable = (props) => {
                         <TableCell onClick={() => handleClickOpen([customer?.cover_image, ...customer.images])}>
                           {customer.cover_image ? (
 
-                            <Image
+                            <img
                               priority
-                              placeholder="blur" // You can use "empty" or a custom element as well
-                              blurDataURL="/assets/errors/error-404.png"
+                              // placeholder="blur" // You can use "empty" or a custom element as well
+                              // blurDataURL="/assets/errors/error-404.png"
                               src={customer.cover_image}
                               alt="image"
                               width={50}
                               height={50}
                               style={{ borderRadius: 10 }}
                             />
-                          ) : (<Image
+                          ) : (<img
                             priority
-                            placeholder="blur" // You can use "empty" or a custom element as well
-                            blurDataURL="/assets/errors/error-404.png"
+                            // placeholder="blur" // You can use "empty" or a custom element as well
+                            // blurDataURL="/assets/errors/error-404.png"
                             src={"/assets/errors/error-404.png"}
                             alt="image"
                             width={50}
@@ -331,10 +331,10 @@ export const CustomersTable = (props) => {
                         <TableCell onClick={() => handleClickOpen([customer?.cover_image, ...customer.images])}>
                           {!!customer.images && (
 
-                            <Image
+                            <img
                               priority
-                              placeholder="blur" // You can use "empty" or a custom element as well
-                              blurDataURL="/assets/errors/error-404.png"
+                              // placeholder="blur" // You can use "empty" or a custom element as well
+                              // blurDataURL="/assets/errors/error-404.png"
                               src={customer.cover_image}
                               alt="image"
                               width={50}
@@ -395,7 +395,7 @@ export const CustomersTable = (props) => {
                         <TableRow hover key={customer.id}>
                           <TableCell onClick={() => {customer?.cover_image && handleClickOpen([customer?.cover_image?.replace('http://', 'https://'), ...customer.images])}}>
                             {!!customer.cover_image && (
-                              <Image
+                              <img
                                 priority
                                 placeholder="blur" // You can use "empty" or a custom element as well
                                 blurDataURL="/assets/errors/error-404.png"
@@ -467,7 +467,7 @@ export const CustomersTable = (props) => {
                       ) : (
                         <TableRow hover key={customer.id}>
                           <TableCell>
-                            <Image
+                            <img
                               priority
                               src={BaseUrl + "/file/banners/" + customer?.image}
                               alt="image"
@@ -568,7 +568,7 @@ function AlertDialogSlide({ handleClose, open, localization }) {
             >
               {open.images.map((image, index) => (
                 <SwiperSlide key={image?.id} >
-                 <Image
+                 <img
                     placeholder="blur" // You can use "empty" or a custom element as well
                     blurDataURL="/assets/errors/error-404.png"
                     width={500}

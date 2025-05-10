@@ -123,7 +123,7 @@ handleClose={handleClose} localization={localization}/>
                         <TableCell onClick={() => handleClickOpen([customer?.cover_image])}>
                           {!!customer.cover_image && (
                             
-                            <Image
+                            <img
                               priority
                                placeholder="blur" // You can use "empty" or a custom element as well
                             blurDataURL="/assets/errors/error-404.png"
@@ -139,7 +139,7 @@ handleClose={handleClose} localization={localization}/>
                         <TableCell onClick={() => handleClickOpen(customer.items)}>
                           {!!customer.items && (
                             
-                            <Image
+                            <img
                               priority
                                placeholder="blur" // You can use "empty" or a custom element as well
                             blurDataURL="/assets/errors/error-404.png"
@@ -162,7 +162,7 @@ handleClose={handleClose} localization={localization}/>
                     : (
                       <TableRow hover key={customer.id}>
                         <TableCell>
-                          <Image
+                          <img
                             priority
                             src={BaseUrl + "/file/banners/" + customer?.image}
                             alt="image"
@@ -262,7 +262,7 @@ CustomersTable.propTypes = {
             >
               {open.images.map((image, index) => (
                 <SwiperSlide key={image.id} >
-                  <Image
+                  <img
                        placeholder="blur" // You can use "empty" or a custom element as well
                             blurDataURL="/assets/errors/error-404.png"
                     width={500}
