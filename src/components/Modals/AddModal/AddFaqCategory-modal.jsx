@@ -15,7 +15,7 @@ import * as Yup from 'yup';
 import Content from "src/Localization/Content";
 import { useSelector } from 'react-redux';
 import { Delete as DeleteIcon, Image as ImageIcon } from '@mui/icons-material';
-import {ListItem, List, CardMedia, Paper} from '@mui/material';
+import {ListItem, List, CardMedia, Paper, InputLabel, FormControl, Select, MenuItem, FormHelperText} from '@mui/material';
 import { useState } from 'react';
 const BaseUrl = process.env.NEXT_PUBLIC_ANALYTICS_BASEURL;
 
@@ -68,6 +68,11 @@ BootstrapDialogTitle.propTypes = {
     onClose: PropTypes.func.isRequired,
 };
 
+const categoriesList = [
+    { value: 'fastlink', name: 'tezkor havolalar' },
+    { value: 'social', name: 'ijtimoiy tarmoqlar' },
+];
+
 export default function AddCompanyModal({ getDatas, type, subId }) {
     const { loading, error, createData } = useFetcher();
     const [open, setOpen] = React.useState(false);
@@ -107,6 +112,7 @@ export default function AddCompanyModal({ getDatas, type, subId }) {
         formik.values.nameru = ""
         formik.values.nameen = ""
         formik.values.namekaa = ""
+        formik.values.type = ""
       handleClose()
     }
 
@@ -116,7 +122,7 @@ export default function AddCompanyModal({ getDatas, type, subId }) {
             nameru: "",
             nameen: "",
             namekaa: "",
-           
+           type: "",
             submit: null,
         },
         validationSchema: Yup.object({
@@ -124,6 +130,7 @@ export default function AddCompanyModal({ getDatas, type, subId }) {
             nameru: Yup.string().min(2).required("Name RU is required"),
             nameen: Yup.string().min(2).required("Name EN is required"),
             namekaa: Yup.string().min(2).required("Name KAA is required"),
+            type: Yup.string().required("Category is required"),
         }),
 
 
@@ -136,6 +143,7 @@ export default function AddCompanyModal({ getDatas, type, subId }) {
                     name_ru: values.nameru,
                     name_en: values.nameen,
 name_kaa: values.namekaa,
+                    // type: values.type,
                     
                 };
 if (type === "announcementnetwork") {
@@ -147,6 +155,7 @@ if (type === "announcementnetwork") {
     formData.append("name_en", values.nameen);
     formData.append("name_kaa", values.namekaa);
     formData.append("name", values.nameuz);
+    formData.append("type", values.type );
   
     const response = await fetch(BaseUrl + "/announcement/social/networks/link/category/create/", {
         method: 'POST',
@@ -269,6 +278,31 @@ style={{display:"flex", alignItems:"center", justifyContent:"space-between"}}>
         </Box>
       )}
     </Paper>}
+     {type === "announcementnetwork" &&            <FormControl fullWidth 
+                 error={!!(formik.touched.type && formik.errors.type)}>
+  <InputLabel tLabel 
+   variant="filled"
+    id="demo-simple-select-autowidth-label">{localization.table.type}</InputLabel>
+  <Select
+    labelId="demo-simple-select-autowidth-label"
+  label
+    name="type"
+    value={formik.values.type}
+    onChange={formik.handleChange}
+    onBlur={formik.handleBlur}
+  >
+    {categoriesList &&
+      categoriesList.map((item) => (
+        <MenuItem key={item?.value}
+         value={item?.value}>
+          {item?.name}
+        </MenuItem>
+      ))}
+  </Select>
+  {formik.touched.type && formik.errors.type && (
+    <FormHelperText>{formik.errors.type}</FormHelperText>
+  )}
+</FormControl>}
                             <TextField
                                 error={!!(formik.touched.nameuz && formik.errors.nameuz)}
                                 fullWidth

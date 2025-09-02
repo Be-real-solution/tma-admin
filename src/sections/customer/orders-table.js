@@ -61,6 +61,9 @@ export const CustomersTable = (props) => {
 
 
 
+const categoriesList = {
+    fastlink: 'tezkor havolalar' ,
+    social: 'ijtimoiy tarmoqlar' }
 
   
 
@@ -80,6 +83,7 @@ export const CustomersTable = (props) => {
                 <TableCell>{localization.action}</TableCell>
               </TableRow> : <TableRow>
               {type === "networkcategory" && <TableCell>{localization.table.image}</TableCell> }
+              {type === "networkcategory" && <TableCell>{localization.table.type}</TableCell> }
                 <TableCell>{localization.table.name + " uz"}</TableCell>
                 <TableCell>{localization.table.name + " ru"}</TableCell>
                 <TableCell>{localization.table.name + " en"}</TableCell>
@@ -126,6 +130,7 @@ export const CustomersTable = (props) => {
                         height={40}
                       />}
                     </TableCell> }
+                     {type === "networkcategory" && <TableCell>{categoriesList[customer?.type] || "-"}</TableCell>}
                     <TableCell>{customer?.name_uz}</TableCell>
                     <TableCell>{customer?.name_ru}</TableCell>
                     <TableCell>{customer?.name_en}</TableCell>

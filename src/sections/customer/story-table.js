@@ -115,7 +115,7 @@ handleClose={handleClose} localization={localization}/>
               </TableRow>
               : items.length ? items.map((customer) => {
                 const createdAt = (time) => format(new Date(time || customer?.created_at || customer?.published_date || null), "dd/MM/yyyy HH:mm");
-
+  const isVideo = customer?.items[0]?.image?.includes(".mp4") || customer?.items[0]?.image?.includes(".MP4");
                 return (
                   <>
                     { type === "story"  ? (
@@ -138,17 +138,28 @@ handleClose={handleClose} localization={localization}/>
                         </TableCell>
                         <TableCell onClick={() => handleClickOpen(customer.items)}>
                           {!!customer.items && (
-                            
-                            <img
+                            <>
+                         {isVideo   ?   <video controls width="50" height="50" style={{ borderRadius: 10 }}>
+
+  <source width={50} height={50} src={ customer.items[0]?.image} type="video/mp4" />
+
+
+  <a href={ customer.items[0]?.image}>MP4</a>
+
+</video> : <img
                               priority
-                               placeholder="blur" // You can use "empty" or a custom element as well
-                            blurDataURL="/assets/errors/error-404.png"
+                              placeholder="blur" // You can use "empty" or a custom element as well
+                              blurDataURL="/assets/errors/error-404.png"
                               src={ customer.items[0]?.image}
                               alt="image"
                               width={50}
                               height={50}
                               style={{ borderRadius: 10 }}
-                            />
+                              />
+                   
+                   }
+
+                              </>
                           )}
                         </TableCell>
               
@@ -260,9 +271,20 @@ CustomersTable.propTypes = {
               spaceBetween={30}
               slidesPerView={1}
             >
-              {open.images.map((image, index) => (
+              {open.images.map((image, index) => {
+                const path = image.image ? image?.image : image;
+  const isVideo = path?.includes(".mp4") ||path?.includes(".MP4");
+
+                return(
                 <SwiperSlide key={image.id} >
-                  <img
+               {isVideo ? <video controls width="500" height="400" style={{ borderRadius: 10 }}>
+
+  <source width={500} height={400} src={path} type="video/mp4" />
+
+
+  <a href={path}>MP4</a>
+
+</video> : <img
                        placeholder="blur" // You can use "empty" or a custom element as well
                             blurDataURL="/assets/errors/error-404.png"
                     width={500}
@@ -270,9 +292,10 @@ CustomersTable.propTypes = {
                     src={`${image.image ? image?.image : image}`}
                     alt={`Image ${index + 1}`}
                     style={{ width: "100%", height: "350px" }} // Adjust size as needed
-                  />
+                  /> }
                 </SwiperSlide>
-              ))}
+              )
+              })}
             </Swiper>
           )}
         </DialogContent>

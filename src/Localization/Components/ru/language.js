@@ -153,7 +153,7 @@ const header = {
     id: "ID",
     inn: "ИНН",
     total_amount: "общая сумма",
-    type: "тип авто",
+    type: "тип",
     car_name: "название авто",
     method: "метод",
     uses_date: "дата использования",
