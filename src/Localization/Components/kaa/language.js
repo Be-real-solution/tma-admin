@@ -153,7 +153,7 @@ const header = {
     id: "ID",
     inn: "INN",
     total_amount: "jumlı somma",
-    type: "avto türı",
+    type: "türı",
     car_name: "avto atı",
     method: "usıl",
     uses_date: "qollanıw kúnı",

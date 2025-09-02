@@ -11,7 +11,11 @@ import CloseIcon from '@heroicons/react/24/solid/XMarkIcon';
 import { SvgIcon, useMediaQuery, CircularProgress } from '@mui/material';
 import useFetcher from 'src/hooks/use-fetcher';
 import PlusIcon from '@heroicons/react/24/solid/PencilSquareIcon';
-
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormHelperText from '@mui/material/FormHelperText';
+import FormControl from '@mui/material/FormControl';
+import Select from '@mui/material/Select';
 import { Delete as DeleteIcon, Image as ImageIcon } from '@mui/icons-material';
 import {ListItem, List, CardMedia, Paper} from '@mui/material';
 import { useState } from 'react';
@@ -69,6 +73,11 @@ BootstrapDialogTitle.propTypes = {
   onClose: PropTypes.func.isRequired,
 };
 
+const categoriesList = [
+    { value: 'fastlink', name: 'tezkor havolalar' },
+    { value: 'social', name: 'ijtimoiy tarmoqlar' },
+];
+
 export default function AddCompanyModal({ getDatas, row, type, route }) {
   const { loading, error, createData } = useFetcher();
   const [open, setOpen] = React.useState(false);
@@ -109,10 +118,12 @@ export default function AddCompanyModal({ getDatas, row, type, route }) {
       nameru: row.name_ru,
       nameen: row.name_en,
       namekaa: row.name_kaa,
+      type: row.type || "",
     
       submit: null,
     },
     validationSchema: Yup.object({
+      // type: Yup.string().required("Type is required"),
       nameuz: Yup.string().min(2).required("Name UZ is required"),
       nameru: Yup.string().min(2).required("Name RU is required"),
       nameen: Yup.string().min(2).required("Name EN is required"),
@@ -129,7 +140,8 @@ export default function AddCompanyModal({ getDatas, row, type, route }) {
         name_uz: values.nameuz,
         name_ru: values.nameru,
         name_kaa: values.namekaa,
-        name: values.nameuz
+        name: values.nameuz,
+
         
          
 
@@ -142,6 +154,7 @@ export default function AddCompanyModal({ getDatas, row, type, route }) {
           formData.append("name_ru", values.nameru);
           formData.append("name_en", values.nameen);
           formData.append("name_kaa", values.namekaa);
+          formData.append("type", values.type );
       
           const response = await fetch(BaseUrl + route+`/${row.id}/`, {
               method: 'PATCH',
@@ -261,6 +274,31 @@ style={{display:"flex", alignItems:"center", justifyContent:"space-between"}}>
         </Box>
       )}
     </Paper>}
+               {type === "announcementnetwork" &&            <FormControl fullWidth 
+                 error={!!(formik.touched.type && formik.errors.type)}>
+  <InputLabel tLabel 
+   variant="filled"
+    id="demo-simple-select-autowidth-label">{localization.table.type}</InputLabel>
+  <Select
+    labelId="demo-simple-select-autowidth-label"
+  label
+    name="type"
+    value={formik.values.type}
+    onChange={formik.handleChange}
+    onBlur={formik.handleBlur}
+  >
+    {categoriesList &&
+      categoriesList.map((item) => (
+        <MenuItem key={item?.value}
+         value={item?.value}>
+          {item?.name}
+        </MenuItem>
+      ))}
+  </Select>
+  {formik.touched.type && formik.errors.type && (
+    <FormHelperText>{formik.errors.type}</FormHelperText>
+  )}
+</FormControl>}
               <TextField
                 error={!!(formik.touched.nameuz && formik.errors.nameuz)}
                 fullWidth
