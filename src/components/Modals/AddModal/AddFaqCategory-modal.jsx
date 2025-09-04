@@ -130,7 +130,7 @@ export default function AddCompanyModal({ getDatas, type, subId }) {
             nameru: Yup.string().min(2).required("Name RU is required"),
             nameen: Yup.string().min(2).required("Name EN is required"),
             namekaa: Yup.string().min(2).required("Name KAA is required"),
-            type: Yup.string().required("Category is required"),
+            type: type === "announcementnetwork" && Yup.string().required("Category is required"),
         }),
 
 
