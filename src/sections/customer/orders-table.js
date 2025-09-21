@@ -100,8 +100,7 @@ const categoriesList = {
               </Box> 
               </TableCell>
               </TableRow> : items.length ? items.map((customer) => {
-                const createdAt = format(new Date(customer?.createdAt || null), "dd/MM/yyyy");
-             
+            
 
                 return (
                   <>

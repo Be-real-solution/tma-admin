@@ -178,7 +178,6 @@ export default function AddCompanyModal({ getDatas, row, type, route }) {
               setOpen(false)
               setIsLoading(false)
               
-              onFinish()
           
             }
       }else{

@@ -1,31 +1,25 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react/jsx-max-props-per-line */
-import { useCallback, useMemo, useState, useEffect, useRef } from 'react';
+import { useCallback, useState, useEffect } from 'react';
 import Head from 'next/head';
-import { Box, Button, Container, Stack, SvgIcon, Typography, Breadcrumbs } from "@mui/material";
+import { Box, Container, Stack, Typography } from "@mui/material";
 
 
 import { Layout as DashboardLayout } from 'src/layouts/dashboard/layout';
 import { CustomersTable } from 'src/sections/customer/orders-table';
 import { CustomersSearch } from 'src/sections/customer/customers-search';
-import { applyPagination } from 'src/utils/apply-pagination';
+
 import useFetcher from 'src/hooks/use-fetcher';
 import AddCompanyModal from 'src/components/Modals/AddModal/AddFaqCategory-modal';
 import Content from "src/Localization/Content";
 import { useSelector, useDispatch } from "react-redux";
 import { changePage } from "src/slices/paginationReduser";
 
-const useCustomers = (data, page, rowsPerPage) => {
-  return useMemo(() => {
-    return applyPagination(data, page, rowsPerPage);
-  }, [data, page, rowsPerPage]);
-};
 
 
 
 
-
-const Page = ({ subId, setSubId }) => {
+const Page = () => {
   const { data, loading, error, fetchData, createData } = useFetcher();
   const dispatch = useDispatch();
 
