@@ -187,7 +187,7 @@ const header = {
     add: "Qo‘shish",
     edit: "Tahrirlash",
     add_title: (title) => `${title} qo‘shish`,
-    edit_title: (title) => `${title} ni tahrirlash`,
+    edit_title: (title) => `${title}ni tahrirlash`,
     addProduct: {
       addproduct: "Mahsulot qo‘shish",
       editproduct: "Mahsulotni tahrirlash",
